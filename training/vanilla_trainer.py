@@ -44,7 +44,7 @@ def validate(model, validation_loader, config):
 
 def train_vanilla_predictor(model, epochs):
     device = torch.cuda.device(torch.cuda.current_device())
-    criterion = vanilla_losses.DiceLoss()
+    criterion = vanilla_losses.BCEWithLogitsLoss()
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau
     optimizer = torch.optim.Adam(model.parameters(), 0.000001)
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=10, factor=0.5, verbose=True)
@@ -68,4 +68,5 @@ def train_vanilla_predictor(model, epochs):
         if validation_loss < best_validation_loss:
             print("Saving best model..")
             best_validation_loss = validation_loss
-            torch.save(model.state_dict(), "Models/Predictors/{}".format(type(model).__name__))
+            torch.save(model.state_dict(), "Models/Predictors/{}-{}".format(type(model).__name__,
+                                                                            len(list("Models/Predictors/"))))
