@@ -13,21 +13,22 @@ class KvasirDataset(Dataset):
         self.path = path
         self.fnames = listdir(join(path, "images/"))
         self.common_transforms = transforms.Compose([transforms.ToTensor(),
-                                                     transforms.CenterCrop(400),
-                                                     transforms.Resize(256),
-                                                     transforms.RandomCrop(224),
-                                                     transforms.RandomHorizontalFlip(),
+                                                     transforms.Resize((400, 400)),
                                                      ])
-        self.train_transforms = transforms.Compose(transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
-                                                   )
+        self.train_transforms = transforms.Compose([transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+                                                    ])
 
     def __len__(self):
         return len(self.fnames)
+
+    def get_augmentations(self):
+        pass
 
     def __getitem__(self, index):
         image = (open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
         mask = (open(join(join(self.path, "masks/"), self.fnames[index])).convert("RGB"))
         image = self.common_transforms(image)
+        # image = self.train_transforms(image)
         mask = self.common_transforms(mask)[0].unsqueeze(0)
         mask = (mask > 0.5).float()
         return image, mask, self.fnames[index]
