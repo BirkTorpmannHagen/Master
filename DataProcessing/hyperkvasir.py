@@ -1,7 +1,6 @@
 from os import listdir
 from os.path import join
 
-import matplotlib.pyplot as plt
 import torch.utils.data
 from PIL.Image import open
 from torch.nn.functional import one_hot
@@ -21,24 +20,28 @@ class KvasirClassificationDataset(Dataset):
         self.path = join(path, "labeled-images/lower-gi-tract/pathological-findings")
         self.transforms = transforms.Compose([
             transforms.Resize((400, 400)),
+            transforms.RandomVerticalFlip(),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(180),
             transforms.ToTensor()
         ])
 
         self.label_names = listdir(self.path)
+        self.num_classes = len(self.label_names)
         self.fname_class_dict = {}
         i = 0
         for i, label in enumerate(self.label_names):
             class_path = join(self.path, label)
             for fname in listdir(class_path):
                 self.fname_class_dict[fname] = label
-        self.index_dict = dict(zip(self.label_names, range(len(self.label_names))))
+        self.index_dict = dict(zip(self.label_names, range(self.num_classes)))
 
     def __len__(self):
         return len(self.fname_class_dict)
 
     def __getitem__(self, item):
         fname, label = list(self.fname_class_dict.items())[item]
-        onehot = one_hot(torch.tensor(self.index_dict[label]), num_classes=len(self.label_names))
+        onehot = one_hot(torch.tensor(self.index_dict[label]), num_classes=self.num_classes)
         image = open(join(join(self.path, label), fname)).convert("RGB")
         image = self.transforms(image)
         return image, onehot, fname
@@ -79,21 +82,18 @@ def test_KvasirSegmentationDataset():
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
-    print("Tests passed")
+    print("Classification Tests passed")
 
 
 def test_KvasirClassificationDataset():
     dataset = KvasirClassificationDataset("Data")
     for x, y, fname in torch.utils.data.DataLoader(dataset):
-        plt.imshow(x.squeeze().T)
-        print(fname[0])
-        plt.show()
-        input()
         assert isinstance(x, torch.Tensor)
-        # assert isinstance(y, torch.Tensor)
-    print("Tests passed")
+        assert isinstance(y, torch.Tensor)
+
+    print("Segmentation Tests passed")
 
 
 if __name__ == '__main__':
-    # test_KvasirSegmentationDataset()
+    test_KvasirSegmentationDataset()
     test_KvasirClassificationDataset()
