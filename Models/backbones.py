@@ -13,7 +13,10 @@ class Unet(backbones.Unet):
 class DeepLab(backbones.DeepLabV3Plus):
     def __init__(self, classes):
         super(DeepLab, self).__init__()
-        self.model = backbones.DeepLabV3Plus(in_channels=3, classes=classes)
+        self.model = backbones.DeepLabV3Plus(in_channels=3, classes=classes, encoder_weights=None)
+        self.encoder = self.model.encoder
 
     def forward(self, x):
         return self.model.forward(x)
+
+

@@ -5,7 +5,7 @@ import torch.optim.optimizer
 from torch.utils.data import DataLoader
 from torch.utils.data import random_split
 
-from DataProcessing.hyperkvasir import KvasirDataset
+from DataProcessing.hyperkvasir import KvasirSegmentationDataset
 from Tests.metrics import iou
 
 
@@ -46,8 +46,8 @@ def validate(model, validation_loader, config, plot=False):
             # print([float(i) for i in batch_ious])
             if plot:
                 # plt.imshow(y[0, 0].cpu().numpy(), alpha=0.5)
-                # plt.imshow(image[0].permute(1, 2, 0).cpu().numpy())
-                plt.imshow((output[0, 0].cpu().numpy() > 0.5).astype(int), alpha=0.5)
+                plt.imshow(image[0].permute(1, 2, 0).cpu().numpy())
+                # plt.imshow((output[0, 0].cpu().numpy() > 0.5).astype(int), alpha=0.5)
                 plt.imshow(y[0, 0].cpu().numpy().astype(int), alpha=0.5)
                 plt.title(iou(output[0, 0], mask[0, 0]))
                 plt.show()
@@ -66,14 +66,14 @@ def train_vanilla_predictor(model, epochs, num):
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=10, factor=0.5, verbose=True)
     # scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=10)
     config = {"criterion": criterion, "device": device, "optimizer": optimizer, "scheduler": scheduler}
-    dataset = KvasirDataset("Data/segmented-images/")
+    dataset = KvasirSegmentationDataset("Data/")
     train_set, val_set = random_split(dataset, [int(len(dataset) * 0.8), len(dataset) - int(len(dataset) * 0.8)])
     train_loader = DataLoader(train_set, batch_size=16, shuffle=True)
     val_loader = DataLoader(val_set, batch_size=16)
     best_validation_loss = 10
     for i in range(epochs):
         training_loss = np.abs(train_epoch(model, train_loader, config))
-        validation_loss, iou = validate(model, val_loader, config)
+        validation_loss, iou = validate(model, val_loader, config, plot=False)
         scheduler.step(validation_loss)
         print(
             "Epoch: {}/{} with lr {} \t Training loss:{}\t validation loss: {}\t IoU: {}".format(i, epochs,
