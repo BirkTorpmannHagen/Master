@@ -44,7 +44,7 @@ class KvasirClassificationDataset(Dataset):
         onehot = one_hot(torch.tensor(self.index_dict[label]), num_classes=self.num_classes)
         image = open(join(join(self.path, label), fname)).convert("RGB")
         image = self.transforms(image)
-        return image, onehot, fname
+        return image, onehot.float(), fname
 
 
 class KvasirSegmentationDataset(Dataset):
@@ -82,6 +82,7 @@ def test_KvasirSegmentationDataset():
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
+        print(y)
     print("Classification Tests passed")
 
 
@@ -90,10 +91,10 @@ def test_KvasirClassificationDataset():
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
-
+        print(y)
     print("Segmentation Tests passed")
 
 
 if __name__ == '__main__':
-    test_KvasirSegmentationDataset()
+    # test_KvasirSegmentationDataset()
     test_KvasirClassificationDataset()
