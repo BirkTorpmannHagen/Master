@@ -1,14 +1,9 @@
-import torch.nn
-
-import Models.backbones as backbones
 import training.vanilla_trainer
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 if __name__ == '__main__':
-    i = 1
+    i = 2
     while True:
-        model = backbones.DeepLab(1).to("cuda")
-        model = torch.nn.Sequential(model, torch.nn.Sigmoid())
-        training.vanilla_trainer.train_vanilla_predictor(model, 200, i)
+        config = {"epochs": 100, "id": i, "lr": 0.00001}
+        training.vanilla_trainer.train_vanilla_predictor(config)
         i += 1
-# TODO modify model to include activation

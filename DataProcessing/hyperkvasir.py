@@ -1,6 +1,7 @@
 from os import listdir
 from os.path import join
 
+import numpy as np
 import torch.utils.data
 from PIL.Image import open
 from torch.nn.functional import one_hot
@@ -30,13 +31,16 @@ class KvasirClassificationDataset(Dataset):
         self.num_classes = len(self.label_names)
         self.fname_class_dict = {}
         i = 0
+        self.class_weights = np.zeros(self.num_classes)
         for i, label in enumerate(self.label_names):
             class_path = join(self.path, label)
             for fname in listdir(class_path):
+                self.class_weights[i] += 1
                 self.fname_class_dict[fname] = label
         self.index_dict = dict(zip(self.label_names, range(self.num_classes)))
 
     def __len__(self):
+        # return 256  # for debugging
         return len(self.fname_class_dict)
 
     def __getitem__(self, item):
@@ -82,7 +86,6 @@ def test_KvasirSegmentationDataset():
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
-        print(y)
     print("Classification Tests passed")
 
 
