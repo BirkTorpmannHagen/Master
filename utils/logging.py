@@ -1,6 +1,21 @@
+import pandas as pd
 import torch
 
 
-def write_to_csv(fname: str, data: torch.Tensor):
-    array = data.numpy()
-    wr
+def log(fname, columns, values):
+    try:
+        df = pd.read_csv(fname)
+    except FileNotFoundError:
+        df = pd.DataFrame(columns=columns)
+    df = df.append(dict(zip(columns, values)), ignore_index=True)
+    df.to_csv(fname)
+
+
+def log_iou(fname, epoch, id, ious: torch.Tensor):
+    try:
+        df = pd.read_csv(fname)
+    except FileNotFoundError:
+        df = pd.DataFrame(columns=["epoch", "id", "iou"])
+    serialized_ious = ious.flatten().numpy()
+    for iou in serialized_ious:
+        df.append([epoch, id, iou])

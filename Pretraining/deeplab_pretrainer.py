@@ -8,7 +8,8 @@ from torch.utils.data import random_split
 from torchvision.models import resnet34
 from torchvision.ops.focal_loss import sigmoid_focal_loss
 
-import DataProcessing.augmentation as aug
+import utils.logging as logging
+from DataProcessing.augmentation import image_transforms
 from DataProcessing.hyperkvasir import KvasirClassificationDataset
 from Models.backbones import DeepLab
 
@@ -23,6 +24,8 @@ def pretrain_encoder(seg_model, dataset, config):
     print("Pretraining ")
     backbone = resnet34(pretrained=False, num_classes=dataset.num_classes).to("cuda")
     epochs = config["epochs"]
+    # augment = AutoAugment()
+    augment = image_transforms()
     lr = config["lr"]
     id = config["id"]
     if "Resnet34-{}".format(id) in listdir("Predictors/ResNetBackbones"):
@@ -41,7 +44,8 @@ def pretrain_encoder(seg_model, dataset, config):
             for i, (x, y, fname) in enumerate(DataLoader(train_set, 4, shuffle=True)):
                 image = x.to("cuda")
                 label = y.to("cuda")
-                image = aug.image_transforms()(image)
+                # image = augment(ToPILImage()(image).convert("RGB").) #TODO check if this is better
+                image = augment(image)
                 optimizer.zero_grad()
                 output = backbone(image)  # todo check; might be wrong
                 loss = criterion(output, label, reduction="mean")
@@ -63,13 +67,17 @@ def pretrain_encoder(seg_model, dataset, config):
             preds_concat = np.argmax(preds_concat.numpy(), axis=1)
             label_concat = np.argmax(label_concat.numpy(), axis=1)
             bal_acc = balanced_accuracy_score(label_concat, preds_concat)
+            training_loss = np.mean(
+                losses)
+            accuracy = accuracy_score(label_concat, preds_concat)
             print("Epoch: {}, \t Training Loss: {} \t Balanced Accuracy: {} \t Actual accuracy: {}".format(epoch,
-                                                                                                           np.mean(
-                                                                                                               losses),
+                                                                                                           training_loss,
                                                                                                            bal_acc,
-                                                                                                           accuracy_score(
-                                                                                                               label_concat,
-                                                                                                               preds_concat)))
+                                                                                                           accuracy
+                                                                                                           ))
+            logging.log("logs/pretrain.log", ["id", "epoch", "train_loss", "balanced_acc", "acc"],
+                        [id, epoch, training_loss,
+                         bal_acc, accuracy])
             if bal_acc > best_bal_acc:
                 best_bal_acc = bal_acc
                 print("Found new best model with accuracy {}!".format(best_bal_acc))

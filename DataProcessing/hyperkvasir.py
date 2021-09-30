@@ -28,6 +28,7 @@ class KvasirClassificationDataset(Dataset):
                 self.class_weights[i] += 1
                 self.fname_class_dict[fname] = label
         self.index_dict = dict(zip(self.label_names, range(self.num_classes)))
+
         self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
                                                      transforms.ToTensor()
                                                      ])
@@ -39,6 +40,9 @@ class KvasirClassificationDataset(Dataset):
     def __getitem__(self, item):
         fname, label = list(self.fname_class_dict.items())[item]
         onehot = one_hot(torch.tensor(self.index_dict[label]), num_classes=self.num_classes)
+        image = open(join(join(self.path, label), fname)).convert("RGB")
+        # print(list(image.getdata()))
+        # input()
         image = self.common_transforms(open(join(join(self.path, label), fname)).convert("RGB"))
         return image, onehot.float(), fname
 
