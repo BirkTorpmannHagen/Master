@@ -68,13 +68,13 @@ class KvasirSegmentationDataset(Dataset):
         image = self.common_transforms(
             open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
         mask = self.common_transforms(
-            open(join(join(self.path, "masks/"), self.fnames[index])).convert("RGB"))
+            open(join(join(self.path, "masks/"), self.fnames[index])).convert("L"))
         mask = (mask > 0.5).float()
         return image, mask, self.fnames[index]
 
 
 def test_KvasirSegmentationDataset():
-    dataset = KvasirSegmentationDataset("Data")
+    dataset = KvasirSegmentationDataset("Datasets/HyperKvasir")
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
@@ -82,7 +82,7 @@ def test_KvasirSegmentationDataset():
 
 
 def test_KvasirClassificationDataset():
-    dataset = KvasirClassificationDataset("Data")
+    dataset = KvasirClassificationDataset("Datasets/HyperKvasir")
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)

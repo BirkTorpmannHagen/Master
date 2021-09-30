@@ -10,6 +10,7 @@ from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirClassifi
 from Models import backbones
 from Pretraining.deeplab_pretrainer import pretrain_encoder
 from Tests.metrics import iou
+from utils import logging
 
 
 def train_epoch(model, training_loader, config):
@@ -40,8 +41,9 @@ def validate(model, validation_loader, config, epoch, plot=False):
     device = config["device"]
     optimizer = config["optimizer"]
     id = config["id"]
+    batch_size = config["batch_size"]
     losses = []
-    ious = []
+    ious = torch.empty((0,))
     with torch.no_grad():
         for x, y, fname in validation_loader:
             image = x.to("cuda")
@@ -49,9 +51,8 @@ def validate(model, validation_loader, config, epoch, plot=False):
             output = model(image)
             loss = criterion(output, mask)
             losses.append(np.abs(loss.item()))
-            batch_ious = [iou(output_i, mask_j).cpu().numpy() for output_i, mask_j in zip(output, mask)]
-            ious.append(np.mean(batch_ious))
-            # print([float(i) for i in batch_ious])
+            batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
+            ious = torch.cat((ious, batch_ious.flatten()))
             if plot:
                 # plt.imshow(y[0, 0].cpu().numpy(), alpha=0.5)
                 plt.imshow(image[0].permute(1, 2, 0).cpu().numpy())
@@ -61,8 +62,7 @@ def validate(model, validation_loader, config, epoch, plot=False):
                 plt.show()
                 plot = False
     avg_val_loss = np.mean(losses)
-    avg_iou = np.mean(ious)
-    return avg_val_loss, avg_iou
+    return avg_val_loss, ious
 
 
 def train_vanilla_predictor(config):
@@ -73,33 +73,37 @@ def train_vanilla_predictor(config):
     model = backbones.DeepLab(1).to("cuda")
     if pretrain:
         pretrain_config = {"epochs": 100, "lr": 0.000001, "id": id}
-        encoder = pretrain_encoder(model, KvasirClassificationDataset("Data"), config=pretrain_config)
+        encoder = pretrain_encoder(model, KvasirClassificationDataset("Datasets/HyperKvasir"), config=pretrain_config)
         model.encoder.load_state_dict(encoder.state_dict())  # use pretrained weights
     model = torch.nn.Sequential(model, torch.nn.Sigmoid())
     device = torch.cuda.device(torch.cuda.current_device())
     criterion = vanilla_losses.JaccardLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, T_0=25)
-    train_config = {"criterion": criterion, "device": device, "optimizer": optimizer, "scheduler": scheduler, "id": id}
-    dataset = KvasirSegmentationDataset("Data/")
+    train_config = {"criterion": criterion, "device": device, "optimizer": optimizer, "scheduler": scheduler, "id": id,
+                    "batch_size": 16}
+    dataset = KvasirSegmentationDataset("Datasets/HyperKvasir")
     train_set, val_set = random_split(dataset, [int(len(dataset) * 0.8), len(dataset) - int(len(dataset) * 0.8)])
-    train_loader = DataLoader(train_set, batch_size=16, shuffle=True)
-    val_loader = DataLoader(val_set, batch_size=16, shuffle=True)
+    train_loader = DataLoader(train_set, batch_size=train_config["batch_size"], shuffle=True)
+    val_loader = DataLoader(val_set, batch_size=train_config["batch_size"], shuffle=True)
     best_iou = 0
     print("Starting Segmentation training")
     for i in range(epochs):
         training_loss = np.abs(train_epoch(model, train_loader, train_config))
-        validation_loss, iou = validate(model, val_loader, train_config, i, plot=True)
+        validation_loss, ious = validate(model, val_loader, train_config, i, plot=True)
+        logging.log_iou("logs/ious.log", i, id, ious)
+        mean_iou = torch.mean(ious)
         scheduler.step(i)
-        # scheduler.step(validation_loss)
         print(
             "Epoch: {}/{} with lr {} \t Training loss:{}\t validation loss: {}\t IoU: {}".format(i, epochs,
                                                                                                  [group['lr'] for group
                                                                                                   in
                                                                                                   optimizer.param_groups],
                                                                                                  training_loss,
-                                                                                                 validation_loss, iou))
-        if iou > best_iou:
+                                                                                                 validation_loss,
+                                                                                                 mean_iou))
+
+        if mean_iou > best_iou:
             print("Saving best model..")
-            best_iou = iou
+            best_iou = mean_iou
             torch.save(model.state_dict(), "Predictors/BaselineDeepLab/DeepLab-{}".format(id))

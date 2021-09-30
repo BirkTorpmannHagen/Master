@@ -91,6 +91,6 @@ def pretrain_encoder(seg_model, dataset, config):
 
 if __name__ == '__main__':
     config = {"epochs": 100, "lr": 0.000001, "id": 1}
-    dataset = KvasirClassificationDataset("Data")
+    dataset = KvasirClassificationDataset("Datasets/HyperKvasir")
     model = DeepLab(dataset.num_classes).to("cuda")
     pretrain_encoder(model, dataset, config)

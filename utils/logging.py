@@ -8,7 +8,7 @@ def log(fname, columns, values):
     except FileNotFoundError:
         df = pd.DataFrame(columns=columns)
     df = df.append(dict(zip(columns, values)), ignore_index=True)
-    df.to_csv(fname)
+    df.to_csv(fname, index=False)
 
 
 def log_iou(fname, epoch, id, ious: torch.Tensor):
@@ -18,4 +18,5 @@ def log_iou(fname, epoch, id, ious: torch.Tensor):
         df = pd.DataFrame(columns=["epoch", "id", "iou"])
     serialized_ious = ious.flatten().numpy()
     for iou in serialized_ious:
-        df.append([epoch, id, iou])
+        df = df.append(dict(zip(["epoch", "id", "iou"], [epoch, id, iou])), ignore_index=True)
+    df.to_csv(fname, index=False)
