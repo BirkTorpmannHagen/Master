@@ -4,6 +4,6 @@ import training.vanilla_trainer
 if __name__ == '__main__':
     i = 2
     while True:
-        config = {"epochs": 100, "id": i, "lr": 0.00001}
+        config = {"epochs": 200, "id": i, "lr": 0.000001, "pretrain": True}
         training.vanilla_trainer.train_vanilla_predictor(config)
         i += 1

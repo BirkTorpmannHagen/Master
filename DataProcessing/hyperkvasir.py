@@ -8,8 +8,6 @@ from torch.nn.functional import one_hot
 from torch.utils.data import Dataset
 from torchvision import transforms
 
-from DataProcessing.augmentation import vanilla_augmentations
-
 
 class KvasirClassificationDataset(Dataset):
     """
@@ -19,14 +17,6 @@ class KvasirClassificationDataset(Dataset):
     def __init__(self, path):
         super(KvasirClassificationDataset, self).__init__()
         self.path = join(path, "labeled-images/lower-gi-tract/pathological-findings")
-        self.transforms = transforms.Compose([
-            transforms.Resize((400, 400)),
-            transforms.RandomVerticalFlip(),
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation(180),
-            transforms.ToTensor()
-        ])
-
         self.label_names = listdir(self.path)
         self.num_classes = len(self.label_names)
         self.fname_class_dict = {}
@@ -38,6 +28,9 @@ class KvasirClassificationDataset(Dataset):
                 self.class_weights[i] += 1
                 self.fname_class_dict[fname] = label
         self.index_dict = dict(zip(self.label_names, range(self.num_classes)))
+        self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
+                                                     transforms.ToTensor()
+                                                     ])
 
     def __len__(self):
         # return 256  # for debugging
@@ -46,8 +39,7 @@ class KvasirClassificationDataset(Dataset):
     def __getitem__(self, item):
         fname, label = list(self.fname_class_dict.items())[item]
         onehot = one_hot(torch.tensor(self.index_dict[label]), num_classes=self.num_classes)
-        image = open(join(join(self.path, label), fname)).convert("RGB")
-        image = self.transforms(image)
+        image = self.common_transforms(open(join(join(self.path, label), fname)).convert("RGB"))
         return image, onehot.float(), fname
 
 
@@ -64,19 +56,15 @@ class KvasirSegmentationDataset(Dataset):
         self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
                                                      transforms.ToTensor()
                                                      ])
-        self.train_transforms = transforms.Compose([])
 
     def __len__(self):
         return len(self.fnames)
 
     def __getitem__(self, index):
-        image = (open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
-        mask = (open(join(join(self.path, "masks/"), self.fnames[index])).convert("RGB"))
-        vanilla_aug = vanilla_augmentations()
-        image, mask = vanilla_aug(image, mask)
-        mask = self.common_transforms(mask)[0].unsqueeze(0)
-        image = self.common_transforms(image)
-        image = self.train_transforms(image)
+        image = self.common_transforms(
+            open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
+        mask = self.common_transforms(
+            open(join(join(self.path, "masks/"), self.fnames[index])).convert("RGB"))
         mask = (mask > 0.5).float()
         return image, mask, self.fnames[index]
 
@@ -94,10 +82,9 @@ def test_KvasirClassificationDataset():
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
-        print(y)
     print("Segmentation Tests passed")
 
 
 if __name__ == '__main__':
-    # test_KvasirSegmentationDataset()
+    test_KvasirSegmentationDataset()
     test_KvasirClassificationDataset()

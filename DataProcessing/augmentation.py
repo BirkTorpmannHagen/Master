@@ -1,8 +1,24 @@
 import torch.nn
 import torchvision.transforms.functional as F
+from torchvision import transforms
 
 
-class vanilla_augmentations(torch.nn.Module):
+def pipeline_tranforms():
+    return transforms.Compose([
+        transforms.Resize((400, 400)),
+        transforms.ToTensor()
+    ])
+
+
+def image_transforms():
+    return transforms.Compose([
+        transforms.ColorJitter(0.1, 0.1, 0.1),
+        transforms.RandomAdjustSharpness(0.9, 0.1),
+        transforms.RandomAutocontrast()
+    ])
+
+
+class seg_augmentations(torch.nn.Module):
     def __init__(self, p=0.5):
         super().__init__()
         self.p = p
