@@ -3,6 +3,7 @@ import torch
 
 
 def log(fname, columns, values):
+    # TODO convert to numpy for lower space requirements
     try:
         df = pd.read_csv(fname)
     except FileNotFoundError:

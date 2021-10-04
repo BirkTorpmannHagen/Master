@@ -18,7 +18,7 @@ def image_transforms():
     ])
 
 
-class seg_augmentations(torch.nn.Module):
+class SegAugmentations(torch.nn.Module):
     def __init__(self, p=0.5):
         super().__init__()
         self.p = p

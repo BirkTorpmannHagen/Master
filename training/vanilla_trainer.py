@@ -20,12 +20,12 @@ def train_epoch(model, training_loader, config):
     model.train()
     losses = []
     image_aug = aug.image_transforms()
-    seg_aug = aug.seg_augmentations
+    seg_aug = aug.SegAugmentations(0.5)
     for x, y, fname in training_loader:
         image = x.to("cuda")
         image = image_aug(image)
         mask = y.to("cuda")
-        image, mask = seg_aug(0.5)(image, mask)
+        image, mask = seg_aug(image, mask)
         optimizer.zero_grad()
         output = model(image)
         loss = criterion(output, mask)
@@ -90,7 +90,7 @@ def train_vanilla_predictor(config):
     print("Starting Segmentation training")
     for i in range(epochs):
         training_loss = np.abs(train_epoch(model, train_loader, train_config))
-        validation_loss, ious = validate(model, val_loader, train_config, i, plot=True)
+        validation_loss, ious = validate(model, val_loader, train_config, i, plot=False)
         logging.log_iou("logs/ious.log", i, id, ious)
         mean_iou = torch.mean(ious)
         scheduler.step(i)
