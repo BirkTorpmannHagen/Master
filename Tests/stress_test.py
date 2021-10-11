@@ -1,12 +1,19 @@
 import random
+from os import listdir
+from os.path import join
 
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 
+from DataProcessing.etis import EtisDataset
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset
+from Models.backbones import DeepLab
+from Tests.metrics import iou
+from utils.logging import log_iou
 
 
 class AdditiveNoise(nn.Module):
@@ -39,7 +46,7 @@ def apply_stressors(image, mask):
     return image, mask
 
 
-def stresstest():
+def stresstesttest():
     dataset = KvasirSegmentationDataset("Datasets/HyperKvasir")
     for x, y, fname in DataLoader(dataset):
         image, mask = apply_stressors(x.to("cuda"), y.to("cuda"))
@@ -49,5 +56,32 @@ def stresstest():
         input()
 
 
+def perform_stresstest(modelpath, stressors=True):
+    dataset = EtisDataset("Datasets/ETIS-LaribPolypDB")
+    # dataset = KvasirSegmentationDataset("Datasets/HyperKvasir")
+    for predictor_name in listdir(modelpath):
+        if len(predictor_name.split("-")) == 3:
+            model = DeepLab(1).to("cuda")
+            model = torch.nn.Sequential(model, torch.nn.Sigmoid())
+
+            model.eval()
+            test = torch.load(join(modelpath, predictor_name))
+            # print(test)
+            model.load_state_dict(test)
+            ious = torch.empty((0,))
+
+            for x, y, fname in tqdm(DataLoader(dataset)):
+                if stressors:
+                    image, mask = apply_stressors(x.to("cuda"), y.to("cuda"))
+                else:
+                    image, mask = x.to("cuda"), y.to("cuda")
+                with torch.no_grad():
+                    output = model(image)
+                    batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
+                    ious = torch.cat((ious, batch_ious.flatten()))
+            log_iou("logs/kvasir-no-pretrain-baseline.log", -1, predictor_name.split("-")[-1], ious)
+
+
 if __name__ == '__main__':
-    stresstest()
+    perform_stresstest("Predictors/BaselineDeepLab", stressors=False)
+    # EtisDataset("")

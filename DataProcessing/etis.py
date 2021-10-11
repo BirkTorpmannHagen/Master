@@ -26,11 +26,11 @@ class EtisDataset(Dataset):
 
     def __getitem__(self, index):
         image = self.common_transforms(
-            open(join(self.path, "ETIS-LaribPolypDB/{}.jpg".format(index))).convert("RGB"))
+            open(join(self.path, "ETIS-LaribPolypDB/{}.jpg".format(index + 1))).convert("RGB"))
         mask = self.common_transforms(
-            open(join(self.path, "GroundTruth/p{}.jpg".format(index))).convert("RGB"))
+            open(join(self.path, "GroundTruth/p{}.jpg".format(index + 1))).convert("RGB"))
         mask = (mask > 0.5).float()
-        return image, mask
+        return image, mask, index + 1
 
 
 def test_etis():

@@ -91,7 +91,10 @@ def train_vanilla_predictor(config):
     for i in range(epochs):
         training_loss = np.abs(train_epoch(model, train_loader, train_config))
         validation_loss, ious = validate(model, val_loader, train_config, i, plot=False)
-        logging.log_iou("logs/ious.log", i, id, ious)
+        if pretrain:
+            logging.log_iou("logs/ious.log", i, id, ious)
+        else:
+            logging.log_iou("logs/no-pretrain-ious.log", i, id, ious)
         mean_iou = torch.mean(ious)
         scheduler.step(i)
         print(
@@ -106,4 +109,7 @@ def train_vanilla_predictor(config):
         if mean_iou > best_iou:
             print("Saving best model..")
             best_iou = mean_iou
-            torch.save(model.state_dict(), "Predictors/BaselineDeepLab/DeepLab-{}".format(id))
+            if pretrain:
+                torch.save(model.state_dict(), "Predictors/BaselineDeepLab/DeepLab-{}".format(id))
+            else:
+                torch.save(model.state_dict(), "Predictors/BaselineDeepLab/DeepLab-nopretrain-{}".format(id))
