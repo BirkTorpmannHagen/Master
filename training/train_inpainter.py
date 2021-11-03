@@ -6,10 +6,13 @@ import torchvision.transforms as transforms
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision.utils import save_image
+from Models.inpainters import SegGenerator, SegDiscriminator
 from DataProcessing.hyperkvasir import KvasirInpaintingDataset
 from DataProcessing.etis import EtisDataset
 from PipelineMods.ganlib.implementations.context_encoder.models import Generator, Discriminator
 from PIL import Image
+from tqdm import tqdm
+from PipelineMods.polyp_inpainter import Inpainter
 
 
 def weights_init_normal(m):
@@ -21,28 +24,16 @@ def weights_init_normal(m):
         torch.nn.init.constant_(m.bias.data, 0.0)
 
 
-# def save_sample(batches_done):
-#     samples, masked_samples, i = next(iter(test_dataloader))
-#     samples = Variable(samples.type(Tensor))
-#     masked_samples = Variable(masked_samples.type(Tensor))
-#     i = i[0].item()  # Upper-left coordinate of mask
-#     # Generate inpainted image
-#     gen_mask = generator(masked_samples)
-#     filled_samples = masked_samples.clone()
-#     filled_samples[:, :, i : i + opt.mask_size, i : i + opt.mask_size] = gen_mask
-#     # Save sample
-#     sample = torch.cat((masked_samples.data, filled_samples.data, samples.data), -2)
-#     save_image(sample, "images/%d.png" % batches_done, nrow=6, normalize=True)
-
-
 def train_new_inpainter():
     # Loss function
     adversarial_loss = torch.nn.BCELoss()
     pixelwise_loss = torch.nn.L1Loss()
 
     # Initialize generator and discriminator
-    generator = Generator(channels=3)
-    discriminator = Discriminator(channels=3)
+    # generator = Generator(channels=3)
+    # discriminator = Discriminator(channels=3)
+    generator = SegGenerator()
+    discriminator = SegDiscriminator()
     cuda = True
     if cuda:
         generator.cuda()
@@ -69,18 +60,18 @@ def train_new_inpainter():
     # )
 
     # Optimizers
-    optimizer_G = torch.optim.Adam(generator.parameters(), lr=0.0001)
-    optimizer_D = torch.optim.Adam(discriminator.parameters(), lr=0.0001)
+    optimizer_G = torch.optim.Adam(generator.parameters(), lr=0.00001)
+    optimizer_D = torch.optim.Adam(discriminator.parameters(), lr=0.00001)
 
     # Initialize weights
-    generator.apply(weights_init_normal)
-    discriminator.apply(weights_init_normal)
+    # generator.apply(weights_init_normal)
+    # discriminator.apply(weights_init_normal)
     # patch_h, patch_w = int(50 / 2 ** 3), int(50 / 2 ** 3)
     # patch = (1, patch_h, patch_w)
     # print(patch)
     for epoch in range(200):
         printed = False
-        for i, (imgs, mask, masked_imgs, masked_parts, filename) in enumerate(dataloader):
+        for i, (imgs, mask, masked_imgs, masked_parts, filename) in tqdm(enumerate(dataloader)):
             imgs = imgs.cuda()
             mask = mask.cuda()
             masked_imgs = masked_imgs.cuda()
@@ -146,11 +137,16 @@ def train_new_inpainter():
                 plt.title("Real")
                 plt.imshow(masked_parts[0].detach().cpu().numpy().T)
                 plt.show()
+                try:
+                    test = Inpainter(f"Predictors/Inpainters/deeplab-generator-{epoch}")
+                    test.get_test()
+                except FileNotFoundError:
+                    print("Weird...")
                 printed = True
         if epoch % 10 == 0:
             print("Saving")
-            torch.save(generator.state_dict(), f"Predictors/Inpainters/generator-{epoch}")
-            torch.save(discriminator.state_dict(), f"Predictors/Inpainters/discriminator-{epoch}")
+            torch.save(generator.state_dict(), f"Predictors/Inpainters/deeplab-generator-{epoch}")
+            torch.save(discriminator.state_dict(), f"Predictors/Inpainters/deeplab-discriminator-{epoch}")
 
 
 if __name__ == '__main__':

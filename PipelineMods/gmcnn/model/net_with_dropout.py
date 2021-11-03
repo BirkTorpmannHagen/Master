@@ -1,11 +1,12 @@
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from model.basemodel import BaseModel
 from model.basenet import BaseNet
-from model.loss import WGANLoss, IDMRFLoss
 from model.layer import init_weights, PureUpsampling, ConfidenceDrivenMaskLayer, SpectralNorm
-import numpy as np
+from model.loss import WGANLoss, IDMRFLoss
+
 
 # generative multi-column convolutional neural net
 class GMCNN(BaseNet):
@@ -29,29 +30,29 @@ class GMCNN(BaseNet):
         self.EB2_pad_rec = []
         self.EB3_pad_rec = []
 
-        self.EB1.append(nn.Conv2d(in_channels, ch, kernel_size=7, stride=1)) #1
+        self.EB1.append(nn.Conv2d(in_channels, ch, kernel_size=7, stride=1))  # 1
 
-        self.EB1.append(nn.Conv2d(ch, ch * 2, kernel_size=7, stride=2)) #2
-        self.EB1.append(nn.Conv2d(ch * 2, ch * 2, kernel_size=7, stride=1)) #3
+        self.EB1.append(nn.Conv2d(ch, ch * 2, kernel_size=7, stride=2))  # 2
+        self.EB1.append(nn.Conv2d(ch * 2, ch * 2, kernel_size=7, stride=1))  # 3
 
-        self.EB1.append(nn.Conv2d(ch * 2, ch * 4, kernel_size=7, stride=2)) #4
+        self.EB1.append(nn.Conv2d(ch * 2, ch * 4, kernel_size=7, stride=2))  # 4
         self.EB1.append(nn.Dropout2d(0.5))  # added by vajira
-        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1)) #5
+        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1))  # 5
         self.EB1.append(nn.Dropout2d(0.5))  # added by vajira
-        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1)) #6
+        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1))  # 6
         self.EB1.append(nn.Dropout2d(0.5))  # added by vajira
 
-        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1, dilation=2)) #7
-        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1, dilation=4)) #8
-        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1, dilation=8)) #9
-        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1, dilation=16)) #10
+        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1, dilation=2))  # 7
+        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1, dilation=4))  # 8
+        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1, dilation=8))  # 9
+        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1, dilation=16))  # 10
 
-        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1)) #11
-        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1)) #12
+        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1))  # 11
+        self.EB1.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=7, stride=1))  # 12
 
         self.EB1.append(PureUpsampling(scale=4))
 
-        self.EB1_pad_rec = [3, 3, 3, 3,0, 3,0, 3,0,  6, 12, 24, 48, 3, 3, 0]
+        self.EB1_pad_rec = [3, 3, 3, 3, 0, 3, 0, 3, 0, 6, 12, 24, 48, 3, 3, 0]
 
         self.EB2.append(nn.Conv2d(in_channels, ch, kernel_size=5, stride=1))
 
@@ -59,11 +60,11 @@ class GMCNN(BaseNet):
         self.EB2.append(nn.Conv2d(ch * 2, ch * 2, kernel_size=5, stride=1))
 
         self.EB2.append(nn.Conv2d(ch * 2, ch * 4, kernel_size=5, stride=2))
-        self.EB2.append(nn.Dropout2d(0.5)) # added by Vajira
+        self.EB2.append(nn.Dropout2d(0.5))  # added by Vajira
         self.EB2.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=5, stride=1))
-        self.EB2.append(nn.Dropout2d(0.5)) # added by Vajira
+        self.EB2.append(nn.Dropout2d(0.5))  # added by Vajira
         self.EB2.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=5, stride=1))
-        self.EB2.append(nn.Dropout2d(0.5)) # added by Vajira
+        self.EB2.append(nn.Dropout2d(0.5))  # added by Vajira
 
         self.EB2.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=5, stride=1, dilation=2))
         self.EB2.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=5, stride=1, dilation=4))
@@ -77,7 +78,7 @@ class GMCNN(BaseNet):
         self.EB2.append(nn.Conv2d(ch * 4, ch * 2, kernel_size=5, stride=1))
         self.EB2.append(nn.Conv2d(ch * 2, ch * 2, kernel_size=5, stride=1))
         self.EB2.append(PureUpsampling(scale=2))
-        self.EB2_pad_rec = [2, 2, 2, 2,0, 2,0, 2,0,  4, 8, 16, 32, 2, 2, 0, 2, 2, 0]
+        self.EB2_pad_rec = [2, 2, 2, 2, 0, 2, 0, 2, 0, 4, 8, 16, 32, 2, 2, 0, 2, 2, 0]
 
         self.EB3.append(nn.Conv2d(in_channels, ch, kernel_size=3, stride=1))
 
@@ -85,11 +86,11 @@ class GMCNN(BaseNet):
         self.EB3.append(nn.Conv2d(ch * 2, ch * 2, kernel_size=3, stride=1))
 
         self.EB3.append(nn.Conv2d(ch * 2, ch * 4, kernel_size=3, stride=2))
-        self.EB3.append(nn.Dropout2d(0.5)) # added by Vajira
+        self.EB3.append(nn.Dropout2d(0.5))  # added by Vajira
         self.EB3.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=3, stride=1))
-        self.EB3.append(nn.Dropout2d(0.5)) # added by Vajira
+        self.EB3.append(nn.Dropout2d(0.5))  # added by Vajira
         self.EB3.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=3, stride=1))
-        self.EB3.append(nn.Dropout2d(0.5)) # added by Vajira
+        self.EB3.append(nn.Dropout2d(0.5))  # added by Vajira
 
         self.EB3.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=3, stride=1, dilation=2))
         self.EB3.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=3, stride=1, dilation=4))
@@ -106,7 +107,7 @@ class GMCNN(BaseNet):
         self.EB3.append(nn.Conv2d(ch * 2, ch, kernel_size=3, stride=1))
         self.EB3.append(nn.Conv2d(ch, ch, kernel_size=3, stride=1))
 
-        self.EB3_pad_rec = [1, 1, 1, 1, 0,1,0, 1,0, 2, 4, 8, 16, 1, 1, 0, 1, 1, 0, 1, 1]
+        self.EB3_pad_rec = [1, 1, 1, 1, 0, 1, 0, 1, 0, 2, 4, 8, 16, 1, 1, 0, 1, 1, 0, 1, 1]
 
         self.decoding_layers.append(nn.Conv2d(ch * 7, ch // 2, kernel_size=3, stride=1))
         self.decoding_layers.append(nn.Conv2d(ch // 2, out_channels, kernel_size=3, stride=1))
@@ -160,7 +161,7 @@ class GMCNN(BaseNet):
 
 # return one dimensional output indicating the probability of realness or fakeness
 class Discriminator(BaseNet):
-    def __init__(self, in_channels, cnum=32, fc_channels=8*8*32*4, act=F.elu, norm=None, spectral_norm=True):
+    def __init__(self, in_channels, cnum=32, fc_channels=8 * 8 * 32 * 4, act=F.elu, norm=None, spectral_norm=True):
         super(Discriminator, self).__init__()
         self.act = act
         self.norm = norm
@@ -178,8 +179,8 @@ class Discriminator(BaseNet):
         else:
             self.layers.append(nn.Conv2d(in_channels, ch, kernel_size=5, padding=2, stride=2))
             self.layers.append(nn.Conv2d(ch, ch * 2, kernel_size=5, padding=2, stride=2))
-            self.layers.append(nn.Conv2d(ch*2, ch*4, kernel_size=5, padding=2, stride=2))
-            self.layers.append(nn.Conv2d(ch*4, ch*4, kernel_size=5, padding=2, stride=2))
+            self.layers.append(nn.Conv2d(ch * 2, ch * 4, kernel_size=5, padding=2, stride=2))
+            self.layers.append(nn.Conv2d(ch * 4, ch * 4, kernel_size=5, padding=2, stride=2))
             self.layers.append(nn.Linear(fc_channels, 1))
         self.layers = nn.ModuleList(self.layers)
 
@@ -195,7 +196,8 @@ class Discriminator(BaseNet):
 
 
 class GlobalLocalDiscriminator(BaseNet):
-    def __init__(self, in_channels, cnum=32, g_fc_channels=16*16*32*4, l_fc_channels=8*8*32*4, act=F.elu, norm=None,
+    def __init__(self, in_channels, cnum=32, g_fc_channels=16 * 16 * 32 * 4, l_fc_channels=8 * 8 * 32 * 4, act=F.elu,
+                 norm=None,
                  spectral_norm=True):
         super(GlobalLocalDiscriminator, self).__init__()
         self.act = act
@@ -302,7 +304,7 @@ class InpaintingModel_GMCNN(BaseModel):
         if self.opt.pretrain_network is False:
             # discriminator
             self.completed_logit, self.completed_local_logit = self.netD(self.completed, self.completed_local)
-            self.G_loss_mrf = self.mrfloss((self.completed_local+1)/2.0, (self.gt_local.detach()+1)/2.0)
+            self.G_loss_mrf = self.mrfloss((self.completed_local + 1) / 2.0, (self.gt_local.detach() + 1) / 2.0)
             self.G_loss = self.G_loss + self.lambda_mrf * self.G_loss_mrf
 
             self.G_loss_adv = -self.completed_logit.mean()
@@ -310,10 +312,12 @@ class InpaintingModel_GMCNN(BaseModel):
             self.G_loss = self.G_loss + self.lambda_adv * (self.G_loss_adv + self.G_loss_adv_local)
 
     def forward_D(self):
-        self.completed_logit, self.completed_local_logit = self.netD(self.completed.detach(), self.completed_local.detach())
+        self.completed_logit, self.completed_local_logit = self.netD(self.completed.detach(),
+                                                                     self.completed_local.detach())
         self.gt_logit, self.gt_local_logit = self.netD(self.gt, self.gt_local)
         # hinge loss
-        self.D_loss_local = nn.ReLU()(1.0 - self.gt_local_logit).mean() + nn.ReLU()(1.0 + self.completed_local_logit).mean()
+        self.D_loss_local = nn.ReLU()(1.0 - self.gt_local_logit).mean() + nn.ReLU()(
+            1.0 + self.completed_local_logit).mean()
         self.D_loss = nn.ReLU()(1.0 - self.gt_logit).mean() + nn.ReLU()(1.0 + self.completed_logit).mean()
         self.D_loss = self.D_loss + self.D_loss_local
 
@@ -368,15 +372,16 @@ class InpaintingModel_GMCNN(BaseModel):
     def evaluate(self, im_in, mask):
         im_in = torch.from_numpy(im_in).type(torch.FloatTensor).cuda() / 127.5 - 1
         mask = torch.from_numpy(mask).type(torch.FloatTensor).cuda()
-        im_in = im_in * (1-mask)
+        im_in = im_in * (1 - mask)
         xin = torch.cat((im_in, mask), 1)
-        ret = self.netGM(xin) * mask + im_in * (1-mask)
+        ret = self.netGM(xin) * mask + im_in * (1 - mask)
         ret = (ret.cpu().detach().numpy() + 1) * 127.5
         return ret.astype(np.uint8)
 
-#=========================================
+
+# =========================================
 # Modified version by Vajira
-#==========================================
+# ==========================================
 class InpaintingModel_GMCNN_Given_Mask(BaseModel):
     def __init__(self, in_channels, act=F.elu, norm=None, opt=None):
         super(InpaintingModel_GMCNN_Given_Mask, self).__init__()
@@ -443,9 +448,9 @@ class InpaintingModel_GMCNN_Given_Mask(BaseModel):
 
     def initVariables(self):
         self.gt = self.input['gt']
-        self.mask_01 = self.input["mask"] # Vajira
-        #mask, rect = generate_mask(self.opt.mask_type, self.opt.img_shapes, self.opt.mask_shapes)
-        #self.mask_01 = torch.from_numpy(mask).cuda().repeat([self.opt.batch_size, 1, 1, 1])
+        self.mask_01 = self.input["mask"]  # Vajira
+        # mask, rect = generate_mask(self.opt.mask_type, self.opt.img_shapes, self.opt.mask_shapes)
+        # self.mask_01 = torch.from_numpy(mask).cuda().repeat([self.opt.batch_size, 1, 1, 1])
         self.mask = self.confidence_mask_layer(self.mask_01)
         if self.opt.mask_type == 'rect':
             self.rect = [rect[0, 0], rect[0, 1], rect[0, 2], rect[0, 3]]
@@ -465,7 +470,7 @@ class InpaintingModel_GMCNN_Given_Mask(BaseModel):
         if self.opt.pretrain_network is False:
             # discriminator
             self.completed_logit, self.completed_local_logit = self.netD(self.completed, self.completed_local)
-            self.G_loss_mrf = self.mrfloss((self.completed_local+1)/2.0, (self.gt_local.detach()+1)/2.0)
+            self.G_loss_mrf = self.mrfloss((self.completed_local + 1) / 2.0, (self.gt_local.detach() + 1) / 2.0)
             self.G_loss = self.G_loss + self.lambda_mrf * self.G_loss_mrf
 
             self.G_loss_adv = -self.completed_logit.mean()
@@ -473,10 +478,12 @@ class InpaintingModel_GMCNN_Given_Mask(BaseModel):
             self.G_loss = self.G_loss + self.lambda_adv * (self.G_loss_adv + self.G_loss_adv_local)
 
     def forward_D(self):
-        self.completed_logit, self.completed_local_logit = self.netD(self.completed.detach(), self.completed_local.detach())
+        self.completed_logit, self.completed_local_logit = self.netD(self.completed.detach(),
+                                                                     self.completed_local.detach())
         self.gt_logit, self.gt_local_logit = self.netD(self.gt, self.gt_local)
         # hinge loss
-        self.D_loss_local = nn.ReLU()(1.0 - self.gt_local_logit).mean() + nn.ReLU()(1.0 + self.completed_local_logit).mean()
+        self.D_loss_local = nn.ReLU()(1.0 - self.gt_local_logit).mean() + nn.ReLU()(
+            1.0 + self.completed_local_logit).mean()
         self.D_loss = nn.ReLU()(1.0 - self.gt_logit).mean() + nn.ReLU()(1.0 + self.completed_logit).mean()
         self.D_loss = self.D_loss + self.D_loss_local
 
@@ -531,8 +538,8 @@ class InpaintingModel_GMCNN_Given_Mask(BaseModel):
     def evaluate(self, im_in, mask):
         im_in = torch.from_numpy(im_in).type(torch.FloatTensor).cuda() / 127.5 - 1
         mask = torch.from_numpy(mask).type(torch.FloatTensor).cuda()
-        im_in = im_in * (1-mask)
+        im_in = im_in * (1 - mask)
         xin = torch.cat((im_in, mask), 1)
-        ret = self.netGM(xin) * mask + im_in * (1-mask)
+        ret = self.netGM(xin) * mask + im_in * (1 - mask)
         ret = (ret.cpu().detach().numpy() + 1) * 127.5
         return ret.astype(np.uint8)
