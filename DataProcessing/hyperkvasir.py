@@ -7,6 +7,7 @@ from PIL.Image import open
 from torch.nn.functional import one_hot
 from torch.utils.data import Dataset
 from torchvision import transforms
+from utils.mask_generator import generate_a_mask
 
 
 class KvasirClassificationDataset(Dataset):
@@ -71,6 +72,54 @@ class KvasirSegmentationDataset(Dataset):
             open(join(join(self.path, "masks/"), self.fnames[index])).convert("L"))
         mask = (mask > 0.5).float()
         return image, mask, self.fnames[index]
+
+
+class KvasirInpaintingDataset(Dataset):
+    def __init__(self, path):
+        super(KvasirInpaintingDataset, self).__init__()
+        self.path = join(path, "segmented-images/")
+        self.fnames = listdir(join(self.path, "images"))
+        self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
+                                                     transforms.ToTensor()
+                                                     ])
+
+    def __len__(self):
+        return len(self.fnames)
+
+    def __getitem__(self, index):
+        image = self.common_transforms(
+            open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
+        mask = self.common_transforms(
+            open(join(join(self.path, "masks/"), self.fnames[index])).convert("L"))
+        mask = (mask > 0.5).float()
+
+        part = mask * image
+        masked_image = image - part
+
+        return image, mask, masked_image, part, self.fnames[index]
+
+
+class KvasirSyntheticDataset(Dataset):
+    def __init__(self, path):
+        super(KvasirSyntheticDataset, self).__init__()
+        self.path = join(path, "unlabeled-images")
+        self.fnames = listdir(join(self.path, "images"))
+        self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
+                                                     transforms.ToTensor()
+                                                     ])
+
+    def __len__(self):
+        return len(self.fnames)
+
+    def __getitem__(self, index):
+        image = self.common_transforms(
+            open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
+        mask = generate_a_mask(imsize=400).T
+        mask = torch.tensor(mask > 0.5).float()
+        part = mask * image
+        masked_image = image - part
+
+        return image, mask, masked_image, part, self.fnames[index]
 
 
 def test_KvasirSegmentationDataset():

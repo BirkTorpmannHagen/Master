@@ -9,24 +9,14 @@ Instrustion on running the script:
 """
 
 import argparse
-import os
-import numpy as np
-import math
 
-import torchvision.transforms as transforms
-from torchvision.utils import save_image
-from PIL import Image
-
-from torch.utils.data import DataLoader
-from torchvision import datasets
+import torch
 from torch.autograd import Variable
+from torch.utils.data import DataLoader
+from torchvision.utils import save_image
 
 from datasets import *
 from models import *
-
-import torch.nn as nn
-import torch.nn.functional as F
-import torch
 
 os.makedirs("images", exist_ok=True)
 
@@ -114,7 +104,7 @@ def save_sample(batches_done):
     # Generate inpainted image
     gen_mask = generator(masked_samples)
     filled_samples = masked_samples.clone()
-    filled_samples[:, :, i : i + opt.mask_size, i : i + opt.mask_size] = gen_mask
+    filled_samples[:, :, i: i + opt.mask_size, i: i + opt.mask_size] = gen_mask
     # Save sample
     sample = torch.cat((masked_samples.data, filled_samples.data, samples.data), -2)
     save_image(sample, "images/%d.png" % batches_done, nrow=6, normalize=True)
