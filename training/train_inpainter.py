@@ -3,6 +3,7 @@ import numpy as np
 import torch
 import torch.nn
 import torchvision.transforms as transforms
+from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision.utils import save_image
@@ -34,6 +35,10 @@ def train_new_inpainter():
     # discriminator = Discriminator(channels=3)
     generator = SegGenerator()
     discriminator = SegDiscriminator()
+
+    generator.load_state_dict(torch.load("Predictors/Inpainters/deeplab-generator-650"))
+    discriminator.load_state_dict(torch.load("Predictors/Inpainters/deeplab-discriminator-650"))
+
     cuda = True
     if cuda:
         generator.cuda()
@@ -60,8 +65,10 @@ def train_new_inpainter():
     # )
 
     # Optimizers
-    optimizer_G = torch.optim.Adam(generator.parameters(), lr=0.00001)
+    optimizer_G = torch.optim.Adam(generator.parameters(), lr=0.0001)
     optimizer_D = torch.optim.Adam(discriminator.parameters(), lr=0.00001)
+    scheduler_G = CosineAnnealingWarmRestarts(optimizer_G, T_0=100)
+    scheduler_D = CosineAnnealingWarmRestarts(optimizer_D, T_0=100)
 
     # Initialize weights
     # generator.apply(weights_init_normal)
@@ -69,9 +76,12 @@ def train_new_inpainter():
     # patch_h, patch_w = int(50 / 2 ** 3), int(50 / 2 ** 3)
     # patch = (1, patch_h, patch_w)
     # print(patch)
-    for epoch in range(200):
+    for epoch in range(660, 1000):
         printed = False
-        for i, (imgs, mask, masked_imgs, masked_parts, filename) in tqdm(enumerate(dataloader)):
+        d_losses = []
+        g_advs = []
+        g_pixels = []
+        for i, (imgs, mask, masked_imgs, masked_parts, filename) in enumerate(dataloader):
             imgs = imgs.cuda()
             mask = mask.cuda()
             masked_imgs = masked_imgs.cuda()
@@ -103,11 +113,14 @@ def train_new_inpainter():
 
             g_adv = adversarial_loss(torch.masked_select(disc, mask_bool), valid)
             g_pixel = pixelwise_loss(torch.masked_select(gen_parts, mask_bool), torch.masked_select(imgs, mask_bool))
+            g_advs.append(g_adv.item())
+            g_pixels.append(g_pixel.item())
             # Total loss
             g_loss = 0.001 * g_adv + 0.999 * g_pixel
 
             g_loss.backward()
             optimizer_G.step()
+            scheduler_G.step(epoch)
 
             # ---------------------
             #  Train Discriminator
@@ -116,17 +129,21 @@ def train_new_inpainter():
             optimizer_D.zero_grad()
 
             # Measure discriminator's ability to classify real from generated samples
+
             real_loss = adversarial_loss(torch.masked_select(discriminator(masked_parts), mask_bool), valid)
             fake_loss = adversarial_loss(torch.masked_select(discriminator(gen_parts.detach()), mask_bool), fake)
             d_loss = 0.5 * (real_loss + fake_loss)
+            d_losses.append(d_loss.item())
+            # wasserstein critic loss
+
+            # d_loss = -torch.mean(discriminator(masked_parts)) + torch.mean(discriminator(gen_parts.detach()))
 
             d_loss.backward()
             optimizer_D.step()
+            scheduler_D.step(epoch)
             if not printed and epoch % 10 == 0:
-                print(
-                    "[Epoch %d/%d] [Batch %d/%d] [D loss: %f] [G adv: %f, pixel: %f]"
-                    % (epoch, 400, i, len(dataloader), d_loss.item(), g_adv.item(), g_pixel.item())
-                )
+                torch.save(generator.state_dict(), f"Predictors/Inpainters/deeplab-generator-{epoch}")
+                torch.save(discriminator.state_dict(), f"Predictors/Inpainters/deeplab-discriminator-{epoch}")
                 plt.title("Part")
                 plt.imshow((gen_parts[0].detach().cpu().numpy().T))
                 plt.show()
@@ -134,19 +151,18 @@ def train_new_inpainter():
                 # plt.imshow((gen_parts[0].detach().cpu().numpy().T))
                 # plt.imshow(masked_imgs[0].detach().cpu().numpy().T)
                 # plt.show()
-                plt.title("Real")
-                plt.imshow(masked_parts[0].detach().cpu().numpy().T)
-                plt.show()
+                # plt.title("Real")
+                # plt.imshow(masked_parts[0].detach().cpu().numpy().T)
+                # plt.show()
                 try:
                     test = Inpainter(f"Predictors/Inpainters/deeplab-generator-{epoch}")
                     test.get_test()
                 except FileNotFoundError:
                     print("Weird...")
                 printed = True
-        if epoch % 10 == 0:
-            print("Saving")
-            torch.save(generator.state_dict(), f"Predictors/Inpainters/deeplab-generator-{epoch}")
-            torch.save(discriminator.state_dict(), f"Predictors/Inpainters/deeplab-discriminator-{epoch}")
+        print(
+            f"[Epoch {epoch}] [D loss: {np.mean(d_losses)}] [G adv: {np.mean(g_advs)}, pixel: {np.mean(g_pixels)}]"
+        )
 
 
 if __name__ == '__main__':

@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch
-from ganlib.implementations.wgan.wgan import
 from torchvision.transforms import Normalize
 # from PipelineMods.gmcnn.model.net_with_dropout import InpaintingModel_GMCNN_Given_Mask
 from PipelineMods.ganlib.implementations.context_encoder.models import Generator
@@ -18,25 +17,29 @@ class Inpainter(nn.Module):
         self.model = SegGenerator()
         self.model.load_state_dict(torch.load(path_to_state_dict))
 
-    def forward(self, img, mask):
-        polyp = self.model(mask)
+    def forward(self, img, mask, masked_image):
+        polyp = self.model(masked_image)
         merged = (1 - mask) * img + (polyp * mask)
         return merged, polyp
 
     def get_test(self):
-        for image, mask, masked_image, part, fname in DataLoader(KvasirSyntheticDataset("Datasets/HyperKvasir"),
-                                                                 batch_size=4):
+        for i, (image, mask, masked_image, part, fname) in enumerate(
+                DataLoader(KvasirSyntheticDataset("Datasets/HyperKvasir"),
+                           batch_size=4)):
             with torch.no_grad():
-                merged, polyp = self.forward(image, mask)
+                merged, polyp = self.forward(image, mask, masked_image)
                 # print(torch.max(mask))
-                plt.imshow(polyp[0].T)
-                plt.show()
+                # plt.title("Polyp image")
+                # plt.imshow(polyp[0].T)
+                # plt.show()
                 # plt.imshow(masked_image[0].T)
+                plt.title("Inpainted image")
                 plt.imshow(merged[0].T)
                 plt.show()
+                # plt.savefig(f"PipelineMods/inpaint_examples/{i}")
             break
 
 
 if __name__ == '__main__':
-    inpainter = Inpainter("Predictors/Inpainters/deeplab-generator-80")
+    inpainter = Inpainter("Predictors/Inpainters/deeplab-generator-550")
     inpainter.get_test()

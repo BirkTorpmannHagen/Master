@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch
 from segmentation_models_pytorch.deeplabv3 import DeepLabV3Plus
 
 
@@ -17,4 +18,6 @@ class SegDiscriminator(nn.Module):
         self.model = DeepLabV3Plus(in_channels=3, classes=1, activation="sigmoid")
 
     def forward(self, mask):
-        return self.model(mask)
+        # adds nosie to inputs, see https://arxiv.org/pdf/1701.04862.pdf
+        return self.model(mask + torch.normal(torch.zeros_like(mask), torch.ones_like(mask) / 10))
+        # return self.model(mask)

@@ -114,6 +114,7 @@ class KvasirSyntheticDataset(Dataset):
     def __getitem__(self, index):
         image = self.common_transforms(
             open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
+        image = image
         mask = generate_a_mask(imsize=400).T
         mask = torch.tensor(mask > 0.5).float()
         part = mask * image
