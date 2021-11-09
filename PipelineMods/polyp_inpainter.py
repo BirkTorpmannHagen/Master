@@ -3,7 +3,6 @@ import torch.nn as nn
 import torch
 from torchvision.transforms import Normalize
 # from PipelineMods.gmcnn.model.net_with_dropout import InpaintingModel_GMCNN_Given_Mask
-from PipelineMods.ganlib.implementations.context_encoder.models import Generator
 from DataProcessing.hyperkvasir import KvasirSyntheticDataset
 from torch.utils.data.dataloader import DataLoader
 from Models.inpainters import SegGenerator

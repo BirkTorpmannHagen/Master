@@ -65,9 +65,8 @@ class KvasirSegmentationDataset(Dataset):
         # deterministic partition
         self.split = split
         train_size = int(len(self.fnames) * 0.8)
-        val_size = len(self.fnames) - train_size // 2
+        val_size = (len(self.fnames) - train_size) // 2
         test_size = len(self.fnames) - train_size - val_size
-        self.size = 0
         self.fnames_train = self.fnames[:train_size]
         self.fnames_val = self.fnames[train_size:train_size + val_size]
         self.fnames_test = self.fnames[train_size + val_size:]
@@ -147,11 +146,11 @@ class KvasirSyntheticDataset(Dataset):
 
 
 def test_KvasirSegmentationDataset():
-    dataset = KvasirSegmentationDataset("Datasets/HyperKvasir")
+    dataset = KvasirSegmentationDataset("Datasets/HyperKvasir", split="test")
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
-    print("Classification Tests passed")
+    print("Segmentation Tests passed")
 
 
 def test_KvasirClassificationDataset():
@@ -159,9 +158,9 @@ def test_KvasirClassificationDataset():
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
-    print("Segmentation Tests passed")
+    print("Classification Tests passed")
 
 
 if __name__ == '__main__':
     test_KvasirSegmentationDataset()
-    test_KvasirClassificationDataset()
+    # test_KvasirClassificationDataset()

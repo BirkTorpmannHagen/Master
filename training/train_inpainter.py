@@ -10,7 +10,6 @@ from torchvision.utils import save_image
 from Models.inpainters import SegGenerator, SegDiscriminator
 from DataProcessing.hyperkvasir import KvasirInpaintingDataset
 from DataProcessing.etis import EtisDataset
-from PipelineMods.ganlib.implementations.context_encoder.models import Generator, Discriminator
 from PIL import Image
 from tqdm import tqdm
 from PipelineMods.polyp_inpainter import Inpainter
