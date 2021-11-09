@@ -36,8 +36,8 @@ def train_new_inpainter():
     generator = SegGenerator()
     discriminator = SegDiscriminator()
 
-    generator.load_state_dict(torch.load("Predictors/Inpainters/deeplab-generator-650"))
-    discriminator.load_state_dict(torch.load("Predictors/Inpainters/deeplab-discriminator-650"))
+    generator.load_state_dict(torch.load("Predictors/Inpainters/deeplab-generator-990"))
+    discriminator.load_state_dict(torch.load("Predictors/Inpainters/deeplab-discriminator-990"))
 
     cuda = True
     if cuda:
@@ -76,11 +76,12 @@ def train_new_inpainter():
     # patch_h, patch_w = int(50 / 2 ** 3), int(50 / 2 ** 3)
     # patch = (1, patch_h, patch_w)
     # print(patch)
-    for epoch in range(660, 1000):
+    for epoch in range(0, 1000):
         printed = False
         d_losses = []
         g_advs = []
         g_pixels = []
+
         for i, (imgs, mask, masked_imgs, masked_parts, filename) in enumerate(dataloader):
             imgs = imgs.cuda()
             mask = mask.cuda()
@@ -142,8 +143,8 @@ def train_new_inpainter():
             optimizer_D.step()
             scheduler_D.step(epoch)
             if not printed and epoch % 10 == 0:
-                torch.save(generator.state_dict(), f"Predictors/Inpainters/deeplab-generator-{epoch}")
-                torch.save(discriminator.state_dict(), f"Predictors/Inpainters/deeplab-discriminator-{epoch}")
+                torch.save(generator.state_dict(), f"Predictors/Inpainters/better-deeplab-generator-{epoch}")
+                torch.save(discriminator.state_dict(), f"Predictors/Inpainters/better-deeplab-discriminator-{epoch}")
                 plt.title("Part")
                 plt.imshow((gen_parts[0].detach().cpu().numpy().T))
                 plt.show()
@@ -155,7 +156,7 @@ def train_new_inpainter():
                 # plt.imshow(masked_parts[0].detach().cpu().numpy().T)
                 # plt.show()
                 try:
-                    test = Inpainter(f"Predictors/Inpainters/deeplab-generator-{epoch}")
+                    test = Inpainter(f"Predictors/Inpainters/better-deeplab-generator-{epoch}")
                     test.get_test()
                 except FileNotFoundError:
                     print("Weird...")

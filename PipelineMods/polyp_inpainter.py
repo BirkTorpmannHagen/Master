@@ -28,11 +28,6 @@ class Inpainter(nn.Module):
                            batch_size=4)):
             with torch.no_grad():
                 merged, polyp = self.forward(image, mask, masked_image)
-                # print(torch.max(mask))
-                # plt.title("Polyp image")
-                # plt.imshow(polyp[0].T)
-                # plt.show()
-                # plt.imshow(masked_image[0].T)
                 plt.title("Inpainted image")
                 plt.imshow(merged[0].T)
                 plt.show()

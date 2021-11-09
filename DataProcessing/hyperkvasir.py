@@ -51,27 +51,50 @@ class KvasirClassificationDataset(Dataset):
 class KvasirSegmentationDataset(Dataset):
     """
         Dataset class that fetches images with the associated segmentation mask.
-        Employs "vanilla" augmentations,
+        Employs "vanilla" augmentations
+        TODO add deterministic train/val split
     """
 
-    def __init__(self, path):
+    def __init__(self, path, split="train"):
         super(KvasirSegmentationDataset, self).__init__()
         self.path = join(path, "segmented-images/")
         self.fnames = listdir(join(self.path, "images"))
         self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
                                                      transforms.ToTensor()
                                                      ])
+        # deterministic partition
+        self.split = split
+        train_size = int(len(self.fnames) * 0.8)
+        val_size = len(self.fnames) - train_size // 2
+        test_size = len(self.fnames) - train_size - val_size
+        self.size = 0
+        self.fnames_train = self.fnames[:train_size]
+        self.fnames_val = self.fnames[train_size:train_size + val_size]
+        self.fnames_test = self.fnames[train_size + val_size:]
+        self.split_fnames = None  # iterable for selected split
+        if self.split == "train":
+            self.size = train_size
+            self.split_fnames = self.fnames_train
+        elif self.split == "val":
+            self.size = val_size
+            self.split_fnames = self.fnames_val
+        elif self.split == "test":
+            self.size = test_size
+            self.split_fnames = self.fnames_test
+        else:
+            raise ValueError("Choices are train/val/test")
 
     def __len__(self):
-        return len(self.fnames)
+        return self.size
 
     def __getitem__(self, index):
+
         image = self.common_transforms(
-            open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
+            open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
         mask = self.common_transforms(
-            open(join(join(self.path, "masks/"), self.fnames[index])).convert("L"))
+            open(join(join(self.path, "masks/"), self.split_fnames[index])).convert("L"))
         mask = (mask > 0.5).float()
-        return image, mask, self.fnames[index]
+        return image, mask, self.split_fnames[index]
 
 
 class KvasirInpaintingDataset(Dataset):
