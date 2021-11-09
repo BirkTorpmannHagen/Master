@@ -53,11 +53,12 @@ class VanillaTrainer:
         self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
         self.criterion = vanilla_losses.JaccardLoss()
         self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0=25)
-        self.dataset = KvasirSegmentationDataset("Datasets/HyperKvasir")
-        self.train_set, self.val_set = random_split(self.dataset, [int(len(self.dataset) * 0.8),
-                                                                   len(self.dataset) - int(len(self.dataset) * 0.8)])
+        self.train_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="train")
+        self.val_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="val")
+        self.test_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="test")
         self.train_loader = DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
         self.val_loader = DataLoader(self.val_set, batch_size=self.batch_size, shuffle=True)
+        self.test_loader = DataLoader(self.test_set, batch_size=self.batch_size, shuffle=True)
 
     def train_epoch(self):
         self.model.train()
@@ -83,6 +84,7 @@ class VanillaTrainer:
         for i in range(self.epochs):
             training_loss = np.abs(self.train_epoch())
             validation_loss, ious = self.validate(epoch=i, plot=False)
+            test_ious = self.test()
             logging.log_iou(f"logs/training_log_{self.model_str}_pretrainmode={self.pretrain}_{self.id}", i, ious)
             mean_iou = torch.mean(ious)
             self.scheduler.step(i)
@@ -90,11 +92,25 @@ class VanillaTrainer:
                 f"Epoch {i} of {self.epochs} \t lr={[group['lr'] for group in self.optimizer.param_groups]}, loss={training_loss} \t val_loss={validation_loss}, mean_iou={mean_iou}")
 
             if mean_iou > best_iou:
-                print("Saving best model..")
                 best_iou = mean_iou
-                np.save(f"Experiments/Normal-Pipelines/{self.model_str}/pretrainmode={self.pretrain}_{self.id}", ious)
+                np.save(f"Experiments/Normal-Pipelines/{self.model_str}/pretrainmode={self.pretrain}_{self.id}",
+                        test_ious)
+
+                print(f"Saving new best model. Test-set mean iou: {float(np.mean(test_ious.numpy()))}")
                 torch.save(self.model.state_dict(),
                            f"Predictors/{self.model_str}/pretrainmode={self.pretrain}_{self.id}")
+
+    def test(self):
+        self.model.eval()
+        ious = torch.empty((0,))
+        with torch.no_grad():
+            for x, y, fname in self.test_loader:
+                image = x.to("cuda")
+                mask = y.to("cuda")
+                output = self.model(image)
+                batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
+                ious = torch.cat((ious, batch_ious.flatten()))
+        return ious
 
     def validate(self, epoch, plot=False):
         self.model.eval()
