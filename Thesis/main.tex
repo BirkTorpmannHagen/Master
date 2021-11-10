@@ -1,0 +1,46 @@
+\documentclass[UKenglish]{ifimaster}  %% ... or USenglish or norsk or nynorsk
+\usepackage[utf8]{inputenc}           %% ... or latin1
+\usepackage[T1]{fontenc,url}
+\urlstyle{sf}
+\usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
+\usepackage[backend=biber,style=numeric-comp]{biblatex}
+
+\title{Managing underspecification }        %% ... or whatever
+\subtitle{Any short subtitle}         %% ... if any
+\author{Birk Sebastian Frostelid Torpmann-Hagen}                      %% ... or whoever 
+
+\addbibresource{biblio.bib}            %% ... or whatever
+
+\begin{document}
+\duoforside[dept={Department of Informatics},   %% ... or your department
+  program={Robotics and Intelligent Systems},  %% ... or your programme
+  long]                                        %% ... or long
+
+\frontmatter{}
+\chapter*{Abstract}                   
+
+\tableofcontents{}
+\listoffigures{}
+\listoftables{}
+
+\chapter*{Preface}                   
+
+\mainmatter{}
+\part{Introduction}                  
+
+\chapter{Background}                  
+\subtitle
+
+\part{The project}                    
+
+\chapter{Planning the project}        
+
+
+\part{Conclusion}                    
+
+\chapter{Results}                     
+
+
+\backmatter{}
+\printbibliography
+\end{document}
