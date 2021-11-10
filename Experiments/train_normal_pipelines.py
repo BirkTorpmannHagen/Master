@@ -6,7 +6,7 @@ if __name__ == '__main__':
               "lr": 0.00001,
               "batch_size": 16,
               "epochs": 200}
-    for i in range(100):
+    for i in range(13, 100):
         trainer = VanillaTrainer("DeepLab", i, config)
         trainer.train()
     # i = 4

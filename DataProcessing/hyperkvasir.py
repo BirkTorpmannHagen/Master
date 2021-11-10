@@ -1,6 +1,8 @@
 from os import listdir
 from os.path import join
 
+import PIL.Image
+import matplotlib.pyplot as plt
 import numpy as np
 import torch.utils.data
 from PIL.Image import open
@@ -8,6 +10,7 @@ from torch.nn.functional import one_hot
 from torch.utils.data import Dataset
 from torchvision import transforms
 from utils.mask_generator import generate_a_mask
+import DataProcessing.augmentation as aug
 
 
 class KvasirClassificationDataset(Dataset):
@@ -62,6 +65,8 @@ class KvasirSegmentationDataset(Dataset):
         self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
                                                      transforms.ToTensor()
                                                      ])
+        self.pixeltrans = aug.albumentation_pixelwise_transforms()
+        self.segtrans = aug.albumentation_pixelwise_transforms()
         # deterministic partition
         self.split = split
         train_size = int(len(self.fnames) * 0.8)
@@ -88,10 +93,15 @@ class KvasirSegmentationDataset(Dataset):
 
     def __getitem__(self, index):
 
-        image = self.common_transforms(
-            open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
-        mask = self.common_transforms(
-            open(join(join(self.path, "masks/"), self.split_fnames[index])).convert("L"))
+        image = np.array(open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
+        mask = np.array(open(join(join(self.path, "masks/"), self.split_fnames[index])).convert("L"))
+        if self.split == "train":
+            transformed = self.pixeltrans(image=image)
+            image = transformed["image"]
+            segtransformed = self.segtrans(image=image, mask=mask)
+            image, mask = segtransformed["image"], segtransformed["mask"]
+        image = self.common_transforms(PIL.Image.fromarray(image))
+        mask = self.common_transforms(PIL.Image.fromarray(mask))
         mask = (mask > 0.5).float()
         return image, mask, self.split_fnames[index]
 
@@ -148,6 +158,10 @@ class KvasirSyntheticDataset(Dataset):
 def test_KvasirSegmentationDataset():
     dataset = KvasirSegmentationDataset("Datasets/HyperKvasir", split="test")
     for x, y, fname in torch.utils.data.DataLoader(dataset):
+        plt.imshow(x.squeeze().T)
+        # plt.imshow(y.squeeze().T, alpha=0.5)
+        plt.show()
+
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
     print("Segmentation Tests passed")
