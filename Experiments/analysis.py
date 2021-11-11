@@ -23,4 +23,4 @@ def get_datawise_distribution(experiment_path):
 
 
 if __name__ == '__main__':
-    get_predictorwise_distribution("Experiments/Normal-Pipelines/DeepLab")
+    get_predictorwise_distribution("Experiments/Data/Normal-Pipelines/DeepLab")
