@@ -1,7 +1,7 @@
 from training.vanilla_trainer import VanillaTrainer
 
 if __name__ == '__main__':
-    config = {"device": "cuda",
+    config = {"device": "cuda:4",
               "pretrain": "imagenet",
               "lr": 0.00001,
               "batch_size": 16,

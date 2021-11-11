@@ -1,3 +1,2 @@
-module load slurm
-~/STREAM/STREAM$ sbatch streamrun.sh
-squeue
+#~/STREAM/STREAM$ sbatch train_normal_pipeline.py
+srun python train_normal_pipeline.py
