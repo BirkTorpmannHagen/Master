@@ -2,6 +2,7 @@ name: master
 channels:
   - defaults
   - conda-forge
+  - pytorch
 dependencies:
   - pytorch-gpu
   - segmentation-models-pytorch
