@@ -107,52 +107,90 @@ class KvasirSegmentationDataset(Dataset):
 
 
 class KvasirInpaintingDataset(Dataset):
-    def __init__(self, path):
+    def __init__(self, path, split="train"):
         super(KvasirInpaintingDataset, self).__init__()
         self.path = join(path, "segmented-images/")
         self.fnames = listdir(join(self.path, "images"))
         self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
                                                      transforms.ToTensor()
                                                      ])
+        self.split = split
+        train_size = int(len(self.fnames) * 0.8)
+        val_size = (len(self.fnames) - train_size) // 2
+        test_size = len(self.fnames) - train_size - val_size
+        self.fnames_train = self.fnames[:train_size]
+        self.fnames_val = self.fnames[train_size:train_size + val_size]
+        self.fnames_test = self.fnames[train_size + val_size:]
+        self.split_fnames = None  # iterable for selected split
+        if self.split == "train":
+            self.size = train_size
+            self.split_fnames = self.fnames_train
+        elif self.split == "val":
+            self.size = val_size
+            self.split_fnames = self.fnames_val
+        elif self.split == "test":
+            self.size = test_size
+            self.split_fnames = self.fnames_test
+        else:
+            raise ValueError("Choices are train/val/test")
 
     def __len__(self):
-        return len(self.fnames)
+        return len(self.split_fnames)
 
     def __getitem__(self, index):
         image = self.common_transforms(
-            open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
+            open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
         mask = self.common_transforms(
-            open(join(join(self.path, "masks/"), self.fnames[index])).convert("L"))
+            open(join(join(self.path, "masks/"), self.split_fnames[index])).convert("L"))
         mask = (mask > 0.5).float()
 
         part = mask * image
         masked_image = image - part
 
-        return image, mask, masked_image, part, self.fnames[index]
+        return image, mask, masked_image, part, self.split_fnames[index]
 
 
 class KvasirSyntheticDataset(Dataset):
-    def __init__(self, path):
+    def __init__(self, path, split="train"):
         super(KvasirSyntheticDataset, self).__init__()
         self.path = join(path, "unlabeled-images")
         self.fnames = listdir(join(self.path, "images"))
         self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
                                                      transforms.ToTensor()
                                                      ])
+        self.split = split
+        train_size = int(len(self.fnames) * 0.8)
+        val_size = (len(self.fnames) - train_size) // 2
+        test_size = len(self.fnames) - train_size - val_size
+        self.fnames_train = self.fnames[:train_size]
+        self.fnames_val = self.fnames[train_size:train_size + val_size]
+        self.fnames_test = self.fnames[train_size + val_size:]
+        self.split_fnames = None  # iterable for selected split
+        if self.split == "train":
+            self.size = train_size
+            self.split_fnames = self.fnames_train
+        elif self.split == "val":
+            self.size = val_size
+            self.split_fnames = self.fnames_val
+        elif self.split == "test":
+            self.size = test_size
+            self.split_fnames = self.fnames_test
+        else:
+            raise ValueError("Choices are train/val/test")
 
     def __len__(self):
-        return len(self.fnames)
+        return len(self.split_fnames)
 
     def __getitem__(self, index):
         image = self.common_transforms(
-            open(join(join(self.path, "images/"), self.fnames[index])).convert("RGB"))
+            open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
         image = image
         mask = generate_a_mask(imsize=400).T
         mask = torch.tensor(mask > 0.5).float()
         part = mask * image
         masked_image = image - part
 
-        return image, mask, masked_image, part, self.fnames[index]
+        return image, mask, masked_image, part, self.split_fnames[index]
 
 
 def test_KvasirSegmentationDataset():

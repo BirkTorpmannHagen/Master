@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 import DataProcessing.augmentation as aug
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirClassificationDataset
 from Models import backbones
+from Models import inpainters
 from Pretraining.deeplab_pretrainer import pretrain_encoder
 from Tests.metrics import iou
 from utils import logging
@@ -35,8 +36,9 @@ class VanillaTrainer:
                 self.model.encoder.load_state_dict(encoder.state_dict())
             elif self.pretrain == "imagenet":
                 self.model = backbones.DeepLab("imagenet").to(self.device)
-            elif self.pretrain == "Discriminator":  # for experiment
-                self.model = backbones.DeepLab().to(self.device)
+            elif self.pretrain == "discriminator":  # for experiment
+                print("disc")
+                self.model = inpainters.SegDiscriminator().to(self.device)
                 self.model.load_state_dict(torch.load("Predictors/Inpainters/better-deeplab-discriminator-990"))
         elif model_str == "Divergent":
             self.model = backbones.DivergentNet().to(self.device)

@@ -37,8 +37,8 @@ def train_new_inpainter():
     generator = SegGenerator()
     discriminator = SegDiscriminator()
 
-    generator.load_state_dict(torch.load("Predictors/Inpainters/deeplab-generator-990"))
-    discriminator.load_state_dict(torch.load("Predictors/Inpainters/deeplab-discriminator-990"))
+    # generator.load_state_dict(torch.load("Predictors/Inpainters/no-pretrain-deeplab-generator-290"))
+    # discriminator.load_state_dict(torch.load("Predictors/Inpainters/no-pretrain-deeplab-discriminator-290"))
 
     cuda = True
     if cuda:
@@ -46,7 +46,7 @@ def train_new_inpainter():
         discriminator.cuda()
         adversarial_loss.cuda()
         pixelwise_loss.cuda()
-    # Dataset loader
+    # Dataset loader TODO refactor w/ albumentation library
     transforms_ = [
         transforms.Resize((400, 400), Image.BICUBIC),
         transforms.ToTensor(),
@@ -68,8 +68,8 @@ def train_new_inpainter():
     # Optimizers
     optimizer_G = torch.optim.Adam(generator.parameters(), lr=0.0001)
     optimizer_D = torch.optim.Adam(discriminator.parameters(), lr=0.00001)
-    scheduler_G = CosineAnnealingWarmRestarts(optimizer_G, T_0=100)
-    scheduler_D = CosineAnnealingWarmRestarts(optimizer_D, T_0=100)
+    scheduler_G = CosineAnnealingWarmRestarts(optimizer_G, T_0=100, T_mult=2)
+    scheduler_D = CosineAnnealingWarmRestarts(optimizer_D, T_0=100, T_mult=2)
 
     # Initialize weights
     # generator.apply(weights_init_normal)
@@ -77,7 +77,7 @@ def train_new_inpainter():
     # patch_h, patch_w = int(50 / 2 ** 3), int(50 / 2 ** 3)
     # patch = (1, patch_h, patch_w)
     # print(patch)
-    for epoch in range(0, 1000):
+    for epoch in range(5000):
         printed = False
         d_losses = []
         g_advs = []
@@ -144,8 +144,9 @@ def train_new_inpainter():
             optimizer_D.step()
             scheduler_D.step(epoch)
             if not printed and epoch % 10 == 0:
-                torch.save(generator.state_dict(), f"Predictors/Inpainters/better-deeplab-generator-{epoch}")
-                torch.save(discriminator.state_dict(), f"Predictors/Inpainters/better-deeplab-discriminator-{epoch}")
+                torch.save(generator.state_dict(), f"Predictors/Inpainters/no-pretrain-deeplab-generator-{epoch}")
+                torch.save(discriminator.state_dict(),
+                           f"Predictors/Inpainters/no-pretrain-deeplab-discriminator-{epoch}")
                 plt.title("Part")
                 plt.imshow((gen_parts[0].detach().cpu().numpy().T))
                 plt.show()
@@ -157,7 +158,7 @@ def train_new_inpainter():
                 # plt.imshow(masked_parts[0].detach().cpu().numpy().T)
                 # plt.show()
                 try:
-                    test = Inpainter(f"Predictors/Inpainters/better-deeplab-generator-{epoch}")
+                    test = Inpainter(f"Predictors/Inpainters/no-pretrain-deeplab-generator-{epoch}")
                     test.get_test()
                 except FileNotFoundError:
                     print("Weird...")

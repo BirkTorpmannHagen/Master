@@ -2,7 +2,7 @@ from training.vanilla_trainer import VanillaTrainer
 
 if __name__ == '__main__':
     config = {"device": "cuda",
-              "pretrain": "imagenet",
+              "pretrain": "discriminator",
               "lr": 0.00001,
               "batch_size": 16,
               "epochs": 200}

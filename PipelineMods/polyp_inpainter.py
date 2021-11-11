@@ -21,9 +21,9 @@ class Inpainter(nn.Module):
         merged = (1 - mask) * img + (polyp * mask)
         return merged, polyp
 
-    def get_test(self):
+    def get_test(self, split="test"):
         for i, (image, mask, masked_image, part, fname) in enumerate(
-                DataLoader(KvasirSyntheticDataset("Datasets/HyperKvasir"),
+                DataLoader(KvasirSyntheticDataset("Datasets/HyperKvasir", split="test"),
                            batch_size=4)):
             with torch.no_grad():
                 merged, polyp = self.forward(image, mask, masked_image)
