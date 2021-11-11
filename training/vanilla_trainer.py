@@ -92,7 +92,7 @@ class VanillaTrainer:
 
             if mean_iou > best_iou:
                 best_iou = mean_iou
-                np.save(f"Experiments/Normal-Pipelines/{self.model_str}/pretrainmode={self.pretrain}_{self.id}",
+                np.save(f"Experiments/Data/Normal-Pipelines/{self.model_str}/pretrainmode={self.pretrain}_{self.id}",
                         test_ious)
 
                 print(f"Saving new best model. Test-set mean iou: {float(np.mean(test_ious.numpy()))}")
