@@ -47,11 +47,13 @@ class VanillaTrainer:
             elif "None":
                 pass
         elif model_str == "Polyp":
-            self.model = backbones.PolypNet().to(self.device)
-            if self.pretrain == "KvasirClassification":
-                raise NotImplementedError
+            raise NotImplementedError
+        elif model_str == "Unet":
+            raise NotImplementedError
+        elif model_str == "FPN":
+            raise NotImplementedError
         else:
-            raise AttributeError("model_str not valid; choices are DeepLab, Divergent, Polyp")
+            raise AttributeError("model_str not valid; choices are DeepLab, Divergent, Polyp, FPN, Unet")
 
         self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
         self.criterion = vanilla_losses.JaccardLoss()
