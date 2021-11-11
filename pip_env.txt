@@ -1,0 +1,45 @@
+albumentations==1.1.0
+Bottleneck==1.3.2
+certifi==2021.10.8
+cffi @ file:///tmp/build/80754af9/cffi_1600699180754/work
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+cycler==0.10.0
+daal4py==2021.3.0
+efficientnet-pytorch==0.6.3
+future @ file:///home/conda/feedstock_root/build_artifacts/future_1610147336439/work
+imageio==2.10.3
+joblib @ file:///tmp/build/80754af9/joblib_1613502643832/work
+kiwisolver @ file:///tmp/build/80754af9/kiwisolver_1612282414123/work
+matplotlib @ file:///tmp/build/80754af9/matplotlib-suite_1613407855456/work
+mkl-service==2.3.0
+munch==2.5.0
+networkx==2.6.3
+numexpr @ file:///tmp/build/80754af9/numexpr_1614798504508/work
+numpy @ file:///home/conda/feedstock_root/build_artifacts/numpy_1626648382091/work
+olefile @ file:///home/conda/feedstock_root/build_artifacts/olefile_1602866521163/work
+opencv-python-headless==4.5.4.58
+pandas==1.3.3
+Pillow @ file:///home/conda/feedstock_root/build_artifacts/pillow_1604748693076/work
+pretrainedmodels @ file:///home/conda/feedstock_root/build_artifacts/pretrainedmodels_1619808183723/work
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+pyparsing @ file:///home/linux1/recipes/ci/pyparsing_1610983426697/work
+python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
+pytz @ file:///tmp/build/80754af9/pytz_1612215392582/work
+PyWavelets==1.2.0
+PyYAML==5.4.1
+qudida==0.0.4
+scikit-image==0.18.3
+scikit-learn @ file:///tmp/build/80754af9/scikit-learn_1621370326158/work
+scikit-learn-intelex==2021.20210714.150629
+scipy @ file:///tmp/build/80754af9/scipy_1616700973326/work
+segmentation-models-pytorch @ git+https://github.com/qubvel/segmentation_models.pytorch@b78f4ba34aac2b1519f4c1bad583befd9e6f2466
+six==1.15.0
+threadpoolctl @ file:///tmp/build/80754af9/threadpoolctl_1626115094421/work
+tifffile==2021.11.2
+timm==0.4.12
+torch @ file:///home/conda/feedstock_root/build_artifacts/pytorch-recipe_1618364246409/work
+torchaudio==0.8.0a0+a751e1d
+torchvision @ file:///home/conda/feedstock_root/build_artifacts/torchvision-split_1619073628218/work
+tornado @ file:///tmp/build/80754af9/tornado_1606942283357/work
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/tqdm_1627689047698/work
+typing-extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1622748266870/work
