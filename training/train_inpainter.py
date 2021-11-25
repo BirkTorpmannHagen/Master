@@ -12,7 +12,7 @@ from DataProcessing.hyperkvasir import KvasirInpaintingDataset
 from DataProcessing.etis import EtisDataset
 from PIL import Image
 from tqdm import tqdm
-from PipelineMods.polyp_inpainter import Inpainter
+from model_of_natural_variation.polyp_inpainter import Inpainter
 
 
 # TODO refactor
@@ -37,8 +37,8 @@ def train_new_inpainter():
     generator = SegGenerator()
     discriminator = SegDiscriminator()
 
-    # generator.load_state_dict(torch.load("Predictors/Inpainters/no-pretrain-deeplab-generator-290"))
-    # discriminator.load_state_dict(torch.load("Predictors/Inpainters/no-pretrain-deeplab-discriminator-290"))
+    generator.load_state_dict(torch.load("Predictors/Inpainters/no-pretrain-deeplab-generator-940"))
+    discriminator.load_state_dict(torch.load("Predictors/Inpainters/no-pretrain-deeplab-discriminator-940"))
 
     cuda = True
     if cuda:
@@ -77,7 +77,7 @@ def train_new_inpainter():
     # patch_h, patch_w = int(50 / 2 ** 3), int(50 / 2 ** 3)
     # patch = (1, patch_h, patch_w)
     # print(patch)
-    for epoch in range(5000):
+    for epoch in range(990, 5000):
         printed = False
         d_losses = []
         g_advs = []

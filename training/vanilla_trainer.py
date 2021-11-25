@@ -38,8 +38,14 @@ class VanillaTrainer:
                 self.model = backbones.DeepLab("imagenet").to(self.device)
             elif self.pretrain == "discriminator":  # for experiment
                 print("disc")
-                self.model = inpainters.SegDiscriminator().to(self.device)
-                self.model.load_state_dict(torch.load("Predictors/Inpainters/better-deeplab-discriminator-990"))
+                # self.model = backbones.DeepLab().to(self.device)
+                # self.model = inpainters.SegDiscriminator().to(self.device)
+                # self.model.load_state_dict(torch.load("Predictors/Inpainters/better-deeplab-discriminator-990"))
+                self.gen = inpainters.SegGenerator()
+                self.gen.load_state_dict(torch.load("Predictors/Inpainters/no-pretrain-deeplab-generator-4990"))
+                self.model = torch.nn.Sequential(self.gen,
+                                                 torch.nn.Conv1d(3, 1, (1, 1)),
+                                                 torch.nn.Sigmoid()).to(self.device)
         elif model_str == "Divergent":
             self.model = backbones.DivergentNet().to(self.device)
             if self.pretrain == "KvasirClassification":
@@ -84,7 +90,7 @@ class VanillaTrainer:
         print("Starting Segmentation training")
         for i in range(self.epochs):
             training_loss = np.abs(self.train_epoch())
-            validation_loss, ious = self.validate(epoch=i, plot=False)
+            validation_loss, ious = self.validate(epoch=i, plot=True)
             test_ious = self.test()
             logging.log_iou(f"logs/training_log_{self.model_str}_pretrainmode={self.pretrain}_{self.id}", i, ious)
             mean_iou = torch.mean(ious)

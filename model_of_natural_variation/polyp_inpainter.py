@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 import torch
 from torchvision.transforms import Normalize
-# from PipelineMods.gmcnn.model.net_with_dropout import InpaintingModel_GMCNN_Given_Mask
+# from model_of_natural_variation.gmcnn.model.net_with_dropout import InpaintingModel_GMCNN_Given_Mask
 from DataProcessing.hyperkvasir import KvasirSyntheticDataset
 from torch.utils.data.dataloader import DataLoader
 from Models.inpainters import SegGenerator
@@ -30,7 +30,7 @@ class Inpainter(nn.Module):
                 plt.title("Inpainted image")
                 plt.imshow(merged[0].T)
                 plt.show()
-                # plt.savefig(f"PipelineMods/inpaint_examples/{i}")
+                # plt.savefig(f"model_of_natural_variation/inpaint_examples/{i}")
             break
 
 

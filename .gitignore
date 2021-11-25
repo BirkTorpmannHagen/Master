@@ -1,5 +1,7 @@
 Datasets/
-PipelineMods/inpaint_examples/
+Predictors/
+model_of_natural_variation/inpaint_examples/
 __pycache__/
 *.pyc
+.idea/
 !.gitignore
