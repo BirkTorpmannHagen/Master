@@ -9,6 +9,7 @@ import cv2
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset
 from itertools import combinations_with_replacement
 import sys
+from utils import mask_generator
 
 
 class BezierPolypExtender(nn.Module):
@@ -100,12 +101,26 @@ class BezierPolypExtender(nn.Module):
         plt.show()
 
 
+class RandomDraw(nn.Module):
+    def __init__(self):
+        super(RandomDraw, self).__init__()
+
+    def forward(self, mask, rad):
+        possible_locations = np.argwhere(mask == 0)
+        location = possible_locations[:, np.random.choice(np.arange(possible_locations.shape[1]), 1)].squeeze()
+        location = location
+        location = list(location)
+        perturbation = mask_generator.generate_a_mask(rad=rad, location=location)
+        plt.imshow(perturbation, alpha=0.5)
+        plt.imshow(mask, alpha=0.5)
+        plt.scatter(x=location[0], y=location[1])
+        plt.show()
+
+
 if __name__ == '__main__':
     data = KvasirSegmentationDataset("Datasets/HyperKvasir")
-    mask = data[0][1]
-    pe = BezierPolypExtender(5, 3)
-    pe(mask[0])
-    # plt.imshow(mask[0])
-    # plt.show()
-    # pe = PolypExtender()
-    # pe()
+    mask = data[6][1]
+    # pe = BezierPolypExtender(5, 3)
+    # pe(mask[0])
+
+    rd = RandomDraw()(mask[0], 0.5)

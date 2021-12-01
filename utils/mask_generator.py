@@ -82,6 +82,7 @@ def get_bezier_curve(a, rad=0.2, edgy=0):
 def get_random_points(n=5, scale=0.8, mindst=None, rec=0):
     """ create n random points in the unit square, which are *mindst*
     apart, then scale them."""
+    # todo rewrite this filth
     mindst = mindst or .7 / n
     a = np.random.rand(n, 2)
     d = np.sqrt(np.sum(np.diff(ccw_sort(a), axis=0), axis=1) ** 2)
@@ -95,10 +96,13 @@ def get_random_points(n=5, scale=0.8, mindst=None, rec=0):
 # developer: Vajria
 # =======================================
 
-def generate_a_mask(rad=0.25, edgy=0.05, imsize=400):
+def generate_a_mask(rad=0.25, edgy=0.05, imsize=400, location=None, scale=None):
     # for c in np.array([[0,0], [0,1], [1,0], [1,1]]):
-    location = [randint(0, np.floor(imsize / 1.5)),
-                randint(0, np.floor(imsize / 1.5))]  # location region to generate a mask
+    if location is None:
+        location = [randint(0, np.floor(imsize / 1.5)),
+                    randint(0, np.floor(imsize / 1.5))]  # location region to generate a mask
+    else:
+        location = location
 
     a = get_random_points(n=5, scale=128) + location
     x, y, _ = get_bezier_curve(a, rad=rad, edgy=edgy)
