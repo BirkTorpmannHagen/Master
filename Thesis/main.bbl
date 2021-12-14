@@ -1,0 +1,436 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{nty/global//global/global}
+  \entry{retinopathy}{inproceedings}{}
+    \name{author}{7}{}{%
+      {{hash=BE}{%
+         family={Beede},
+         familyi={B\bibinitperiod},
+         given={Emma},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=BE}{%
+         family={Baylor},
+         familyi={B\bibinitperiod},
+         given={Elizabeth},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=HF}{%
+         family={Hersch},
+         familyi={H\bibinitperiod},
+         given={Fred},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=IA}{%
+         family={Iurchenko},
+         familyi={I\bibinitperiod},
+         given={Anna},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=WL}{%
+         family={Wilcox},
+         familyi={W\bibinitperiod},
+         given={Lauren},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=RP}{%
+         family={Ruamviboonsuk},
+         familyi={R\bibinitperiod},
+         given={Paisan},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=VLM}{%
+         family={Vardoulakis},
+         familyi={V\bibinitperiod},
+         given={Laura\bibnamedelima M.},
+         giveni={L\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Association for Computing Machinery}%
+    }
+    \keyw{health, human-centered ai, deep learning, diabetes}
+    \strng{namehash}{BE+1}
+    \strng{fullhash}{BEBEHFIAWLRPVLM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{booktitle}{Proceedings of the 2020 CHI Conference on Human Factors
+  in Computing Systems}
+    \verb{doi}
+    \verb 10.1145/3313831.3376718
+    \endverb
+    \field{isbn}{9781450367080}
+    \field{pages}{1–12}
+    \field{series}{CHI '20}
+    \field{title}{A Human-Centered Evaluation of a Deep Learning System
+  Deployed in Clinics for the Detection of Diabetic Retinopathy}
+    \verb{url}
+    \verb https://doi.org/10.1145/3313831.3376718
+    \endverb
+    \list{location}{1}{%
+      {Honolulu, HI, USA}%
+    }
+    \field{year}{2020}
+    \warn{\item Can't use 'location' + 'address'}
+  \endentry
+
+  \entry{damour2020underspecification}{misc}{}
+    \name{author}{40}{}{%
+      {{hash=DA}{%
+         family={D'Amour},
+         familyi={D\bibinitperiod},
+         given={Alexander},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=HK}{%
+         family={Heller},
+         familyi={H\bibinitperiod},
+         given={Katherine},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=MD}{%
+         family={Moldovan},
+         familyi={M\bibinitperiod},
+         given={Dan},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=AB}{%
+         family={Adlam},
+         familyi={A\bibinitperiod},
+         given={Ben},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=AB}{%
+         family={Alipanahi},
+         familyi={A\bibinitperiod},
+         given={Babak},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Beutel},
+         familyi={B\bibinitperiod},
+         given={Alex},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=CC}{%
+         family={Chen},
+         familyi={C\bibinitperiod},
+         given={Christina},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=DJ}{%
+         family={Deaton},
+         familyi={D\bibinitperiod},
+         given={Jonathan},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=EJ}{%
+         family={Eisenstein},
+         familyi={E\bibinitperiod},
+         given={Jacob},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=HMD}{%
+         family={Hoffman},
+         familyi={H\bibinitperiod},
+         given={Matthew\bibnamedelima D.},
+         giveni={M\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=HF}{%
+         family={Hormozdiari},
+         familyi={H\bibinitperiod},
+         given={Farhad},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=HN}{%
+         family={Houlsby},
+         familyi={H\bibinitperiod},
+         given={Neil},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=HS}{%
+         family={Hou},
+         familyi={H\bibinitperiod},
+         given={Shaobo},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=JG}{%
+         family={Jerfel},
+         familyi={J\bibinitperiod},
+         given={Ghassen},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=KA}{%
+         family={Karthikesalingam},
+         familyi={K\bibinitperiod},
+         given={Alan},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=LM}{%
+         family={Lucic},
+         familyi={L\bibinitperiod},
+         given={Mario},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=MY}{%
+         family={Ma},
+         familyi={M\bibinitperiod},
+         given={Yian},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=MC}{%
+         family={McLean},
+         familyi={M\bibinitperiod},
+         given={Cory},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=MD}{%
+         family={Mincu},
+         familyi={M\bibinitperiod},
+         given={Diana},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Mitani},
+         familyi={M\bibinitperiod},
+         given={Akinori},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Montanari},
+         familyi={M\bibinitperiod},
+         given={Andrea},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=NZ}{%
+         family={Nado},
+         familyi={N\bibinitperiod},
+         given={Zachary},
+         giveni={Z\bibinitperiod},
+      }}%
+      {{hash=NV}{%
+         family={Natarajan},
+         familyi={N\bibinitperiod},
+         given={Vivek},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=NC}{%
+         family={Nielson},
+         familyi={N\bibinitperiod},
+         given={Christopher},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=OTF}{%
+         family={Osborne},
+         familyi={O\bibinitperiod},
+         given={Thomas\bibnamedelima F.},
+         giveni={T\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=RR}{%
+         family={Raman},
+         familyi={R\bibinitperiod},
+         given={Rajiv},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=RK}{%
+         family={Ramasamy},
+         familyi={R\bibinitperiod},
+         given={Kim},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Sayres},
+         familyi={S\bibinitperiod},
+         given={Rory},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Schrouff},
+         familyi={S\bibinitperiod},
+         given={Jessica},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Seneviratne},
+         familyi={S\bibinitperiod},
+         given={Martin},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SS}{%
+         family={Sequeira},
+         familyi={S\bibinitperiod},
+         given={Shannon},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=SH}{%
+         family={Suresh},
+         familyi={S\bibinitperiod},
+         given={Harini},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=VV}{%
+         family={Veitch},
+         familyi={V\bibinitperiod},
+         given={Victor},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=VM}{%
+         family={Vladymyrov},
+         familyi={V\bibinitperiod},
+         given={Max},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=WX}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Xuezhi},
+         giveni={X\bibinitperiod},
+      }}%
+      {{hash=WK}{%
+         family={Webster},
+         familyi={W\bibinitperiod},
+         given={Kellie},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=YS}{%
+         family={Yadlowsky},
+         familyi={Y\bibinitperiod},
+         given={Steve},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=YT}{%
+         family={Yun},
+         familyi={Y\bibinitperiod},
+         given={Taedong},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=ZX}{%
+         family={Zhai},
+         familyi={Z\bibinitperiod},
+         given={Xiaohua},
+         giveni={X\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Sculley},
+         familyi={S\bibinitperiod},
+         given={D.},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DA+1}
+  \strng{fullhash}{DAHKMDABABBACCDJEJHMDHFHNHSJGKALMMYMCMDMAMANZNVNCOTFRRRKSRSJSMSSSHVVVMWXWKYSYTZXSD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \verb{eprint}
+    \verb 2011.03395
+    \endverb
+    \field{title}{Underspecification Presents Challenges for Credibility in
+  Modern Machine Learning}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2020}
+  \endentry
+
+  \entry{modelbased}{misc}{}
+    \name{author}{3}{}{%
+      {{hash=RA}{%
+         family={Robey},
+         familyi={R\bibinitperiod},
+         given={Alexander},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=HH}{%
+         family={Hassani},
+         familyi={H\bibinitperiod},
+         given={Hamed},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=PGJ}{%
+         family={Pappas},
+         familyi={P\bibinitperiod},
+         given={George\bibnamedelima J.},
+         giveni={G\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{RAHHPGJ1}
+    \strng{fullhash}{RAHHPGJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \verb{eprint}
+    \verb 2005.10247
+    \endverb
+    \field{title}{Model-Based Robust Deep Learning: Generalizing to Natural,
+  Out-of-Distribution Data}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2020}
+  \endentry
+
+  \entry{dl_medical_imaging}{article}{}
+    \name{author}{3}{}{%
+      {{hash=SD}{%
+         family={Shen},
+         familyi={S\bibinitperiod},
+         given={Dinggang},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=WG}{%
+         family={Wu},
+         familyi={W\bibinitperiod},
+         given={Guorong},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=SHI}{%
+         family={Suk},
+         familyi={S\bibinitperiod},
+         given={Heung-Il},
+         giveni={H\bibinithyphendelim I\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SDWGSHI1}
+    \strng{fullhash}{SDWGSHI1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \verb{doi}
+    \verb 10.1146/annurev-bioeng-071516-044442
+    \endverb
+    \verb{eprint}
+    \verb https://doi.org/10.1146/annurev-bioeng-071516-044442
+    \endverb
+    \field{note}{PMID: 28301734}
+    \field{number}{1}
+    \field{pages}{221\bibrangedash 248}
+    \field{title}{Deep Learning in Medical Image Analysis}
+    \verb{url}
+    \verb https://doi.org/10.1146/annurev-bioeng-071516-044442
+    \endverb
+    \field{volume}{19}
+    \field{journaltitle}{Annual Review of Biomedical Engineering}
+    \field{year}{2017}
+  \endentry
+\enddatalist
+\endinput

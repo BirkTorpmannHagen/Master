@@ -1,0 +1,48 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {UKenglish}{}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Introduction}{1}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {2}Background}{3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.1}Generalizability}{3}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.1}Empirical Risk Minimization}{4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.2}Underspecification}{6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.3}Sensitivity}{6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.1.4}Spurious correlations}{6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.2}Related work}{6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.1}Model robust deep learning}{6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.2}Divergent Net}{6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.3}...}{6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Models of natural variation}{6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{GAN-inpainting}{6}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Methodology}{7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.4}(algorithm name)}{7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.4.1}Model of natural variability}{7}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Gan-based polyp inpainting}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {3.4.2}Geometric and pixel-wise transformations}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.5}Baselines}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.6}Datasets}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {3.7}Metrics and evaluation}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Results}{9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Discussion}{11}%
