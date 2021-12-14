@@ -58,7 +58,7 @@ class KvasirSegmentationDataset(Dataset):
         TODO add deterministic train/val split
     """
 
-    def __init__(self, path, split="train"):
+    def __init__(self, path, split="train", augment=True):
         super(KvasirSegmentationDataset, self).__init__()
         self.path = join(path, "segmented-images/")
         self.fnames = listdir(join(self.path, "images"))
@@ -72,6 +72,7 @@ class KvasirSegmentationDataset(Dataset):
         train_size = int(len(self.fnames) * 0.8)
         val_size = (len(self.fnames) - train_size) // 2
         test_size = len(self.fnames) - train_size - val_size
+        self.augment = augment
         self.fnames_train = self.fnames[:train_size]
         self.fnames_val = self.fnames[train_size:train_size + val_size]
         self.fnames_test = self.fnames[train_size + val_size:]
@@ -95,7 +96,7 @@ class KvasirSegmentationDataset(Dataset):
 
         image = np.array(open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
         mask = np.array(open(join(join(self.path, "masks/"), self.split_fnames[index])).convert("L"))
-        if self.split == "train":
+        if self.split == "train" and self.augment == True:
             transformed = self.pixeltrans(image=image)
             image = transformed["image"]
             segtransformed = self.segtrans(image=image, mask=mask)

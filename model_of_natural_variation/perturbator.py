@@ -115,6 +115,7 @@ class RandomDraw(nn.Module):
         plt.imshow(mask, alpha=0.5)
         plt.scatter(x=location[0], y=location[1])
         plt.show()
+        return (mask + perturbation > 0).astype(int)  # todo verify
 
 
 if __name__ == '__main__':
