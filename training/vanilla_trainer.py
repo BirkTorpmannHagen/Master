@@ -19,6 +19,7 @@ class VanillaTrainer:
         :param model: String describing the model type. Can be DeepLab, Divergent, ... TODO
         :param config: Contains hyperparameters : lr, epochs, batch_size, T_0, T_mult
         """
+        print("test")
         self.device = config["device"]
         self.pretrain = config["pretrain"]
         self.lr = config["lr"]
