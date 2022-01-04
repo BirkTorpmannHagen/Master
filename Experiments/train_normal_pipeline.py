@@ -1,12 +1,12 @@
 from training.vanilla_trainer import VanillaTrainer
 
 if __name__ == '__main__':
-    config = {"device": "cuda:4",
+    config = {"device": "cuda",
               "pretrain": "imagenet",
               "lr": 0.00001,
               "batch_size": 16,
-              "epochs": 200}
-    trainer = VanillaTrainer("DeepLab", -1, config)
+              "epochs": 1000}
+    trainer = VanillaTrainer("DeepLab", "1000_epochs_2", config)
     trainer.train()
     # for i in range(13, 100):
     #     trainer = VanillaTrainer("DeepLab", i, config)

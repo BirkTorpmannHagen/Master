@@ -39,10 +39,13 @@ def get_generalizability_gap(modelpath):
 
 
 if __name__ == '__main__':
-    get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_0")
-    get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_1")
-    get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_2")
-    get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_3")
-    get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-10")
-    get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-9")
-
+    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_0")
+    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_1")
+    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_2")
+    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_3")
+    # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-10")
+    # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-9")
+    print("1000 epochs")
+    get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs")
+    get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs_2")
+    get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_test2")
