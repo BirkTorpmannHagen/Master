@@ -21,15 +21,17 @@ def eval(dataset, model):
 
 
 def get_generalizability_gap(modelpath):
-    if modelpath.split("/")[1] == "DeepLab":
-        model = DeepLab("imagenet").to("cuda")
-        model.load_state_dict(torch.load(modelpath))
-    else:
-        raise NotImplementedError(modelpath.split("/")[1])
+    model = DeepLab("imagenet").to("cuda")
+    model.load_state_dict(torch.load(modelpath))
+    # if modelpath.split("/")[1] == "DeepLab":
+    #     model = DeepLab("imagenet").to("cuda")
+    #     model.load_state_dict(torch.load(modelpath))
+    # else:
+    #     raise NotImplementedError(modelpath.split("/")[1])
 
     kvasir = DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir", split="test"))
     etis = DataLoader(EtisDataset("Datasets/ETIS-LaribPolypDB"))
-    
+
     kvasir_ious = eval(kvasir, model)
     etis_ious = eval(etis, model)
     print(np.mean(kvasir_ious),
@@ -37,4 +39,13 @@ def get_generalizability_gap(modelpath):
 
 
 if __name__ == '__main__':
-    get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_0")
+    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_0")
+    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_1")
+    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_2")
+    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_3")
+    # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-10")
+    # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-9")
+    print("1000 epochs")
+    get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs")
+    get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs_2")
+    get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_test2")

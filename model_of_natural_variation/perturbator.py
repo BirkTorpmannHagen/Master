@@ -75,9 +75,7 @@ class BezierPolypExtender(nn.Module):
         #         plt.savefig("wtf.png")
         #         plt.show()
         plt.imshow(proximity_image)
-        plt.show()
-        input()
-        # for x in np.arange(proximity_image.shape[0]):
+        plt.show()  # for x in np.arange(proximity_image.shape[0]):
         #     for y in np.arange(proximity_image.shape[1]):
         #         if edges[x, y] == 1:
         #             proximity_image[x, y] = np.linalg.norm(seed - np.array([[x, y]]))
@@ -87,10 +85,7 @@ class BezierPolypExtender(nn.Module):
         pdf[proximity_image < self.minimum_distance] = 0  # controls minimum abberation size
         pdf = pdf / np.sum(pdf)  # normalize
         ac_idx = np.argwhere(pdf != 0)
-        print(ac_idx.shape)
         probs = pdf[ac_idx[:, 0], ac_idx[:, 1]]
-        print(probs)
-        print(np.sum(probs))
         anchorpoint = ac_idx[np.random.choice(range(ac_idx.shape[0]), 1, p=probs)]
 
         plt.imshow(pdf)
@@ -115,12 +110,20 @@ class RandomDraw(nn.Module):
         plt.imshow(mask, alpha=0.5)
         plt.scatter(x=location[0], y=location[1])
         plt.show()
+        return (mask + perturbation > 0).long()  # todo verify
 
 
 if __name__ == '__main__':
     data = KvasirSegmentationDataset("Datasets/HyperKvasir")
     mask = data[6][1]
+    print(mask.shape)
     # pe = BezierPolypExtender(5, 3)
     # pe(mask[0])
-
+    print("drawing")
+    print(mask[0].shape)
     rd = RandomDraw()(mask[0], 0.5)
+    print("drawn")
+    # print(rd)
+    plt.imshow(rd)
+    plt.show()
+    print("???)")

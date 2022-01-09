@@ -8,9 +8,9 @@ Model wrappers
 
 
 class Unet(backbones.Unet):
-    def __init__(self, classes):
+    def __init__(self):
         super(Unet, self).__init__()
-        self.model = backbones.Unet(in_channels=3, classes=classes)
+        self.model = backbones.Unet(in_channels=3, classes=1)
 
     def forward(self, x):
         return self.model.forward(x)

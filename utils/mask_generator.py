@@ -103,7 +103,6 @@ def generate_a_mask(rad=0.25, edgy=0.05, imsize=400, location=None, scale=None):
                     randint(0, np.floor(imsize / 1.5))]  # location region to generate a mask
     else:
         location = location
-
     a = get_random_points(n=5, scale=128) + location
     x, y, _ = get_bezier_curve(a, rad=rad, edgy=edgy)
 
@@ -114,7 +113,7 @@ def generate_a_mask(rad=0.25, edgy=0.05, imsize=400, location=None, scale=None):
     pts = c.reshape((-1, 1, 2))
     img = cv.fillPoly(img, [pts], (255, 255, 255))  # (255,255, 255) = color (White)
 
-    return img
+    return img[:, :, 0] / 255
 
 
 if __name__ == '__main__':

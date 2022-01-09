@@ -19,6 +19,7 @@ class VanillaTrainer:
         :param model: String describing the model type. Can be DeepLab, Divergent, ... TODO
         :param config: Contains hyperparameters : lr, epochs, batch_size, T_0, T_mult
         """
+        print("test")
         self.device = config["device"]
         self.pretrain = config["pretrain"]
         self.lr = config["lr"]
@@ -63,7 +64,7 @@ class VanillaTrainer:
 
         self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
         self.criterion = vanilla_losses.JaccardLoss()
-        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0=25)
+        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0=50, T_mult=2)
         self.train_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="train")
         self.val_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="val")
         self.test_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="test")
