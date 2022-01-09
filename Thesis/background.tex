@@ -1,10 +1,7 @@
 \chapter{Background}
 \setcounter{chapter}{2}
-
-
 \section{Colorectal Polyps, Medical Imaging, and Deep Learning}
-<<<<<<< HEAD
-	Polyps are small growths found in and around the inner lining of the large intestine. These polyps, also referred to as adenomas, can in time develop into cancerous tumours, or carcinomas, in a process known as the adenoma-carcinoma sequence \cite{ACS}. Though the majority of polyps do not undergo this process, identifying polyps nonetheless constitutes an important step towards preventing colorectal cancer. Indeed, resection of these polyps has been shown to reduce the incidence of colorectal cancer by a significant margin \cite{resection}. 
+ small growths found in and around the inner lining of the large intestine. These polyps, also referred to as adenomas, can in time develop into cancerous tumours, or carcinomas, in a process known as the adenoma-carcinoma sequence \cite{ACS}. Though the majority of polyps do not undergo this process, identifying polyps nonetheless constitutes an important step towards preventing colorectal cancer. Indeed, resection of these polyps has been shown to reduce the incidence of colorectal cancer by a significant margin \cite{resection}. 
 	
 	Though colorectal cancer remains as one of the leading causes of cancer-related death worldwide (source), mortality rates have nonetheless declined in large part to increased use of screening colonoscopy, which in turn allows for the opportunity for preemptive treatment. Polyps are, however, by nature somewhat difficukt to detect and are routinely missed by clinicians, with miss rates ranging upwards of 27\% for diminutive  polyps \cite{missrate1, missrate2}.
 	
@@ -86,72 +83,3 @@
 	
 	\subsection{Generalisation Failure Modes}
 	\subsection{Bayesian perspective of Generalization}
-=======
-Polyps are small growths found in and around the inner lining of the large intestine. These polyps, also referred to as adenomas, can in time develop into cancerous tumours, or carcinomas, in a process known as the adenoma-carcinoma sequence \cite{ACS}. Though the majority of polyps do not undergo this process, identifying polyps nonetheless constitutes an important step towards preventing colorectal cancer. Indeed, resection of these polyps has been shown to reduce the incidence of colorectal cancer by a significant margin \cite{resection}.
-
-Though colorectal cancer remains as one of the leading causes of cancer-related death worldwide (source), mortality rates have nonetheless declined in large part to increased use of screening colonoscopy, which in turn allows for the opportunity for preemptive treatment. Polyps are, however, by nature somewhat difficukt to detect and are routinely missed by clinicians, with miss rates ranging upwards of 27\% for diminutive polyps \cite{missrate1, missrate2}.
-
-Naturally, reducing this miss rate has the potential to further reduce incidence rates. There has been a significant body of work dedicated to for instance workflow optimization using both optical and mechanical approaches, for instance chromoendoscopy, wherein stains or dyes are applied at the time of endoscopy, or the use of alternative lighting such as narrow-band imaging, which increases the textural details that help distinguish polyps from their surrounding tissue.
-
-These systems do, however, require more equipment, training and expertise to effectively employ. Thus, automatic polyp segmentation using deep learning and convolutional neural networks (CNNs) has been identified as another diminutive detection method. This requires minimal training time on the part of the clinician, no additional equipment, and has been show to significantly increase detection rates when deployed in a clinical setting \cite{polyp-success-story}.
-
-Naturally, these results are not unique to the detection of polyps. Indeed, medical imaging has in recent years proven to be one of the most promising applications of artificial intelligence and deep learning, having the capacity to significantly improve both the accuracy and efficiency of detection, diagnosis, and treatment of a wide variety of diseases \cite{dl_medical_imaging}.
-
-%Some examples here
-
-There are, however, still several hurdles to overcome; recent research has shown that even state of the art deep-learning pipelines are prone to generalization failure when deployed in practical settings, particularly when exposed to distributional shifts such as changes in demographics, imaging equipment, noise, and more despite exhibiting high performance on hold-out sets \cite{retinopathy, damour2020underspecification}. There is no reason to expect that polyps are exempt from this problem, given how pervasive such shortcomings are in similar tasks.
-
-Naturally, such systems are rendered practically useless should they fail to perform sufficiently outside of the very carefully controlled conditions upon which they are trained. Thus, for AI-assisted detection to be on any considerable merit, it has to infer causally reasonable patterns in the data that generalize well to other hospitals, demographics, imaging equipment, resolutions, and so on. As will be discussed later in this chapter, this is in no way guaranteed by the deep learning pipelines typically used today.
-
-
-\section{Examples of Generalizability failure}
-
-%Examples - ~one paragraph each
-
-\subsection{Generalization Failure across Medical Domains}
-
-\subsection{Generalization Failure across Polyp-detection models}
-There has been astonishingly little research into determining the generalizability of models designed for polyp-detection. As a result, a meta-analysis of a selection of such models is required. Several models, consisting of DDANet, DivergentNet, (...), were trained according to the hyperparameters provided in their respective papers and repositories. Table (...) shows their results when evaluated on separate datasets. Methodological details can be found in chapter (...).
-% move to methods? analysis?
-
-\subsection{Generalization Failure across other domains}
-
-
-\section{Generalizability Theory}
-
-\subsection{Empirical Risk Minimization}
-
-% copy from essay
-% How deep learning works with respect to generalizability; modelling risk through an empirical estimation
-At the most fundamental level, the goal of machine learning is to learn a mapping between two spaces of objects \(X\) and \(Y\). This mapping, namely the function \(f: X \rightarrow Y\), maps some input object \(x \in X\), an image for example, to a corresponding and application-relevant output object \(y \in Y\), for instance a segmentation mask or a class label. It is worth noting, however, that \(f\) is not as much a function in the mathematical sense as much as it is an abstraction of whatever ground-truth relationship that the deep learning system is intended to capture, and consequently cannot typically be modelled explicitly. Instead, machine learning systems aim to find a representation of this mapping automatically by leveraging a training set \(\{x_i, y_i\}_{0...n}\) to find a sufficiently performant approximation of \(f\). This is referred to as supervised learning, and the resulting approximation found using the training set is denoted by \(h: X \rightarrow \hat{Y}\), and typically referred to as a hypothesis.
-
-To find such an approximation, we assume that there exists a joint probability distribution over \(X\) and \(Y\), namely \(P(x,y)\), and that the training data \(\{x_i, y_i\}_{0...n}\) is drawn from this probability distribution such that the resulting sample distribution is independent and identically distributed (henceforth: iid) to \(P(x,y)\). This is the so-called iid assumption. Note that by modelling the mapping as a joint probability distribution, one can model uncertainty in the predictions by expressing the output as a conditional probability \(P(y|x)\). In conjunction with a loss-function \(L(h(x),y)\) which measures the discrepancy between the hypothesis and the ground truth, these assumptions allows us to quantify the expected performance of a given hypothesis:
-\begin{equation}
-    R(h) = \boldsymbol{E}[L(h(x),y)] = \int L(h(x),y) dP(x,y)
-\end{equation}
-Using this framework, one can then find an iid-optimal hypothesis, often called a predictor, by finding the predictor \(h^*\) among a fixed class of functions (defined by network architecture) \(\mathcal{H}\) that minimizes risk:
-\begin{equation}
-    h^* = \argmin_{h \in \mathcal{H}}R(h)
-\end{equation}
-
-Since \(P(x,y\)) is not known, however, one cannot compute \(R(h)\) explicitly. Instead, the expected risk has to be computed through empirical estimation, i.e by finding the arithmetic average of the risk associated with each prediction by the hypothesis over the training set:
-\begin{equation}
-    R_{emp}(h) = \frac{1}{n}\sum_{i=1}^{n}L(h(x_i), y_i)
-\end{equation}
-This risk can in turn be minimized with respect to the hypothesis class. This is called empirical risk minimization (ERM):
-\begin{equation}
-    \hat{h} = \argmin_{h \in \mathcal{H}}R_{emp}(h)
-\end{equation}
-
-The central idea with this approach to machine learning is that the training data can be considered a finite iid sampling of the underlying distribution. As such, by the central limit theorem, the hold-out performance of the computed hypothesis will approach iid-optimal performance given a sufficient amount of training data and some sufficiently capable and regularized training procedure. This should in theory allow deep learning systems to be able to generalize, since the empirical risk in theory can approximate the true risk arbitrarily well given sufficient training data.
-
-Naturally, however, real-world data is rarely neat enough for it to consistently abide by the iid assumption. Commonly encountered variation in real world data such as variable instance lighting conditions, class imbalance, image corruptions, noise, or other more subtle forms of distributional shift all result in structural misalignment of the training and deployment distributions (citation). Ideally, predictors should be robust to these sorts of changes, however evidently this is in not guaranteed by ERM (citation). ERM simply guarantees an iid-optimal predictor. While the difference is subtle, it is worth reemphasizing: empirical risk minimization only generalizes to data which is more or less identically distributed to the training data. Differently distributed or otherwise perturbed data, even that which is near imperceptible or at any rate inconsequentially different to the human eye, violates the iid assumption, and can as such not be expected to be classified correctly given a predictor trained via ERM.
-
-To mitigate this, one could simply add more data to the pipeline through augmentation, or simply collecting more training data. This will lead to a better approximation of the true risk. This does not, however, solve the problem. The variability of the real world is not, unfortunately, easy to model merely through augmentations, and collecting sufficient data to cover every potential source of natural variability is infeasible, especially in medical domains.
-%link this
-Consider for example a machine-learning pipeline wherein a model is trained to classify cows and camels. The dataset consists of cows, pictured in grass fields and pastures, and camels, pictured in deserts. To be generous, let us assume that we have sufficient quantities of data to ensure that the pipeline is perfectly invariant to the pose of the respective animals, to lighting conditions, geometric transforms, etc. One may then expect that the pipeline correctly learns to classify the two, and attains high accuracies, and indeed when evaluated on iid data, this would be entirely correct. However, what would then happen if one such predictor encountered a cow in the desert and a camel in a grass pasture? This constitutes a distributional shift, and as such we cannot expect reliable performance as detailed in \ref{erm}. Naturally, the predictor may have learned just fine exactly what constitutes a cow and a camel, but it might just as easily learned to associate deserts with camels and pastures with cows. And from a data perspective, both are equally correct interpretations. The immediate response to this may be to simply add some pictures with more varied backgrounds, but this once again would only serve to make the pipeline more robust to backgrounds. it would not guarantee that the pipeline learns the right inductive biases. The predictor may then for example instead learn that cows typically are black and white and camels usually beige, and then fail when it encounters a brown cow. One could keep adding more and more data, but there is not really any way of knowing when the pipeline is well enough specified by the data such that it starts returning predictors with the desired inductive biases. There are in simpler terms several "correct" interpretations of what separates the classes from a purely data-based perspective, each with their own inductive biases. There are as a consequence not just one risk-minimizing predictor, but a whole family of them. This is referred to as underspecification \cite{damour2020underspecification}.
-
-\subsection{Generalisation Failure Modes}
-
-\subsection{Bayesian perspective of Generalization}
->>>>>>> 5d15e744fce70d41265c143348e8d4fc323e0218
