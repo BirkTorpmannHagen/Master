@@ -15,18 +15,37 @@
 	
 	There are, however, still several hurdles to overcome; recent research has shown that even state of the art deep-learning pipelines are prone to generalization failure when deployed in practical settings, particularly when exposed to distributional shifts such as changes in demographics, imaging equipment, noise, and more despite exhibiting high performance on hold-out sets \cite{retinopathy, damour2020underspecification}. There is no reason to expect that polyps are exempt from this problem, given how pervasive such shortcomings are in similar tasks.
 	
-	Naturally, such systems are rendered practically useless should they fail to perform sufficiently outside of the very carefully controlled conditions upon which they are trained. Thus, for AI-assisted detection to be on any considerable merit, it has to infer causally reasonable patterns in the data that generalize well to other hospitals, demographics, imaging equipment, resolutions, and so on. As will be discussed later in this chapter, this is in no way guaranteed by the deep learning pipelines typically used today. 
+	Naturally, such systems are rendered practically useless should they fail to perform sufficiently outside of the very carefully controlled conditions upon which they are trained. Thus, for AI-assisted detection to be on any considerable merit, it has to infer causally reasonable patterns in the data that generalize well to other hospitals, demographics, imaging equipment, resolutions, and so on. Though a human would not find this type of generalization very difficult, deep-learning (and for that matter, other data-driven approaches) regularly seem to fail in this regard. 
 
-\section{Examples of Generalizability failure}
+\section{Generalization failure in the Wild}
+
+	The medical domain is characterized by a number of key features that separate it from other areas where deep-learning typically excels. Training data is often scarce, the pathologies that constitute the classification targets are unevenly distributed and often exhibit high degrees of inter-class variability, and there can be a significant number of confounding variables. 
+		
+	For instance, a deep-learning based classifier which successfully detected pneumonia in X-ray scans across a number of hospitals with striking accuracy was determined to be basing its predictions not on any lesions or otherwise pathologically relevant features in the images, but rather on a hospital-specific metal token that was on every image, which it used in conjunction with learning the prevalence rate of pneumonia for the hospitals from which the data was collected. As a result, when deployed on data from hospitals that it had not seen during training, the system failed to generalize \cite{pneumonia}. 
+		
+	In another study, it was shown that a classifier intended to detect diabetic retinopathy exhibited significant variability in performance depending on the type of camera used. The same study also showed that the same type of performance variability could be found when detecting skin-conditions across demographics with differing skin tones. \cite{damour2020underspecification}. 
 	
-%Examples - ~one paragraph each
-	\subsection{Generalization Failure across Medical Domains}
-	\subsection{Generalization Failure across Polyp-detection models}
-		There has been astonishingly little research into determining the generalizability of models designed for polyp-detection. As a result, a meta-analysis of a selection of such models is required. Several models, consisting of DDANet, DivergentNet, (...), were trained according to the hyperparameters provided in their respective papers and repositories. Table (...) shows their results when evaluated on separate datasets. Methodological details can be found in chapter (...). 
-		% move to methods? analysis?
-	\subsection{Generalization Failure across other domains}
+	Though there has been limited literature detailing the generalizability of pipelines trained to segment polyps, there is no reason to believe that it is somehow exempt from the same problems that impact the aforementioned tasks. To illustrate this, a brief meta analysis can be performed. Table
+	\begin{table}
+		\centering
+		\begin{tabularx}{\textwidth}{X | X X}
+			Model & IID & Mean OOD \\
+			\hline
+			DeepLabV3 & ... & ... \\
+			U-Net & ... & ... \\
+			FPN & ... & ... \\
+			DDA-net & ... & ... \\
+			Divergent-net & ... & ...\\
+		\end{tabularx}
+				\label{table:polyp-case}
+	\end{table}
+	There has been astonishingly little research into determining the generalizability of models designed for polyp-detection. As a result, a meta-analysis of a selection of such models is required. Several models, consisting of DDANet, DivergentNet, (...), were trained according to the hyperparameters provided in their respective papers and repositories. Table (...) shows their results when evaluated on separate datasets. Methodological details can be found in chapter (...). 
+
+	Naturally, non-medical domains are in no way immune to generalisation failure. In fact, one could easily argue that the vast majority of deep-learning pipelines fail to generalize altogether, and instead merely infer some set of inductive biases that, although perhaps causally incorrect, perform sufficiently well for general use. 
 	
 \section{Generalizability Theory}
+	\subsection{Generalizability and Expectations}
+		When developing deep-learning based systems, there is by and large an expectation that it will 
 	\subsection{Empirical Risk Minimization} 
 	
 		% copy from essay
@@ -53,7 +72,10 @@
 		
 		The central idea with this approach to machine learning is that the training data can be considered a finite iid sampling of the underlying distribution. As such, by the central limit theorem, the hold-out performance of the computed hypothesis will approach iid-optimal performance given a sufficient amount of training data and some sufficiently capable and regularized training procedure. This should in theory allow deep learning systems to be able to generalize, since the empirical risk in theory can approximate the true risk arbitrarily well given sufficient training data.
 		
-		Naturally, however, real-world data is rarely neat enough for it to consistently abide by the iid assumption. Commonly encountered variation in real world data such as variable instance lighting conditions, class imbalance, image corruptions, noise, or other more subtle forms of distributional shift all result in structural misalignment of the training and deployment distributions (citation). Ideally, predictors should be robust to these sorts of changes, however evidently this is in not guaranteed by ERM (citation). ERM simply guarantees an iid-optimal predictor. While the difference is subtle, it is worth reemphasizing: empirical risk minimization only generalizes to data which is more or less identically distributed to the training data. Differently distributed or otherwise perturbed data, even that which is near imperceptible or at any rate inconsequentially different to the human eye, violates the iid assumption, and can as such not be expected to be classified correctly given a predictor trained via ERM. 
+		\subsection{Underspecification}	
+		
+			
+		Naturally, however, real-world data is rarely neat enough for it to consistently abide by the iid assumption. Commonly encountered variation in real world data such as variable lighting conditions, class imbalance, image corruptions, noise, or other more subtle forms of distributional shift all result in structural misalignment of the training and deployment distributions (citation). Ideally, predictors should be robust to these sorts of changes, however evidently this is in not guaranteed by ERM (citation). ERM simply guarantees an iid-optimal predictor. While the difference is subtle, it is worth reemphasizing: empirical risk minimization only generalizes to data which is more or less identically distributed to the training data. Differently distributed or otherwise perturbed data, even that which is near imperceptible or at any rate inconsequentially different to the human eye, violates the iid assumption, and can as such not be expected to be classified correctly given a predictor trained via ERM. 
 		
 		To mitigate this, one could simply add more data to the pipeline through augmentation, or simply collecting more training data. This will lead to a better approximation of the true risk. This does not, however, solve the problem. The variability of the real world is not, unfortunately, easy to model merely through augmentations, and collecting sufficient data to cover every potential source of natural variability is infeasible, especially in medical domains. 
 	 %link this
