@@ -5,7 +5,9 @@ if __name__ == '__main__':
               "pretrain": "imagenet",
               "lr": 0.00001,
               "batch_size": 16,
-              "epochs": 500}
-
-    trainer = ContrastiveTrainer(model_str="DeepLab", id="adaptive", config=config)
-    trainer.train()
+              "epochs": 250}
+    # trainer = ContrastiveTrainer(model_str="DeepLab", id="fully_stochastic_weights", config=config)
+    # trainer.train()
+    for i in range(2, 10):
+        trainer = ContrastiveTrainer(model_str="DeepLab", id=f"new_loss_{i}", config=config)
+        trainer.train()

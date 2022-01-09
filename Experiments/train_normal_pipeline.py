@@ -5,9 +5,10 @@ if __name__ == '__main__':
               "pretrain": "imagenet",
               "lr": 0.00001,
               "batch_size": 16,
-              "epochs": 1000}
-    trainer = VanillaTrainer("DeepLab", "1000_epochs_2", config)
-    trainer.train()
+              "epochs": 250}
+    for i in range(1, 5):
+        trainer = VanillaTrainer("DeepLab", f"250_epochs_{i}", config)
+        trainer.train()
     # for i in range(13, 100):
     #     trainer = VanillaTrainer("DeepLab", i, config)
     #     trainer.train()
