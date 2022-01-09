@@ -6,7 +6,6 @@ import torch.optim.optimizer
 from torch.utils.data import DataLoader
 import DataProcessing.augmentation as aug
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirClassificationDataset
-from DataProcessing.etis import EtisDataset
 from Models import backbones
 from Models import inpainters
 from Pretraining.deeplab_pretrainer import pretrain_encoder
@@ -21,27 +20,36 @@ class WeightedPerturbationLoss(nn.Module):
 
     """
 
-    def __init__(self):
+    def __init__(self, adaptive=True):
         super(WeightedPerturbationLoss, self).__init__()
         self.epsilon = 1e-5
+        self.adaptive = adaptive
 
-    def forward(self, new_mask, old_mask, new_seg, old_seg, iou_weight=0.5):
+    def forward(self, new_mask, old_mask, new_seg, old_seg, iou_weight=None):
         def difference(mask1, mask2):
             return mask1 * (1 - mask2) + mask2 * (1 - mask1)
 
         vanilla_jaccard = vanilla_losses.JaccardLoss()(old_seg, old_mask)
-        perturbation_loss = torch.sum((difference(difference(new_mask, old_mask),
-                                                  difference(new_seg, old_seg))
-                                       ) / \
-                                      torch.sum(torch.clamp(new_seg + new_mask + old_mask + old_seg, 0,
-                                                            1))) + self.epsilon  # normalizing factor
-        return (1 - iou_weight) * vanilla_jaccard + iou_weight * perturbation_loss
+        # perturbation_loss = torch.sum((difference(difference(new_mask, old_mask),
+        #                                           difference(new_seg, old_seg))
+        #                                ) / \
+        #                               (torch.sum(
+        #                                   torch.clamp(new_mask + old_mask, 0, 1))) + self.epsilon)  # normalizing factor
+
+        # ~bd + ~ac + b~d + a~c
+        perturbation_loss = (1 - new_mask) * new_seg + (1 - old_mask) * old_seg + new_mask * (
+                1 - new_seg) + old_mask * (1 - old_seg)
+        perturbation_loss = torch.sum(perturbation_loss) / (torch.sum(
+            torch.clamp(new_mask + old_mask, 0, 1)) + self.epsilon)
+        if self.adaptive:
+            return (1 - iou_weight) * vanilla_jaccard + iou_weight * perturbation_loss
+        return 0.5 * vanilla_jaccard + 0.5 * perturbation_loss
 
 
 class ContrastiveTrainer(VanillaTrainer):
     def __init__(self, model_str, id, config):
         super(ContrastiveTrainer, self).__init__(model_str, id, config)
-        self.mnv = ModelOfNaturalVariation().to(self.device)
+        self.mnv = ModelOfNaturalVariation(T0=1).to(self.device)
         self.criterion = WeightedPerturbationLoss().to(self.device)
         self.train_loader = DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir"), batch_size=8)
 
@@ -68,14 +76,14 @@ class ContrastiveTrainer(VanillaTrainer):
         print("Starting Segmentation training")
         for i in range(self.epochs):
             training_loss = np.abs(self.train_epoch())
-            val_loss, ious = self.validate(epoch=i, plot=True)
-            gen_ious = self.validate_generalizability(epoch=i, plot=True)
+            val_loss, ious = self.validate(epoch=i, plot=False)
+            gen_ious = self.validate_generalizability(epoch=i, plot=False)
             logging.log_iou(f"logs/augmented-training_log_{self.model_str}_pretrainmode={self.pretrain}_{self.id}", i,
                             ious.cpu())
             mean_iou = torch.mean(ious)
             gen_iou = torch.mean(gen_ious)
             self.scheduler.step(i)
-            self.mnv.step()
+            # self.mnv.step()
             print(
                 f"Epoch {i} of {self.epochs} \t"
                 f" lr={[group['lr'] for group in self.optimizer.param_groups]} \t"
@@ -94,7 +102,10 @@ class ContrastiveTrainer(VanillaTrainer):
                     test_ious)
                 print(f"Saving new best model. IID test-set mean iou: {float(np.mean(test_ious.numpy()))}")
                 torch.save(self.model.state_dict(),
-                           f"Predictors/Augmented/{self.model_str}-pretrainmode={self.pretrain}_{self.id}")
+                           f"Predictors/Augmented/{self.model_str}/pretrainmode={self.pretrain}_{self.id}")
+                print("saved in: ", f"Predictors/Augmented/{self.model_str}/pretrainmode={self.pretrain}_{self.id}")
+        torch.save(self.model.state_dict(),
+                   f"Predictors/Augmented/{self.model_str}/pretrainmode={self.pretrain}_{self.id}_last_epoch")
 
     def validate(self, epoch, plot=False):
         # todo refactor to make this prettier
@@ -134,22 +145,4 @@ class ContrastiveTrainer(VanillaTrainer):
                 output = self.model(image)
                 batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
                 ious = torch.cat((ious, batch_ious.flatten()))
-        return ious
-
-    def validate_generalizability(self, epoch, plot=False):
-        self.model.eval()
-        ious = torch.empty((0,))
-        with torch.no_grad():
-            for x, y, index in DataLoader(EtisDataset("Datasets/ETIS-LaribPolypDB")):
-                image = x.to("cuda")
-                mask = y.to("cuda")
-                output = self.model(image)
-                batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
-                ious = torch.cat((ious, batch_ious.flatten()))
-                if plot:
-                    plt.imshow(image[0].permute(1, 2, 0).cpu().numpy())
-                    plt.imshow((output[0, 0].cpu().numpy() > 0.5).astype(int), alpha=0.5)
-                    plt.title("IoU {} at epoch {}".format(iou(output[0, 0], mask[0, 0]), epoch))
-                    plt.show()
-                    plot = False  # plot one example per epoch (hacky, but works)
         return ious

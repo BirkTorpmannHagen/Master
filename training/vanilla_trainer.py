@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import segmentation_models_pytorch.utils.losses as vanilla_losses
 import torch.optim.optimizer
+from DataProcessing.etis import EtisDataset
+
 from torch.utils.data import DataLoader
-import DataProcessing.augmentation as aug
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirClassificationDataset
 from Models import backbones
 from Models import inpainters
@@ -87,26 +88,38 @@ class VanillaTrainer:
         return np.mean(losses)
 
     def train(self):
-        best_iou = 0
+        best_val_loss = 10
         print("Starting Segmentation training")
         for i in range(self.epochs):
             training_loss = np.abs(self.train_epoch())
-            validation_loss, ious = self.validate(epoch=i, plot=True)
-            test_ious = self.test()
-            logging.log_iou(f"logs/training_log_{self.model_str}_pretrainmode={self.pretrain}_{self.id}", i, ious)
+            val_loss, ious = self.validate(epoch=i, plot=False)
+            gen_ious = self.validate_generalizability(epoch=i, plot=False)
+            logging.log_iou(f"logs/training_log_{self.model_str}_pretrainmode={self.pretrain}_{self.id}", i,
+                            ious.cpu())
             mean_iou = torch.mean(ious)
+            gen_iou = torch.mean(gen_ious)
             self.scheduler.step(i)
             print(
-                f"Epoch {i} of {self.epochs} \t lr={[group['lr'] for group in self.optimizer.param_groups]}, loss={training_loss} \t val_loss={validation_loss}, mean_iou={mean_iou}")
-
-            if mean_iou > best_iou:
-                best_iou = mean_iou
-                np.save(f"Experiments/Data/Normal-Pipelines/{self.model_str}/pretrainmode={self.pretrain}_{self.id}",
-                        test_ious)
-
-                print(f"Saving new best model. Test-set mean iou: {float(np.mean(test_ious.numpy()))}")
+                f"Epoch {i} of {self.epochs} \t"
+                f" lr={[group['lr'] for group in self.optimizer.param_groups]} \t"
+                f" loss={training_loss} \t"
+                f" val_loss={val_loss} \t"
+                f" ood_iou={gen_iou}\t"
+                f" val_iou={mean_iou} \t"
+                f" gen_prop={gen_iou / mean_iou}"
+            )
+            if val_loss < best_val_loss:
+                test_ious = self.test()
+                best_val_loss = val_loss
+                np.save(
+                    f"Experiments/Data/Normal-Pipelines/{self.model_str}/pretrainmode={self.pretrain}_{self.id}",
+                    test_ious)
+                print(f"Saving new best model. IID test-set mean iou: {float(np.mean(test_ious.numpy()))}")
                 torch.save(self.model.state_dict(),
-                           f"Predictors/{self.model_str}/pretrainmode={self.pretrain}_{self.id}")
+                           f"Predictors/Vanilla/{self.model_str}/pretrainmode={self.pretrain}_{self.id}")
+                print("saved in: ", f"Predictors/Vanilla/{self.model_str}/pretrainmode={self.pretrain}_{self.id}")
+        torch.save(self.model.state_dict(),
+                   f"Predictors/Vanilla/{self.model_str}/pretrainmode={self.pretrain}_{self.id}_last_epoch")
 
     def test(self):
         self.model.eval()
@@ -143,3 +156,21 @@ class VanillaTrainer:
                     plot = False  # plot one example per epoch
         avg_val_loss = np.mean(losses)
         return avg_val_loss, ious
+
+    def validate_generalizability(self, epoch, plot=False):
+        self.model.eval()
+        ious = torch.empty((0,))
+        with torch.no_grad():
+            for x, y, index in DataLoader(EtisDataset("Datasets/ETIS-LaribPolypDB")):
+                image = x.to("cuda")
+                mask = y.to("cuda")
+                output = self.model(image)
+                batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
+                ious = torch.cat((ious, batch_ious.flatten()))
+                if plot:
+                    plt.imshow(image[0].permute(1, 2, 0).cpu().numpy())
+                    plt.imshow((output[0, 0].cpu().numpy() > 0.5).astype(int), alpha=0.5)
+                    plt.title("IoU {} at epoch {}".format(iou(output[0, 0], mask[0, 0]), epoch))
+                    plt.show()
+                    plot = False  # plot one example per epoch (hacky, but works)
+            return ious

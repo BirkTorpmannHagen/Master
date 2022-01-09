@@ -3,6 +3,7 @@ from Tests.metrics import iou
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset
 from DataProcessing.etis import EtisDataset
 from torch.utils.data import DataLoader
+from os import listdir
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -45,7 +46,17 @@ if __name__ == '__main__':
     # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_3")
     # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-10")
     # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-9")
-    print("1000 epochs")
-    get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs")
-    get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs_2")
-    get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_test2")
+    # get_generalizability_gap("Predictors/Augmented/DeepLab/pretrainmode=imagenet_0")
+    # get_generalizability_gap("Predictors/Augmented/DeepLab/pretrainmode=imagenet_1")
+    for fname in listdir("Predictors/Augmented/DeepLab/"):
+        try:
+            get_generalizability_gap(f"Predictors/Augmented/DeepLab/{fname}")
+        except IsADirectoryError:
+            continue
+    for fname in listdir("Predictors/Vanilla/DeepLab/"):
+        try:
+            get_generalizability_gap(f"Predictors/Vanilla/DeepLab/{fname}")
+        except IsADirectoryError:
+            continue
+    # get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs_2")
+    # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_test2")
