@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.20)  10 DEC 2021 18:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.20)  8 JAN 2022 18:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -694,42 +694,60 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 ] [9] [10
 
 ]
-(./introduction.tex) (./background.tex [1
+(./introduction.tex
+Chapter 1.
+) (./background.tex [1
 
 ] [2
 
 ]
 Chapter 2.
-[3] [4] [5]) (./methodology.tex [6] [7
+[3] [4] [5]
 
-]) (./results.tex [8]) (./discussion.tex
-[9
+LaTeX Warning: Reference `erm' on page 6 undefined on input line 60.
 
-] [10
+) (./methodology.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-]) [11] [12
+ [6]
+[7] [8
 
-] [13] [14
+]
+Chapter 3.
+[9]) (./results.tex [10]
+Chapter 4.
+) (./discussion.tex [11
+
+] [12
+
+]
+Chapter 5.
+) [13] [14
+
+] [15] [16
 
 ]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4
 0.
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+ (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-) [15] (./main.aux)
+)
+[17] (./main.aux)
+
+LaTeX Warning: There were undefined references.
+
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12093 strings out of 481239
- 210282 string characters out of 5920377
- 662479 words of memory out of 5000000
- 27105 multiletter control sequences out of 15000+600000
+ 12108 strings out of 481239
+ 210884 string characters out of 5920377
+ 661715 words of memory out of 5000000
+ 27120 multiletter control sequences out of 15000+600000
  584837 words of font info for 114 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,5n,45p,2171b,2203s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,5n,45p,2172b,2203s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texliv
 e/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/t
 ype1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
@@ -743,10 +761,10 @@ tino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplbi8a
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/s
 hare/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on main.pdf (29 pages, 206523 bytes).
+Output written on main.pdf (31 pages, 208577 bytes).
 PDF statistics:
- 155 PDF objects out of 1000 (max. 8388607)
- 107 compressed objects within 2 object streams
+ 162 PDF objects out of 1000 (max. 8388607)
+ 112 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

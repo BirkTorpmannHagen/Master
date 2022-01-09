@@ -17,6 +17,112 @@
 \endgroup
 
 \datalist[entry]{nty/global//global/global}
+  \entry{polyp-success-story}{article}{}
+    \name{author}{9}{}{%
+      {{hash=BI}{%
+         family={Barua},
+         familyi={B\bibinitperiod},
+         given={Ishita},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=VDG}{%
+         family={Vinsard},
+         familyi={V\bibinitperiod},
+         given={Daniela\bibnamedelima Guerrero},
+         giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=JHC}{%
+         family={Jodal},
+         familyi={J\bibinitperiod},
+         given={Henriette\bibnamedelima C},
+         giveni={H\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=LM}{%
+         family={L{\o}berg},
+         familyi={L\bibinitperiod},
+         given={Magnus},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=KM}{%
+         family={Kalager},
+         familyi={K\bibinitperiod},
+         given={Mette},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=HO}{%
+         family={Holme},
+         familyi={H\bibinitperiod},
+         given={{\O}yvind},
+         giveni={{\O}\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Misawa},
+         familyi={M\bibinitperiod},
+         given={Masashi},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Bretthauer},
+         familyi={B\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=MY}{%
+         family={Mori},
+         familyi={M\bibinitperiod},
+         given={Yuichi},
+         giveni={Y\bibinitperiod},
+      }}%
+    }
+    \list{language}{1}{%
+      {en}%
+    }
+    \list{publisher}{1}{%
+      {Georg Thieme Verlag KG}%
+    }
+    \strng{namehash}{BI+1}
+    \strng{fullhash}{BIVDGJHCLMKMHOMMBMMY1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{abstract}{%
+    BACKGROUND: Artificial intelligence (AI)-based polyp detection systems are
+  used during colonoscopy with the aim of increasing lesion detection and
+  improving colonoscopy quality. PATIENTS AND METHODS: We performed a
+  systematic review and meta-analysis of prospective trials to determine the
+  value of AI-based polyp detection systems for detection of polyps and
+  colorectal cancer. We performed systematic searches in MEDLINE, EMBASE, and
+  Cochrane CENTRAL. Independent reviewers screened studies and assessed
+  eligibility, certainty of evidence, and risk of bias. We compared colonoscopy
+  with and without AI by calculating relative and absolute risks and mean
+  differences for detection of polyps, adenomas, and colorectal cancer.
+  RESULTS: Five randomized trials were eligible for analysis. Colonoscopy with
+  AI increased adenoma detection rates (ADRs) and polyp detection rates (PDRs)
+  compared to colonoscopy without AI (values given with 95 \%CI). ADR with AI
+  was 29.6 \% (22.2 \% - 37.0 \%) versus 19.3 \% (12.7 \% - 25.9 \%) without
+  AI; relative risk (RR] 1.52 (1.31 - 1.77), with high certainty. PDR was 45.4
+  \% (41.1 \% - 49.8 \%) with AI versus 30.6 \% (26.5 \% - 34.6 \%) without AI;
+  RR 1.48 (1.37 - 1.60), with high certainty. There was no difference in
+  detection of advanced adenomas (mean advanced adenomas per colonoscopy 0.03
+  for each group, high certainty). Mean adenomas detected per colonoscopy was
+  higher for small adenomas ($\leq$ 5 mm) for AI versus non-AI (mean difference
+  0.15 [0.12 - 0.18]), but not for larger adenomas (> 5 - $\leq$ 10 mm, mean
+  difference 0.03 [0.01 - 0.05]; > 10 mm, mean difference 0.01 [0.00 - 0.02];
+  high certainty). Data on cancer are unavailable. CONCLUSIONS: AI-based polyp
+  detection systems during colonoscopy increase detection of small nonadvanced
+  adenomas and polyps, but not of advanced adenomas.%
+    }
+    \field{number}{3}
+    \field{pages}{277\bibrangedash 284}
+    \field{title}{Artificial intelligence for polyp detection during
+  colonoscopy: a systematic review and meta-analysis}
+    \field{volume}{53}
+    \field{journaltitle}{Endoscopy}
+    \field{month}{03}
+    \field{year}{2021}
+  \endentry
+
   \entry{retinopathy}{inproceedings}{}
     \name{author}{7}{}{%
       {{hash=BE}{%
@@ -351,6 +457,311 @@
     \field{year}{2020}
   \endentry
 
+  \entry{missrate1}{article}{}
+    \name{author}{15}{}{%
+      {{hash=HD}{%
+         family={Heresbach},
+         familyi={H\bibinitperiod},
+         given={D},
+         giveni={D},
+      }}%
+      {{hash=BT}{%
+         family={Barrioz},
+         familyi={B\bibinitperiod},
+         given={T},
+         giveni={T},
+      }}%
+      {{hash=LMG}{%
+         family={Lapalus},
+         familyi={L\bibinitperiod},
+         given={M\bibnamedelima G},
+         giveni={M\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Coumaros},
+         familyi={C\bibinitperiod},
+         given={D},
+         giveni={D},
+      }}%
+      {{hash=BP}{%
+         family={Bauret},
+         familyi={B\bibinitperiod},
+         given={P},
+         giveni={P},
+      }}%
+      {{hash=PP}{%
+         family={Potier},
+         familyi={P\bibinitperiod},
+         given={P},
+         giveni={P},
+      }}%
+      {{hash=SD}{%
+         family={Sautereau},
+         familyi={S\bibinitperiod},
+         given={D},
+         giveni={D},
+      }}%
+      {{hash=BC}{%
+         family={Bousti{\`e}re},
+         familyi={B\bibinitperiod},
+         given={C},
+         giveni={C},
+      }}%
+      {{hash=GJC}{%
+         family={Grimaud},
+         familyi={G\bibinitperiod},
+         given={J\bibnamedelima C},
+         giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=BC}{%
+         family={Barth{\'e}l{\'e}my},
+         familyi={B\bibinitperiod},
+         given={C},
+         giveni={C},
+      }}%
+      {{hash=SJ}{%
+         family={S{\'e}e},
+         familyi={S\bibinitperiod},
+         given={J},
+         giveni={J},
+      }}%
+      {{hash=SI}{%
+         family={Serraj},
+         familyi={S\bibinitperiod},
+         given={I},
+         giveni={I},
+      }}%
+      {{hash=DPN}{%
+         family={D'Halluin},
+         familyi={D\bibinitperiod},
+         given={P\bibnamedelima N},
+         giveni={P\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=BB}{%
+         family={Branger},
+         familyi={B\bibinitperiod},
+         given={B},
+         giveni={B},
+      }}%
+      {{hash=PT}{%
+         family={Ponchon},
+         familyi={P\bibinitperiod},
+         given={T},
+         giveni={T},
+      }}%
+    }
+    \list{language}{1}{%
+      {en}%
+    }
+    \list{publisher}{1}{%
+      {Georg Thieme Verlag KG}%
+    }
+    \strng{namehash}{HD+1}
+    \strng{fullhash}{HDBTLMGCDBPPPSDBCGJCBCSJSIDPNBBPT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{abstract}{%
+    BACKGROUND AND STUDY AIM: Polyp miss rates during colonoscopy have been
+  calculated in a few tandem or back-to-back colonoscopy studies. Our objective
+  was to assess the adenoma miss rate while limiting technique or operator
+  expertise biases, i. e. by performing a large multicenter study, with
+  same-day back-to-back video colonoscopy, done by two different operators in
+  randomized order and blinded to the other examination. PATIENTS AND METHODS:
+  294 patients at 11 centers were included. Among the 286 analyzable tandem
+  colonoscopies, miss rates were calculated in both a lesion- and patient-based
+  analysis. Each of these rates was determined for polyps overall, for
+  adenomas, and then for lesions larger than 5 mm, and for advanced adenomas.
+  Univariate and logistic regression analysis were performed to define
+  independent variables associated with missed polyps or adenomas. RESULTS: The
+  miss rates for polyps, adenomas, polyps > or = 5 mm, adenomas > or = 5 mm,
+  and advanced adenomas were, respectively, 28 \%, 20 \%, 12 \%, 9 \% and 11
+  \%. None of the masses with a carcinomatous (n = 3) or carcinoid component (n
+  = 1) was missed. The specific lesion miss rates for patients with polyps and
+  adenomas were respectively 36 \% and 26 \% but the corresponding rates were
+  23 \% and 9.4 \% when calculated for all 286 patients. The diameter (1-mm
+  increments) and number of polyps (> or = 3) were independently associated
+  with a lower polyp miss rate, whereas sessile or flat shape and left location
+  were significantly associated with a higher miss rate. Adequacy of cleansing,
+  presence of diverticula, and duration of withdrawal for the first procedure
+  were not associated with adenoma miss rate. CONCLUSIONS: We confirm a
+  significant miss rate for polyps or adenoma during colonoscopy. Detection of
+  flat polyps is an issue that must be focused on to improve the quality of
+  colonoscopy.%
+    }
+    \field{number}{4}
+    \field{pages}{284\bibrangedash 290}
+    \field{title}{Miss rate for colorectal neoplastic polyps: a prospective
+  multicenter study of back-to-back video colonoscopies}
+    \field{volume}{40}
+    \field{journaltitle}{Endoscopy}
+    \field{month}{04}
+    \field{year}{2008}
+  \endentry
+
+  \entry{ACS}{article}{}
+    \name{author}{4}{}{%
+      {{hash=LA}{%
+         family={Leslie},
+         familyi={L\bibinitperiod},
+         given={A},
+         giveni={A},
+      }}%
+      {{hash=CFA}{%
+         family={Carey},
+         familyi={C\bibinitperiod},
+         given={F\bibnamedelima A},
+         giveni={F\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=PNR}{%
+         family={Pratt},
+         familyi={P\bibinitperiod},
+         given={N\bibnamedelima R},
+         giveni={N\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=SRJC}{%
+         family={Steele},
+         familyi={S\bibinitperiod},
+         given={R\bibnamedelima J\bibnamedelima C},
+         giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod\bibinitdelim
+  C\bibinitperiod},
+      }}%
+    }
+    \list{language}{1}{%
+      {en}%
+    }
+    \list{publisher}{1}{%
+      {Oxford University Press (OUP)}%
+    }
+    \strng{namehash}{LA+1}
+    \strng{fullhash}{LACFAPNRSRJC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{L}
+    \field{sortinithash}{L}
+    \field{abstract}{%
+    BACKGROUND: It is widely accepted that the adenoma-carcinoma sequence
+  represents the process by which most, if not all, colorectal cancers arise.
+  The evidence supporting this hypothesis has increased rapidly in recent years
+  and the purpose of this article is to review this evidence critically and
+  highlight its clinical significance. METHODS: Medline searches were used to
+  identify recent key articles relating to the adenoma-carcinoma sequence.
+  Further pertinent articles were obtained by manual scanning of the reference
+  lists of identified papers. RESULTS: The evidence supporting the
+  adenoma-carcinoma sequence can be classified as epidemiological,
+  clinicopathological and genetic. The most recent and largest body of data
+  relates to molecular genetic events and their cellular effects; however, many
+  other approaches, such as cytogenetics, molecular cytogenetics and cytometry,
+  have also yielded valuable information. CONCLUSION: Recent work continues to
+  support the adenoma-carcinoma sequence, but there is a paucity of data on the
+  interrelationship between different genetic mutations and on the relationship
+  between molecular and other types of genetic abnormalities. The clinical
+  utility of the observations described has yet to be fully realized and global
+  genetic analysis of colorectal tumours may prove to be central in rational
+  adenoma management.%
+    }
+    \field{number}{7}
+    \field{pages}{845\bibrangedash 860}
+    \field{title}{The colorectal adenoma-carcinoma sequence}
+    \field{volume}{89}
+    \field{journaltitle}{Br. J. Surg.}
+    \field{month}{07}
+    \field{year}{2002}
+  \endentry
+
+  \entry{missrate2}{article}{}
+    \name{author}{8}{}{%
+      {{hash=RDK}{%
+         family={Rex},
+         familyi={R\bibinitperiod},
+         given={D\bibnamedelima K},
+         giveni={D\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+      {{hash=CCS}{%
+         family={Cutler},
+         familyi={C\bibinitperiod},
+         given={C\bibnamedelima S},
+         giveni={C\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=LGT}{%
+         family={Lemmel},
+         familyi={L\bibinitperiod},
+         given={G\bibnamedelima T},
+         giveni={G\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=REY}{%
+         family={Rahmani},
+         familyi={R\bibinitperiod},
+         given={E\bibnamedelima Y},
+         giveni={E\bibinitperiod\bibinitdelim Y\bibinitperiod},
+      }}%
+      {{hash=CDW}{%
+         family={Clark},
+         familyi={C\bibinitperiod},
+         given={D\bibnamedelima W},
+         giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod},
+      }}%
+      {{hash=HDJ}{%
+         family={Helper},
+         familyi={H\bibinitperiod},
+         given={D\bibnamedelima J},
+         giveni={D\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=LGA}{%
+         family={Lehman},
+         familyi={L\bibinitperiod},
+         given={G\bibnamedelima A},
+         giveni={G\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=MDG}{%
+         family={Mark},
+         familyi={M\bibinitperiod},
+         given={D\bibnamedelima G},
+         giveni={D\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+    }
+    \list{language}{1}{%
+      {en}%
+    }
+    \list{publisher}{1}{%
+      {Elsevier BV}%
+    }
+    \strng{namehash}{RDK+1}
+    \strng{fullhash}{RDKCCSLGTREYCDWHDJLGAMDG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{R}
+    \field{sortinithash}{R}
+    \field{abstract}{%
+    BACKGROUND \& AIMS: The miss rate of colonoscopy for neoplasms is poorly
+  understood. The aim of this study was to determine the miss rate of
+  colonoscopy by same day back-to-back colonoscopy. METHODS: Two consecutive
+  same day colonoscopies were performed in 183 patients. The patients were
+  randomized to undergo the second colonoscopy by the same or a different
+  endoscopist and in the same or different position. RESULTS: The overall miss
+  rate for adenomas was 24\%, 27\% for adenomas or = 1 cm. Patients with two or
+  more adenomas at the first examination were more likely than patients with no
+  or one adenoma detected at the first examination to have one or more adenomas
+  at the second examination (odds ratio, 3.3; 95\% confidence interval,
+  1.69-6.46). Right colon adenomas were missed more often (27\%) than left
+  colon adenomas (21\%), but the difference was not significant. There was
+  evidence of variation in sensitivity between endoscopists, but significant
+  miss rates for small adenomas were found among essentially all endoscopists.
+  CONCLUSIONS: Using current colonoscopic technology, there are significant
+  miss rates for adenomas or = 1 cm. The results suggest the need for
+  improvements in colonoscopic technology.%
+    }
+    \field{number}{1}
+    \field{pages}{24\bibrangedash 28}
+    \field{title}{Colonoscopic miss rates of adenomas determined by
+  back-to-back colonoscopies}
+    \field{volume}{112}
+    \field{journaltitle}{Gastroenterology}
+    \field{month}{01}
+    \field{year}{1997}
+  \endentry
+
   \entry{modelbased}{misc}{}
     \name{author}{3}{}{%
       {{hash=RA}{%
@@ -431,6 +842,129 @@
     \field{volume}{19}
     \field{journaltitle}{Annual Review of Biomedical Engineering}
     \field{year}{2017}
+  \endentry
+
+  \entry{resection}{article}{}
+    \name{author}{16}{}{%
+      {{hash=WSJ}{%
+         family={Winawer},
+         familyi={W\bibinitperiod},
+         given={Sidney\bibnamedelima J.},
+         giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=ZAG}{%
+         family={Zauber},
+         familyi={Z\bibinitperiod},
+         given={Ann\bibnamedelima G.},
+         giveni={A\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=HMN}{%
+         family={Ho},
+         familyi={H\bibinitperiod},
+         given={May\bibnamedelima Nah},
+         giveni={M\bibinitperiod\bibinitdelim N\bibinitperiod},
+      }}%
+      {{hash=OMJ}{%
+         family={O'Brien},
+         familyi={O\bibinitperiod},
+         given={Michael\bibnamedelima J.},
+         giveni={M\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=GLS}{%
+         family={Gottlieb},
+         familyi={G\bibinitperiod},
+         given={Leonard\bibnamedelima S.},
+         giveni={L\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=SSS}{%
+         family={Sternberg},
+         familyi={S\bibinitperiod},
+         given={Stephen\bibnamedelima S.},
+         giveni={S\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=WJD}{%
+         family={Waye},
+         familyi={W\bibinitperiod},
+         given={Jerome\bibnamedelima D.},
+         giveni={J\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Schapiro},
+         familyi={S\bibinitperiod},
+         given={Melvin},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BJH}{%
+         family={Bond},
+         familyi={B\bibinitperiod},
+         given={John\bibnamedelima H.},
+         giveni={J\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=PJF}{%
+         family={Panish},
+         familyi={P\bibinitperiod},
+         given={Joel\bibnamedelima F.},
+         giveni={J\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=AF}{%
+         family={Ackroyd},
+         familyi={A\bibinitperiod},
+         given={Frederick},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Shike},
+         familyi={S\bibinitperiod},
+         given={Moshe},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=KRC}{%
+         family={Kurtz},
+         familyi={K\bibinitperiod},
+         given={Robert\bibnamedelima C.},
+         giveni={R\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=HLL}{%
+         family={Hornsby-Lewis},
+         familyi={H\bibinithyphendelim L\bibinitperiod},
+         given={Lynn},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=GH}{%
+         family={Gerdes},
+         familyi={G\bibinitperiod},
+         given={Hans},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=SET}{%
+         family={Stewart},
+         familyi={S\bibinitperiod},
+         given={Edward\bibnamedelima T.},
+         giveni={E\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WSJ+1}
+    \strng{fullhash}{WSJZAGHMNOMJGLSSSSWJDSMBJHPJFAFSMKRCHLLGHSET1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \verb{doi}
+    \verb 10.1056/NEJM199312303292701
+    \endverb
+    \verb{eprint}
+    \verb https://doi.org/10.1056/NEJM199312303292701
+    \endverb
+    \field{note}{PMID: 8247072}
+    \field{number}{27}
+    \field{pages}{1977\bibrangedash 1981}
+    \field{title}{Prevention of Colorectal Cancer by Colonoscopic Polypectomy}
+    \verb{url}
+    \verb https://doi.org/10.1056/NEJM199312303292701
+    \endverb
+    \field{volume}{329}
+    \field{journaltitle}{New England Journal of Medicine}
+    \field{year}{1993}
   \endentry
 \enddatalist
 \endinput
