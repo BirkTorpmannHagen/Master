@@ -1,7 +1,7 @@
 \chapter{Background}
 \setcounter{chapter}{2}
 \section{Colorectal Polyps, Medical Imaging, and Deep Learning}
- small growths found in and around the inner lining of the large intestine. These polyps, also referred to as adenomas, can in time develop into cancerous tumours, or carcinomas, in a process known as the adenoma-carcinoma sequence \cite{ACS}. Though the majority of polyps do not undergo this process, identifying polyps nonetheless constitutes an important step towards preventing colorectal cancer. Indeed, resection of these polyps has been shown to reduce the incidence of colorectal cancer by a significant margin \cite{resection}. 
+	Polyps are small growths found in and around the inner lining of the large intestine. These polyps, also referred to as adenomas, can in time develop into cancerous tumours, or carcinomas, in a process known as the adenoma-carcinoma sequence \cite{ACS}. Though the majority of polyps do not undergo this process, identifying polyps nonetheless constitutes an important step towards preventing colorectal cancer. Indeed, resection of these polyps has been shown to reduce the incidence of colorectal cancer by a significant margin \cite{resection}. 
 	
 	Though colorectal cancer remains as one of the leading causes of cancer-related death worldwide (source), mortality rates have nonetheless declined in large part to increased use of screening colonoscopy, which in turn allows for the opportunity for preemptive treatment. Polyps are, however, by nature somewhat difficukt to detect and are routinely missed by clinicians, with miss rates ranging upwards of 27\% for diminutive  polyps \cite{missrate1, missrate2}.
 	
@@ -13,11 +13,11 @@
 	
 	%Some examples here
 	
-	There are, however, still several hurdles to overcome; recent research has shown that even state of the art deep-learning pipelines are prone to generalization failure when deployed in practical settings, particularly when exposed to distributional shifts such as changes in demographics, imaging equipment, noise, and more despite exhibiting high performance on hold-out sets \cite{retinopathy, damour2020underspecification}. There is no reason to expect that polyps are exempt from this problem, given how pervasive such shortcomings are in similar tasks.
+	There are, however, still several hurdles to overcome; recent research has shown that even state of the art deep-learning pipelines are prone to generalisation failure when deployed in practical settings, particularly when exposed to distributional shifts such as changes in demographics, imaging equipment, noise, and more despite exhibiting high performance on hold-out sets \cite{retinopathy, damour2020underspecification, pneumonia, shortcut_learning}. There is no reason to expect that polyps are exempt from this problem, given how pervasive such shortcomings are in similar tasks.
 	
-	Naturally, such systems are rendered practically useless should they fail to perform sufficiently outside of the very carefully controlled conditions upon which they are trained. Thus, for AI-assisted detection to be on any considerable merit, it has to infer causally reasonable patterns in the data that generalize well to other hospitals, demographics, imaging equipment, resolutions, and so on. Though a human would not find this type of generalization very difficult, deep-learning (and for that matter, other data-driven approaches) regularly seem to fail in this regard. 
+	Naturally, such systems are rendered practically useless should they fail to perform sufficiently outside of the very carefully controlled conditions upon which they are trained. Thus, for AI-assisted detection to be on any considerable merit, it has to infer causally reasonable patterns in the data that generalize well to other hospitals, demographics, imaging equipment, resolutions, and so on. Though a human would not find this type of generalisation very difficult, deep-learning (and for that matter, other data-driven approaches) regularly seem to fail in this regard. 
 
-\section{Generalization failure in the Wild}
+\section{Generalisation failure in the Wild} \label{case_studies}
 
 	The medical domain is characterized by a number of key features that separate it from other areas where deep-learning typically excels. Training data is often scarce, the pathologies that constitute the classification targets are unevenly distributed and often exhibit high degrees of inter-class variability, and there can be a significant number of confounding variables. 
 		
@@ -25,7 +25,7 @@
 		
 	In another study, it was shown that a classifier intended to detect diabetic retinopathy exhibited significant variability in performance depending on the type of camera used. The same study also showed that the same type of performance variability could be found when detecting skin-conditions across demographics with differing skin tones. \cite{damour2020underspecification}. 
 	
-	Though there has been limited literature detailing the generalizability of pipelines trained to segment polyps, there is no reason to believe that it is somehow exempt from the same problems that impact the aforementioned tasks. To illustrate this, a brief meta analysis can be performed. Table
+	Though there has been limited literature detailing the generalisability of pipelines trained to segment polyps, there is no reason to believe that it is somehow exempt from the same problems that impact the aforementioned tasks. To illustrate this, a brief meta analysis can be performed. Table
 	\begin{table}
 		\centering
 		\begin{tabularx}{\textwidth}{X | X X}
@@ -39,20 +39,22 @@
 		\end{tabularx}
 				\label{table:polyp-case}
 	\end{table}
-	There has been astonishingly little research into determining the generalizability of models designed for polyp-detection. As a result, a meta-analysis of a selection of such models is required. Several models, consisting of DDANet, DivergentNet, (...), were trained according to the hyperparameters provided in their respective papers and repositories. Table (...) shows their results when evaluated on separate datasets. Methodological details can be found in chapter (...). 
+	There has been astonishingly little research into determining the generalisability of models designed for polyp-detection. As a result, a meta-analysis of a selection of such models is required. Several models, consisting of DDANet, DivergentNet, (...), were trained according to the hyperparameters provided in their respective papers and repositories. Table (...) shows their results when evaluated on separate datasets. Methodological details can be found in chapter (...). 
 
-	Naturally, non-medical domains are in no way immune to generalisation failure. In fact, one could easily argue that the vast majority of deep-learning pipelines fail to generalize altogether, and instead merely infer some set of inductive biases that, although perhaps causally incorrect, perform sufficiently well for general use. 
+	Naturally, non-medical domains are in no way immune to generalisation failure. In fact, one could easily argue that the vast majority of deep-learning pipelines fail to generalize altogether, and instead merely infer some set of inductive biases that, although perhaps causally incorrect, perform sufficiently well for general use. It has for instance been shown that CNNs trained on imagenet, one of the largest and most diverse datasets in the domain of computer vision, are heavily biased towards textural features\cite{texturebias}. Naturally, this is not necessarily causally accurate; a cat is not a cat because it has cat-like fur; nor is an elephant an elephant only because it has the skin of an elephant. By manually increasing shape bias, it has been shown that the performance of such CNNs improves both in robustness to perturbations and iid accuracy.
 	
-\section{Generalizability Theory}
-	\subsection{Generalizability and Expectations}
-		When developing deep-learning based systems, there is by and large an expectation that it will 
-	\subsection{Empirical Risk Minimization} 
+	Another characteristic of deep learning that supports this argument is the effectiveness of adversarial attacks \cite{adversarial_bugs_features}, which specifically target weaknesses in the inductive biases within DNNs through any number of means in an attempt to induce high rates of incorrect, yet highly confident predictions. Gradient-based adversarial attacks, for instance, use the gradients of the model to break even the most sophisticated and well-trained pipelines merely by adding some carefully crafted, yet visually imperceptible noise to the inputs \cite{adversarial_attacks}. Even without access to the gradients, there exists a multitude of so-called black-box attacks that only use output samples to generate similarly effective attacks (cite). Finally, it has been shown that adding minor visual distractions to objects, for example adding bits of tape or graffiti to stop signs, dramatically increases misclassification rates \cite{physical_attacks}. 
 	
-		% copy from essay
-		% How deep learning works with respect to generalizability; modelling risk through an empirical estimation
-		At the most fundamental level, the goal of machine learning is to learn a mapping between two spaces of objects \(X\) and \(Y\). This mapping, namely the function \(f: X \rightarrow Y\), maps some input object \(x \in X\), an image for example, to a corresponding and application-relevant output object \(y \in Y\), for instance a segmentation mask or a class label. It is worth noting, however, that \(f\) is not as much a function in the mathematical sense as much as it is an abstraction of whatever ground-truth relationship that the deep learning system is intended to capture, and consequently cannot typically be modelled explicitly. Instead, machine learning systems aim to find a representation of this mapping automatically by leveraging a training set \(\{x_i, y_i\}_{0...n}\) to find a sufficiently performant approximation of \(f\). This is referred to as supervised learning, and the resulting approximation found using the training set is denoted by \(h: X \rightarrow \hat{Y}\), and typically referred to as a hypothesis.  
+	Even benign, but nonetheless confounding perturbations also have the potential to induce failure. It has for instance been shown that sophisticated natural language processing models can and readily do fail if one adds peripheral information to the input. (Example, citation)	 
+	
+\section{Generalisability Theory}
+	Exactly why and how DNNs seem to so persistently fail to generalize is a topic of ongoing research, and the available literature seems to suggest that the problem is multifaceted. This section is an attempt to summarize and distill the findings and analysis performed in the field. It will cover the theoretical basis of generalisation and why one might expect DNNs to generalize, discuss the key characteristics of generalisation failure and their origins, and finally introduce a probabilistic perspective of generalisation.
+	\subsection{Generalisation through Empirical Risk Minimization} 
+		Naturally, deep learning would not have experienced as much of a revolution in the last decade or so if there was not some semblance of an expectation that their striking performance was generalisable and performant also outside the idealized settings typically involved in research. The theoretical basis that informs this belief in (most) modern deep learning pipelines is the idea of so-called empirical risk minimization, wherein it is assumed that the dataset upon which the model is trained is a representative sample of the distribution of all possible samples in the relevant domain. In other words, it assumes that the dataset is independently and identically distributed (iid) to the domain distribution. To better understand this assumption, it is beneficial to consider the it from first principles: 
+		
+		At the most fundamental level, the goal of machine learning is to learn a mapping between two spaces of objects \(X\) and \(Y\). This mapping, namely the function \(f: X \rightarrow Y\), maps some input object \(x \in X\), an image for example, to a corresponding and application-relevant output object \(y \in Y\), for instance a segmentation mask or a class probabilities. It is worth noting, however, that \(f\) is not as much a function in the mathematical sense as much as it is an abstraction of whatever ground-truth relationship that the deep learning system is intended to capture, and consequently cannot typically be modelled explicitly. Instead, machine learning systems aim to find a representation of this mapping automatically by leveraging a training set \(\{x_i, y_i\}_{0...n}\) to find a sufficiently performant approximation of \(f\). This is referred to as supervised learning, and the resulting approximation found using the training set is denoted by \(h: X \rightarrow \hat{Y}\), and typically referred to as a hypothesis.  
 		        
-		To find such an approximation, we assume that there exists a joint probability distribution over \(X\) and \(Y\), namely \(P(x,y)\), and that the training data \(\{x_i, y_i\}_{0...n}\) is drawn from this probability distribution such that the resulting sample distribution is independent and identically distributed (henceforth: iid) to \(P(x,y)\). This is the so-called iid assumption. Note that by modelling the mapping as a joint probability distribution, one can model uncertainty in the predictions by expressing the output as a conditional probability \(P(y|x)\). In conjunction with a loss-function \(L(h(x),y)\) which measures the discrepancy between the hypothesis and the ground truth, these assumptions allows us to quantify the expected performance of a given hypothesis:
+		To find such an approximation, we assume that there exists a joint probability distribution over \(X\) and \(Y\), namely \(P(x,y)\), and that the training data \(\{x_i, y_i\}_{0...n}\) is drawn from this probability distribution such that the resulting sample distribution is independent and identically distributed to \(P(x,y)\). This is the so-called iid assumption. By modelling the mapping as a joint probability distribution, one can model uncertainty in the predictions by expressing the output as a conditional probability \(P(y|x)\). In conjunction with a loss-function \(L(h(x),y)\) which measures the discrepancy between the hypothesis and the ground truth, these assumptions allows us to quantify the expected performance of a given hypothesis:
 		\begin{equation}
 		    R(h) = \boldsymbol{E}[L(h(x),y)] = \int L(h(x),y) dP(x,y)
 		\end{equation}
@@ -61,7 +63,7 @@
 		h^* = \argmin_{h \in \mathcal{H}}R(h)
 		\end{equation}
 		
-		Since \(P(x,y\)) is not known, however, one cannot compute \(R(h)\) explicitly. Instead, the expected risk has to be computed through empirical estimation, i.e by finding the arithmetic average of the risk associated with each prediction by the hypothesis over the training set:
+		Since \(P(x,y\)) is not known, however, one cannot compute \(R(h)\) explicitly. Instead, the expected risk has to be estimated empirically, i.e by finding the arithmetic average of the risk associated with each prediction by the hypothesis over the training set:
 		\begin{equation}
 		R_{emp}(h) = \frac{1}{n}\sum_{i=1}^{n}L(h(x_i), y_i)
 		\end{equation}
@@ -69,17 +71,30 @@
 		\begin{equation}
 		\hat{h} = \argmin_{h \in \mathcal{H}}R_{emp}(h)
 		\end{equation}
+		To reiterate, the central idea with this approach to machine learning is that the training data can be considered a finite iid sampling of the underlying distribution. As such, by the central limit theorem, the hold-out performance of the computed hypothesis will approach iid-optimal performance given a sufficient amount of training data and some sufficiently capable and regularized training procedure. This should in theory allow deep learning systems to be able to generalize, since the empirical risk in theory can approximate the true risk arbitrarily well given sufficient training data support.
+	\subsection{A taxonomy of Generalisation Failure Modes}
+		As the analysis in \ref{case_studies} shows, ERM nonetheless readily fails to generate generalisable predictors with respect to out-of-distribution data). Understanding exactly why this is the case is a subject of ongoing study, and the literature around the matter is highly fragmented. Naturally, generalisation is a complex and highly multifaceted phenomenon, with roots in any number of different factors, so there does not typically exist one unique property that sufficiently fully characterizes every instance of generalisation failure. To conduct a proper analysis thereof, it is as such beneficial to construct a taxonomy over the various forms of generalisation failure, the properties that induce them, and the how these properties emerge with respect to empirical risk minimization. First, consider the assumptions upon which ERM is based, namely that:
+		\begin{enumerate}
+			\item The empirical risk is a good approximation of the true risk \(R(h)\) \label{overfit}
+			\item \(f\) exists in \(\mathcal{H}\) \label{underfit}
+			\item \(\{x_i, y_i\}\) is an IID sampling of \(P(x,y)\). This is the aforementioned iid assumption. \label{internal_misalignment}
+			\item \(P(x,y)\) (and, given that \ref{internal_misalignment} is true, \(\{x_i, y_i\}\)) is independently and identically distributed to full space of input-output pairs one might expect in deployment, henceforth denoted by \(P_{\infty}(x,y)\). \label{external_misalignment}
+			\item \(\hat{h}\) is unique in in \(\mathcal{H}\) \label{underspecification}
+		\end{enumerate}  
 		
-		The central idea with this approach to machine learning is that the training data can be considered a finite iid sampling of the underlying distribution. As such, by the central limit theorem, the hold-out performance of the computed hypothesis will approach iid-optimal performance given a sufficient amount of training data and some sufficiently capable and regularized training procedure. This should in theory allow deep learning systems to be able to generalize, since the empirical risk in theory can approximate the true risk arbitrarily well given sufficient training data.
-		
-		\subsection{Underspecification}	
-		
+		Violations of any one of these assumptions induces a corresponding generalisation failure mode. The behavior that violations of assumptions \ref{underfit} and \ref{overfit} correspond is well understood and fairly easy to detect, and is referred to as underfitting and overfitting respectively, but violations of the remaining assumptions, result in more subtle forms of failure, namely internal misalignment, external misalignment, and underspecification respectively for assumptions \ref{internal_misalignment}, \ref{external_misalignment} and \ref{underspecification}.
 			
-		Naturally, however, real-world data is rarely neat enough for it to consistently abide by the iid assumption. Commonly encountered variation in real world data such as variable lighting conditions, class imbalance, image corruptions, noise, or other more subtle forms of distributional shift all result in structural misalignment of the training and deployment distributions (citation). Ideally, predictors should be robust to these sorts of changes, however evidently this is in not guaranteed by ERM (citation). ERM simply guarantees an iid-optimal predictor. While the difference is subtle, it is worth reemphasizing: empirical risk minimization only generalizes to data which is more or less identically distributed to the training data. Differently distributed or otherwise perturbed data, even that which is near imperceptible or at any rate inconsequentially different to the human eye, violates the iid assumption, and can as such not be expected to be classified correctly given a predictor trained via ERM. 
+		\subsubsection{Underspecification}
+		\subsubsection{Overfitting}
+		\subsubsection{Underfitting}
+		\subsubsection{Structural misalignment}
 		
-		To mitigate this, one could simply add more data to the pipeline through augmentation, or simply collecting more training data. This will lead to a better approximation of the true risk. This does not, however, solve the problem. The variability of the real world is not, unfortunately, easy to model merely through augmentations, and collecting sufficient data to cover every potential source of natural variability is infeasible, especially in medical domains. 
-	 %link this
-		Consider for example a machine-learning pipeline wherein a model is trained to classify cows and camels. The dataset consists of cows, pictured in grass fields and pastures, and camels, pictured in deserts. To be generous, let us assume that we have sufficient quantities of data to ensure that the pipeline is perfectly invariant to the pose of the respective animals, to lighting conditions, geometric transforms, etc. One may then expect that the pipeline correctly learns to classify the two, and attains high accuracies, and indeed when evaluated on iid data, this would be entirely correct. However, what would then happen if one such predictor encountered a cow in the desert and a camel in a grass pasture? This constitutes a distributional shift, and as such we cannot expect reliable performance as detailed in \ref{erm}. Naturally, the predictor may have learned just fine exactly what constitutes a cow and a camel, but it might just as easily learned to associate deserts with camels and pastures with cows. And from a data perspective, both are equally correct interpretations. The immediate response to this may be to simply add some pictures with more varied backgrounds, but this once again would only serve to make the pipeline more robust to backgrounds. it would not guarantee that the pipeline learns the right inductive biases. The predictor may then for example instead learn that cows typically are black and white and camels usually beige, and then fail when it encounters a brown cow. One could keep adding more and more data, but there is not really any way of knowing when the pipeline is well enough specified by the data such that it starts returning predictors with the desired inductive biases. There are in simpler terms several "correct" interpretations of what separates the classes from a purely data-based perspective, each with their own inductive biases. There are as a consequence not just one risk-minimizing predictor, but a whole family of them. This is referred to as underspecification \cite{damour2020underspecification}.
+		\subsection{A Bayesian perspective of generalisation}
+\section{Mitigating generalisation failure}
+	\subsection{Adversarial Training}
+		\subsection{Adversarial attacks and defences}
+	\subsection{Improved Risk estimation}
+		\subsubsection{Data augmentation}
+		\subsubsection{Distributional modelling}
+	\subsection{Bayesian Learning}
 	
-	\subsection{Generalisation Failure Modes}
-	\subsection{Bayesian perspective of Generalization}
