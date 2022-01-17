@@ -4,7 +4,6 @@ import numpy as np
 import segmentation_models_pytorch.utils.losses as vanilla_losses
 import torch.optim.optimizer
 from torch.utils.data import DataLoader
-import DataProcessing.augmentation as aug
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirClassificationDataset
 from Models import backbones
 from Models import inpainters
@@ -12,45 +11,15 @@ from Pretraining.deeplab_pretrainer import pretrain_encoder
 from Tests.metrics import iou
 from utils import logging
 from model_of_natural_variation.model import ModelOfNaturalVariation
+from losses.consistency_losses import *
 import torch.nn as nn
 
 
-class WeightedPerturbationLoss(nn.Module):
-    """
-
-    """
-
-    def __init__(self, adaptive=True):
-        super(WeightedPerturbationLoss, self).__init__()
-        self.epsilon = 1e-5
-        self.adaptive = adaptive
-
-    def forward(self, new_mask, old_mask, new_seg, old_seg, iou_weight=None):
-        def difference(mask1, mask2):
-            return mask1 * (1 - mask2) + mask2 * (1 - mask1)
-
-        vanilla_jaccard = vanilla_losses.JaccardLoss()(old_seg, old_mask)
-        # perturbation_loss = torch.sum((difference(difference(new_mask, old_mask),
-        #                                           difference(new_seg, old_seg))
-        #                                ) / \
-        #                               (torch.sum(
-        #                                   torch.clamp(new_mask + old_mask, 0, 1))) + self.epsilon)  # normalizing factor
-
-        # ~bd + ~ac + b~d + a~c
-        perturbation_loss = (1 - new_mask) * new_seg + (1 - old_mask) * old_seg + new_mask * (
-                1 - new_seg) + old_mask * (1 - old_seg)
-        perturbation_loss = torch.sum(perturbation_loss) / (torch.sum(
-            torch.clamp(new_mask + old_mask, 0, 1)) + self.epsilon)
-        if self.adaptive:
-            return (1 - iou_weight) * vanilla_jaccard + iou_weight * perturbation_loss
-        return 0.5 * vanilla_jaccard + 0.5 * perturbation_loss
-
-
-class ContrastiveTrainer(VanillaTrainer):
+class ConsistencyTrainer(VanillaTrainer):
     def __init__(self, model_str, id, config):
-        super(ContrastiveTrainer, self).__init__(model_str, id, config)
+        super(ConsistencyTrainer, self).__init__(model_str, id, config)
         self.mnv = ModelOfNaturalVariation(T0=1).to(self.device)
-        self.criterion = WeightedPerturbationLoss().to(self.device)
+        self.criterion = ConsistencyLoss().to(self.device)
         self.train_loader = DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir"), batch_size=8)
 
     def train_epoch(self):
@@ -61,11 +30,17 @@ class ContrastiveTrainer(VanillaTrainer):
             mask = y.to("cuda")
             aug_img, aug_mask = self.mnv(image, mask)
             self.optimizer.zero_grad()
-
             output = self.model(image)
-            aug_output = self.model(aug_img)  # todo consider train on augmented vs non-augmented?
+            # if np.random.rand() < 0.5:
+            #     target = mask
+            #     output = self.model(image)
+            # else:
+            #     target = aug_mask
+            #     output = self.model(aug_img)
+            aug_output = self.model(aug_img)
             mean_iou = torch.mean(iou(output, mask))
             loss = self.criterion(aug_mask, mask, aug_output, output, mean_iou)
+            # loss = 2 * self.jaccard_test(output, target)
             loss.backward()
             self.optimizer.step()
             losses.append(np.abs(loss.item()))
@@ -146,3 +121,82 @@ class ContrastiveTrainer(VanillaTrainer):
                 batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
                 ious = torch.cat((ious, batch_ious.flatten()))
         return ious
+
+
+class ConsistencyTrainerUsingAugmentation(ConsistencyTrainer):
+    """
+        Uses vanilla data augmentation with p=0.5 instead of a a custom loss
+    """
+
+    def __init__(self, model_str, id, config):
+        super(ConsistencyTrainerUsingAugmentation, self).__init__(model_str, id, config)
+        self.jaccard_test = vanilla_losses.JaccardLoss()
+
+    def train_epoch(self):
+        self.model.train()
+        losses = []
+        for x, y, fname in self.train_loader:
+            image = x.to("cuda")
+            mask = y.to("cuda")
+            aug_img, aug_mask = self.mnv(image, mask)
+            self.optimizer.zero_grad()
+            if np.random.rand() < 0.5:
+                target = mask
+                output = self.model(image)
+            else:
+                target = aug_mask
+                output = self.model(aug_img)
+            aug_output = self.model(aug_img)
+            mean_iou = torch.mean(iou(output, mask))
+            loss = self.jaccard_test(output, target)
+            loss.backward()
+            self.optimizer.step()
+            losses.append(np.abs(loss.item()))
+        return np.mean(losses)
+
+
+class AdversarialConsistencyTrainer(ConsistencyTrainer):
+    """
+        Adversariall samples difficult
+    """
+
+    def __init__(self, model_str, id, config):
+        super(ConsistencyTrainer, self).__init__(model_str, id, config)
+        self.mnv = ModelOfNaturalVariation(T0=0.25).to(self.device)
+        self.num_adv_samples = 25
+        self.naked_closs = NakedConsistencyLoss()
+        self.criterion = ConsistencyLoss().to(self.device)
+
+    def sample_adversarial(self, image, mask, output):
+        self.model.eval()
+        aug_img, aug_mask = None, None  #
+        max_severity = -10
+        with torch.no_grad():
+            for i in range(self.num_adv_samples):
+                adv_aug_img, adv_aug_mask = self.mnv(image, mask)
+                adv_aug_output = self.model(adv_aug_img)
+                severity = self.naked_closs(adv_aug_mask, mask, adv_aug_output, output)
+                if severity > max_severity:
+                    max_severity = severity
+                    aug_img = adv_aug_img
+                    aug_mask = adv_aug_mask
+        self.model.train()
+        return aug_img, aug_mask
+
+    def train_epoch(self):
+        self.model.train()
+        losses = []
+        for x, y, fname in self.train_loader:
+            image = x.to("cuda")
+            mask = y.to("cuda")
+            output = self.model(image)
+            aug_img, aug_mask = self.sample_adversarial(image, mask, output)
+            self.optimizer.zero_grad()
+            mean_iou = torch.mean(iou(output, mask))
+            aug_output = self.model(aug_img)
+            loss = self.criterion(aug_mask, mask, aug_output, output, mean_iou)
+            loss.backward()
+            self.optimizer.step()
+            losses.append(np.abs(loss.item()))
+        self.mnv.step()  # increase difficulty
+        return np.mean(losses)
