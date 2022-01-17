@@ -9,21 +9,37 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.1}Colorectal Polyps, Medical Imaging, and Deep Learning}{3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}Examples of Generalizability failure}{4}%
+\contentsline {section}{\numberline {2.2}Generalisation failure in the Wild}{4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.1}Generalization Failure across Medical Domains}{4}%
+\contentsline {section}{\numberline {2.3}Generalisability Theory}{5}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.2}Generalization Failure across Polyp-detection models}{4}%
+\contentsline {subsection}{\numberline {2.3.1}Generalisation through Empirical Risk Minimization}{6}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.3}Generalization Failure across other domains}{4}%
+\contentsline {subsection}{\numberline {2.3.2}A taxonomy of Generalisation Failure Modes}{7}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.3}Generalizability Theory}{4}%
+\contentsline {subsubsection}{Underspecification}{8}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.1}Empirical Risk Minimization}{4}%
+\contentsline {subsubsection}{Overfitting}{8}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.2}Generalisation Failure Modes}{7}%
+\contentsline {subsubsection}{Underfitting}{8}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.3}Bayesian perspective of Generalization}{7}%
+\contentsline {subsubsection}{Structural misalignment}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.3.3}A Bayesian perspective of generalisation}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.4}Mitigating generalisation failure}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.1}Adversarial Training}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.2}Adversarial attacks and defences}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.3}Improved Risk estimation}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Data augmentation}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsubsection}{Distributional modelling}{8}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.4.4}Bayesian Learning}{8}%
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Methodology}{9}%
 \defcounter {refsection}{0}\relax 
@@ -47,6 +63,18 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{Results}{11}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Discussion}{13}%
+\contentsline {chapter}{\numberline {5}Results}{13}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Discussion}{13}%
+\contentsline {chapter}{Results}{13}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {5.1}Augmentation Robustness and Consistency Loss}{13}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1.1}Data augmentation}{13}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1.2}Consistency loss}{14}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1.3}Adversarial Dice}{14}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {6}Discussion}{15}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Discussion}{15}%

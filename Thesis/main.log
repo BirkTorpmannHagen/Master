@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.20)  8 JAN 2022 18:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.20)  13 JAN 2022 18:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -237,6 +237,35 @@ LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2020/01/15 v2.11c `tabularx' package (DPC)
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
+\col@sep=\dimen149
+\ar@mcellbox=\box47
+\extrarowheight=\dimen150
+\NC@list=\toks23
+\extratabsurround=\skip55
+\backup@length=\skip56
+\ar@cellbox=\box48
+)
+\TX@col@width=\dimen151
+\TX@old@table=\dimen152
+\TX@old@col=\dimen153
+\TX@target=\dimen154
+\TX@delta=\dimen155
+\TX@cols=\count269
+\TX@ftn=\toks24
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tabulary/tabulary.sty
+Package: tabulary 2014/06/11 v0.10 tabulary package (DPC)
+\TY@count=\count270
+\TY@linewidth=\dimen156
+\tymin=\dimen157
+\tymax=\dimen158
+\TY@tablewidth=\dimen159
+)
 (/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
 Package: biblatex 2019/12/01 v3.14 programmable bibliographies (PK/MW)
 
@@ -265,66 +294,66 @@ Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
 Package: logreq 2010/08/04 v1.0 xml request logger
-\lrq@indent=\count269
+\lrq@indent=\count271
 
 (/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.def
 File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
 ))
-\c@tabx@nest=\count270
-\c@listtotal=\count271
-\c@listcount=\count272
-\c@liststart=\count273
-\c@liststop=\count274
-\c@citecount=\count275
-\c@citetotal=\count276
-\c@multicitecount=\count277
-\c@multicitetotal=\count278
-\c@instcount=\count279
-\c@maxnames=\count280
-\c@minnames=\count281
-\c@maxitems=\count282
-\c@minitems=\count283
-\c@citecounter=\count284
-\c@maxcitecounter=\count285
-\c@savedcitecounter=\count286
-\c@uniquelist=\count287
-\c@uniquename=\count288
-\c@refsection=\count289
-\c@refsegment=\count290
-\c@maxextratitle=\count291
-\c@maxextratitleyear=\count292
-\c@maxextraname=\count293
-\c@maxextradate=\count294
-\c@maxextraalpha=\count295
-\c@abbrvpenalty=\count296
-\c@highnamepenalty=\count297
-\c@lownamepenalty=\count298
-\c@maxparens=\count299
-\c@parenlevel=\count300
-\blx@tempcnta=\count301
-\blx@tempcntb=\count302
-\blx@tempcntc=\count303
-\blx@maxsection=\count304
-\blx@maxsegment@0=\count305
-\blx@notetype=\count306
-\blx@parenlevel@text=\count307
-\blx@parenlevel@foot=\count308
-\blx@sectionciteorder@0=\count309
-\blx@entrysetcounter=\count310
-\labelnumberwidth=\skip55
-\labelalphawidth=\skip56
-\biblabelsep=\skip57
-\bibitemsep=\skip58
-\bibnamesep=\skip59
-\bibinitsep=\skip60
-\bibparsep=\skip61
-\bibhang=\skip62
+\c@tabx@nest=\count272
+\c@listtotal=\count273
+\c@listcount=\count274
+\c@liststart=\count275
+\c@liststop=\count276
+\c@citecount=\count277
+\c@citetotal=\count278
+\c@multicitecount=\count279
+\c@multicitetotal=\count280
+\c@instcount=\count281
+\c@maxnames=\count282
+\c@minnames=\count283
+\c@maxitems=\count284
+\c@minitems=\count285
+\c@citecounter=\count286
+\c@maxcitecounter=\count287
+\c@savedcitecounter=\count288
+\c@uniquelist=\count289
+\c@uniquename=\count290
+\c@refsection=\count291
+\c@refsegment=\count292
+\c@maxextratitle=\count293
+\c@maxextratitleyear=\count294
+\c@maxextraname=\count295
+\c@maxextradate=\count296
+\c@maxextraalpha=\count297
+\c@abbrvpenalty=\count298
+\c@highnamepenalty=\count299
+\c@lownamepenalty=\count300
+\c@maxparens=\count301
+\c@parenlevel=\count302
+\blx@tempcnta=\count303
+\blx@tempcntb=\count304
+\blx@tempcntc=\count305
+\blx@maxsection=\count306
+\blx@maxsegment@0=\count307
+\blx@notetype=\count308
+\blx@parenlevel@text=\count309
+\blx@parenlevel@foot=\count310
+\blx@sectionciteorder@0=\count311
+\blx@entrysetcounter=\count312
+\labelnumberwidth=\skip57
+\labelalphawidth=\skip58
+\biblabelsep=\skip59
+\bibitemsep=\skip60
+\bibnamesep=\skip61
+\bibinitsep=\skip62
+\bibparsep=\skip63
+\bibhang=\skip64
 \blx@bcfin=\read3
 \blx@bcfout=\write3
 \blx@langwohyphens=\language85
-\c@mincomprange=\count311
-\c@maxcomprange=\count312
-\c@mincompwidth=\count313
+\c@mincomprange=\count313
+\c@maxcomprange=\count314
+\c@mincompwidth=\count315
 Package biblatex Info: Trying to load biblatex default data model...
 Package biblatex Info: ... file 'blx-dm.def' found.
 
@@ -335,88 +364,88 @@ Package biblatex Info: Trying to load biblatex style data model...
 Package biblatex Info: ... file 'numeric-comp.dbx' not found.
 Package biblatex Info: Trying to load biblatex custom data model...
 Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
-\c@afterword=\count314
-\c@savedafterword=\count315
-\c@annotator=\count316
-\c@savedannotator=\count317
-\c@author=\count318
-\c@savedauthor=\count319
-\c@bookauthor=\count320
-\c@savedbookauthor=\count321
-\c@commentator=\count322
-\c@savedcommentator=\count323
-\c@editor=\count324
-\c@savededitor=\count325
-\c@editora=\count326
-\c@savededitora=\count327
-\c@editorb=\count328
-\c@savededitorb=\count329
-\c@editorc=\count330
-\c@savededitorc=\count331
-\c@foreword=\count332
-\c@savedforeword=\count333
-\c@holder=\count334
-\c@savedholder=\count335
-\c@introduction=\count336
-\c@savedintroduction=\count337
-\c@namea=\count338
-\c@savednamea=\count339
-\c@nameb=\count340
-\c@savednameb=\count341
-\c@namec=\count342
-\c@savednamec=\count343
-\c@translator=\count344
-\c@savedtranslator=\count345
-\c@shortauthor=\count346
-\c@savedshortauthor=\count347
-\c@shorteditor=\count348
-\c@savedshorteditor=\count349
-\c@labelname=\count350
-\c@savedlabelname=\count351
-\c@institution=\count352
-\c@savedinstitution=\count353
-\c@lista=\count354
-\c@savedlista=\count355
-\c@listb=\count356
-\c@savedlistb=\count357
-\c@listc=\count358
-\c@savedlistc=\count359
-\c@listd=\count360
-\c@savedlistd=\count361
-\c@liste=\count362
-\c@savedliste=\count363
-\c@listf=\count364
-\c@savedlistf=\count365
-\c@location=\count366
-\c@savedlocation=\count367
-\c@organization=\count368
-\c@savedorganization=\count369
-\c@origlocation=\count370
-\c@savedoriglocation=\count371
-\c@origpublisher=\count372
-\c@savedorigpublisher=\count373
-\c@publisher=\count374
-\c@savedpublisher=\count375
-\c@language=\count376
-\c@savedlanguage=\count377
-\c@origlanguage=\count378
-\c@savedoriglanguage=\count379
-\c@pageref=\count380
-\c@savedpageref=\count381
-\shorthandwidth=\skip63
-\shortjournalwidth=\skip64
-\shortserieswidth=\skip65
-\shorttitlewidth=\skip66
-\shortauthorwidth=\skip67
-\shorteditorwidth=\skip68
-\locallabelnumberwidth=\skip69
-\locallabelalphawidth=\skip70
-\localshorthandwidth=\skip71
-\localshortjournalwidth=\skip72
-\localshortserieswidth=\skip73
-\localshorttitlewidth=\skip74
-\localshortauthorwidth=\skip75
-\localshorteditorwidth=\skip76
+\c@afterword=\count316
+\c@savedafterword=\count317
+\c@annotator=\count318
+\c@savedannotator=\count319
+\c@author=\count320
+\c@savedauthor=\count321
+\c@bookauthor=\count322
+\c@savedbookauthor=\count323
+\c@commentator=\count324
+\c@savedcommentator=\count325
+\c@editor=\count326
+\c@savededitor=\count327
+\c@editora=\count328
+\c@savededitora=\count329
+\c@editorb=\count330
+\c@savededitorb=\count331
+\c@editorc=\count332
+\c@savededitorc=\count333
+\c@foreword=\count334
+\c@savedforeword=\count335
+\c@holder=\count336
+\c@savedholder=\count337
+\c@introduction=\count338
+\c@savedintroduction=\count339
+\c@namea=\count340
+\c@savednamea=\count341
+\c@nameb=\count342
+\c@savednameb=\count343
+\c@namec=\count344
+\c@savednamec=\count345
+\c@translator=\count346
+\c@savedtranslator=\count347
+\c@shortauthor=\count348
+\c@savedshortauthor=\count349
+\c@shorteditor=\count350
+\c@savedshorteditor=\count351
+\c@labelname=\count352
+\c@savedlabelname=\count353
+\c@institution=\count354
+\c@savedinstitution=\count355
+\c@lista=\count356
+\c@savedlista=\count357
+\c@listb=\count358
+\c@savedlistb=\count359
+\c@listc=\count360
+\c@savedlistc=\count361
+\c@listd=\count362
+\c@savedlistd=\count363
+\c@liste=\count364
+\c@savedliste=\count365
+\c@listf=\count366
+\c@savedlistf=\count367
+\c@location=\count368
+\c@savedlocation=\count369
+\c@organization=\count370
+\c@savedorganization=\count371
+\c@origlocation=\count372
+\c@savedoriglocation=\count373
+\c@origpublisher=\count374
+\c@savedorigpublisher=\count375
+\c@publisher=\count376
+\c@savedpublisher=\count377
+\c@language=\count378
+\c@savedlanguage=\count379
+\c@origlanguage=\count380
+\c@savedoriglanguage=\count381
+\c@pageref=\count382
+\c@savedpageref=\count383
+\shorthandwidth=\skip65
+\shortjournalwidth=\skip66
+\shortserieswidth=\skip67
+\shorttitlewidth=\skip68
+\shortauthorwidth=\skip69
+\shorteditorwidth=\skip70
+\locallabelnumberwidth=\skip71
+\locallabelalphawidth=\skip72
+\localshorthandwidth=\skip73
+\localshortjournalwidth=\skip74
+\localshortserieswidth=\skip75
+\localshorttitlewidth=\skip76
+\localshortauthorwidth=\skip77
+\localshorteditorwidth=\skip78
 Package biblatex Info: Trying to load compatibility code...
 Package biblatex Info: ... file 'blx-compat.def' found.
 
@@ -438,19 +467,19 @@ Package biblatex Info: Trying to load generic definitions...
 Package biblatex Info: ... file 'biblatex.def' found.
  (/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.def
 File: biblatex.def 2019/12/01 v3.14 biblatex compatibility (PK/MW)
-\c@textcitecount=\count382
-\c@textcitetotal=\count383
-\c@textcitemaxnames=\count384
-\c@biburlbigbreakpenalty=\count385
-\c@biburlbreakpenalty=\count386
-\c@biburlnumpenalty=\count387
-\c@biburlucpenalty=\count388
-\c@biburllcpenalty=\count389
+\c@textcitecount=\count384
+\c@textcitetotal=\count385
+\c@textcitemaxnames=\count386
+\c@biburlbigbreakpenalty=\count387
+\c@biburlbreakpenalty=\count388
+\c@biburlnumpenalty=\count389
+\c@biburlucpenalty=\count390
+\c@biburllcpenalty=\count391
 \biburlbigskip=\muskip18
 \biburlnumskip=\muskip19
 \biburlucskip=\muskip20
 \biburllcskip=\muskip21
-\c@smartand=\count390
+\c@smartand=\count392
 )
 Package biblatex Info: Trying to load bibliography style 'numeric-comp'...
 Package biblatex Info: ... file 'numeric-comp.bbx' found.
@@ -467,16 +496,16 @@ Package biblatex Info: ... file 'standard.bbx' found.
 
 (/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
 File: standard.bbx 2019/12/01 v3.14 biblatex bibliography style (PK/MW)
-\c@bbx:relatedcount=\count391
-\c@bbx:relatedtotal=\count392
+\c@bbx:relatedcount=\count393
+\c@bbx:relatedtotal=\count394
 )))
 Package biblatex Info: Trying to load citation style 'numeric-comp'...
 Package biblatex Info: ... file 'numeric-comp.cbx' found.
 
 (/usr/share/texlive/texmf-dist/tex/latex/biblatex/cbx/numeric-comp.cbx
 File: numeric-comp.cbx 2019/12/01 v3.14 biblatex citation style (PK/MW)
-\c@cbx@tempcnta=\count393
-\c@cbx@tempcntb=\count394
+\c@cbx@tempcnta=\count395
+\c@cbx@tempcntb=\count396
 Package biblatex Info: Redefining '\cite'.
 Package biblatex Info: Redefining '\parencite'.
 Package biblatex Info: Redefining '\footcite'.
@@ -502,8 +531,8 @@ Package csquotes Info: Redefining alias 'default' -> 'UKenglish'.
 
 (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdfmode.def
 File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
-\l__kernel_color_stack_int=\count395
-\l__pdf_internal_box=\box47
+\l__kernel_color_stack_int=\count397
+\l__pdf_internal_box=\box49
 )
 (./main.aux)
 \openout1 = `main.aux'.
@@ -524,17 +553,17 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 15.
 LaTeX Font Info:    ... okay on input line 15.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count396
-\scratchdimen=\dimen149
-\scratchbox=\box48
-\nofMPsegments=\count397
-\nofMParguments=\count398
-\everyMPshowfont=\toks23
-\MPscratchCnt=\count399
-\MPscratchDim=\dimen150
-\MPnumerator=\count400
-\makeMPintoPDFobject=\count401
-\everyMPtoPDFconversion=\toks24
+\scratchcounter=\count398
+\scratchdimen=\dimen160
+\scratchbox=\box50
+\nofMPsegments=\count399
+\nofMParguments=\count400
+\everyMPshowfont=\toks25
+\MPscratchCnt=\count401
+\MPscratchDim=\dimen161
+\MPnumerator=\count402
+\makeMPintoPDFobject=\count403
+\everyMPtoPDFconversion=\toks26
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 
@@ -593,6 +622,11 @@ Package biblatex Info: ... file 'main.bbl' found.
 Package biblatex Warning: BibTeX reported the following issues
 (biblatex)                with 'retinopathy':
 (biblatex)                - Can't use 'location' + 'address'.
+
+
+Package biblatex Warning: BibTeX reported the following issues
+(biblatex)                with 'shortcut_learning':
+(biblatex)                - Invalid format of field 'month'.
 
 )
 Package biblatex Info: Reference section=0 on input line 15.
@@ -673,17 +707,17 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 ] [2
 
 ]
-(./main.toc)
+(./main.toc [3])
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
- [3] [4
-
-] (./main.lof)
+ [4] (./main.lof)
 \tf@lof=\write5
 \openout5 = `main.lof'.
 
- [5] [6
+ [5
+
+] [6
 
 ] (./main.lot)
 \tf@lot=\write6
@@ -702,29 +736,29 @@ Chapter 1.
 
 ]
 Chapter 2.
-[3] [4] [5]
-
-LaTeX Warning: Reference `erm' on page 6 undefined on input line 60.
-
-) (./methodology.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [6]
-[7] [8
-
-]
+[3] [4] [5] [6] [7]) (./methodology.tex [8]
 Chapter 3.
-[9]) (./results.tex [10]
+[9
+
+]) (./results.tex [10]
 Chapter 4.
-) (./discussion.tex [11
+) (./analysis.tex [11
 
 ] [12
 
 ]
 Chapter 5.
-) [13] [14
 
-] [15] [16
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [13])
+(./discussion.tex [14]
+Chapter 6.
+) [15
+
+] [16
+
+] [17] [18
 
 ]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4
@@ -732,22 +766,19 @@ LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 4
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-[17] (./main.aux)
-
-LaTeX Warning: There were undefined references.
-
+[19] [20] (./main.aux)
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12108 strings out of 481239
- 210884 string characters out of 5920377
- 661715 words of memory out of 5000000
- 27120 multiletter control sequences out of 15000+600000
+ 12288 strings out of 481239
+ 213748 string characters out of 5920377
+ 678167 words of memory out of 5000000
+ 27289 multiletter control sequences out of 15000+600000
  584837 words of font info for 114 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,5n,45p,2172b,2203s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,18n,45p,1129b,2203s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texliv
 e/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/t
 ype1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
@@ -761,10 +792,10 @@ tino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplbi8a
 .pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/s
 hare/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive
 /texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on main.pdf (31 pages, 208577 bytes).
+Output written on main.pdf (34 pages, 222245 bytes).
 PDF statistics:
- 162 PDF objects out of 1000 (max. 8388607)
- 112 compressed objects within 2 object streams
+ 171 PDF objects out of 1000 (max. 8388607)
+ 118 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

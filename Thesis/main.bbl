@@ -198,6 +198,80 @@
     \warn{\item Can't use 'location' + 'address'}
   \endentry
 
+  \entry{adversarial_attacks}{article}{}
+    \name{author}{8}{}{%
+      {{hash=BB}{%
+         family={Biggio},
+         familyi={B\bibinitperiod},
+         given={Battista},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=CI}{%
+         family={Corona},
+         familyi={C\bibinitperiod},
+         given={Igino},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=MD}{%
+         family={Maiorca},
+         familyi={M\bibinitperiod},
+         given={Davide},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=NB}{%
+         family={Nelson},
+         familyi={N\bibinitperiod},
+         given={Blaine},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=ÅN}{%
+         family={Å rndiÄ‡},
+         familyi={Å\bibinitperiod},
+         given={Nedim},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=LP}{%
+         family={Laskov},
+         familyi={L\bibinitperiod},
+         given={Pavel},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=GG}{%
+         family={Giacinto},
+         familyi={G\bibinitperiod},
+         given={Giorgio},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=RF}{%
+         family={Roli},
+         familyi={R\bibinitperiod},
+         given={Fabio},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer Berlin Heidelberg}%
+    }
+    \strng{namehash}{BB+1}
+    \strng{fullhash}{BBCIMDNBÅNLPGGRF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \verb{doi}
+    \verb 10.1007/978-3-642-40994-3_25
+    \endverb
+    \field{isbn}{9783642387098}
+    \field{issn}{1611-3349}
+    \field{pages}{387â€“402}
+    \field{title}{Evasion Attacks against Machine Learning at Test Time}
+    \verb{url}
+    \verb http://dx.doi.org/10.1007/978-3-642-40994-3_25
+    \endverb
+    \field{journaltitle}{Lecture Notes in Computer Science}
+    \field{year}{2013}
+  \endentry
+
   \entry{damour2020underspecification}{misc}{}
     \name{author}{40}{}{%
       {{hash=DA}{%
@@ -457,6 +531,202 @@
     \field{year}{2020}
   \endentry
 
+  \entry{physical_attacks}{article}{}
+    \name{author}{8}{}{%
+      {{hash=EI}{%
+         family={Evtimov},
+         familyi={E\bibinitperiod},
+         given={Ivan},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=EK}{%
+         family={Eykholt},
+         familyi={E\bibinitperiod},
+         given={Kevin},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=FE}{%
+         family={Fernandes},
+         familyi={F\bibinitperiod},
+         given={Earlence},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=KT}{%
+         family={Kohno},
+         familyi={K\bibinitperiod},
+         given={Tadayoshi},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=LB}{%
+         family={Li},
+         familyi={L\bibinitperiod},
+         given={Bo},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=PA}{%
+         family={Prakash},
+         familyi={P\bibinitperiod},
+         given={Atul},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=RA}{%
+         family={Rahmati},
+         familyi={R\bibinitperiod},
+         given={Amir},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Song},
+         familyi={S\bibinitperiod},
+         given={Dawn},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{EI+1}
+    \strng{fullhash}{EIEKFEKTLBPARASD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{E}
+    \field{sortinithash}{E}
+    \verb{eprint}
+    \verb 1707.08945
+    \endverb
+    \field{title}{Robust Physical-World Attacks on Machine Learning Models}
+    \verb{url}
+    \verb http://arxiv.org/abs/1707.08945
+    \endverb
+    \field{volume}{abs/1707.08945}
+    \field{journaltitle}{CoRR}
+    \field{eprinttype}{arXiv}
+    \field{year}{2017}
+  \endentry
+
+  \entry{texturebias}{misc}{}
+    \name{author}{6}{}{%
+      {{hash=GR}{%
+         family={Geirhos},
+         familyi={G\bibinitperiod},
+         given={Robert},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=RP}{%
+         family={Rubisch},
+         familyi={R\bibinitperiod},
+         given={Patricia},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=MC}{%
+         family={Michaelis},
+         familyi={M\bibinitperiod},
+         given={Claudio},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Bethge},
+         familyi={B\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=WFA}{%
+         family={Wichmann},
+         familyi={W\bibinitperiod},
+         given={Felix\bibnamedelima A.},
+         giveni={F\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=BW}{%
+         family={Brendel},
+         familyi={B\bibinitperiod},
+         given={Wieland},
+         giveni={W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GR+1}
+    \strng{fullhash}{GRRPMCBMWFABW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \verb{eprint}
+    \verb 1811.12231
+    \endverb
+    \field{title}{ImageNet-trained CNNs are biased towards texture; increasing
+  shape bias improves accuracy and robustness}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.CV}
+    \field{year}{2019}
+  \endentry
+
+  \entry{shortcut_learning}{article}{}
+    \name{author}{7}{}{%
+      {{hash=GR}{%
+         family={Geirhos},
+         familyi={G\bibinitperiod},
+         given={Robert},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=JJH}{%
+         family={Jacobsen},
+         familyi={J\bibinitperiod},
+         given={JÃ¶rn-Henrik},
+         giveni={J\bibinithyphendelim H\bibinitperiod},
+      }}%
+      {{hash=MC}{%
+         family={Michaelis},
+         familyi={M\bibinitperiod},
+         given={Claudio},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=ZR}{%
+         family={Zemel},
+         familyi={Z\bibinitperiod},
+         given={Richard},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=BW}{%
+         family={Brendel},
+         familyi={B\bibinitperiod},
+         given={Wieland},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=BM}{%
+         family={Bethge},
+         familyi={B\bibinitperiod},
+         given={Matthias},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=WFA}{%
+         family={Wichmann},
+         familyi={W\bibinitperiod},
+         given={Felix\bibnamedelima A.},
+         giveni={F\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{2}{%
+      {Springer Science}%
+      {Business Media LLC}%
+    }
+    \strng{namehash}{GR+1}
+    \strng{fullhash}{GRJJHMCZRBWBMWFA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \verb{doi}
+    \verb 10.1038/s42256-020-00257-z
+    \endverb
+    \field{issn}{2522-5839}
+    \field{number}{11}
+    \field{pages}{665â€“673}
+    \field{title}{Shortcut learning in deep neural networks}
+    \verb{url}
+    \verb http://dx.doi.org/10.1038/s42256-020-00257-z
+    \endverb
+    \field{volume}{2}
+    \field{journaltitle}{Nature Machine Intelligence}
+    \field{year}{2020}
+    \warn{\item Invalid format of field 'month'}
+  \endentry
+
   \entry{missrate1}{article}{}
     \name{author}{15}{}{%
       {{hash=HD}{%
@@ -598,6 +868,60 @@
     \field{journaltitle}{Endoscopy}
     \field{month}{04}
     \field{year}{2008}
+  \endentry
+
+  \entry{adversarial_bugs_features}{misc}{}
+    \name{author}{6}{}{%
+      {{hash=IA}{%
+         family={Ilyas},
+         familyi={I\bibinitperiod},
+         given={Andrew},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SS}{%
+         family={Santurkar},
+         familyi={S\bibinitperiod},
+         given={Shibani},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=TD}{%
+         family={Tsipras},
+         familyi={T\bibinitperiod},
+         given={Dimitris},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=EL}{%
+         family={Engstrom},
+         familyi={E\bibinitperiod},
+         given={Logan},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=TB}{%
+         family={Tran},
+         familyi={T\bibinitperiod},
+         given={Brandon},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Madry},
+         familyi={M\bibinitperiod},
+         given={Aleksander},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{IA+1}
+    \strng{fullhash}{IASSTDELTBMA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{I}
+    \field{sortinithash}{I}
+    \verb{eprint}
+    \verb 1905.02175
+    \endverb
+    \field{title}{Adversarial Examples Are Not Bugs, They Are Features}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{stat.ML}
+    \field{year}{2019}
   \endentry
 
   \entry{ACS}{article}{}
@@ -965,6 +1289,70 @@
     \field{volume}{329}
     \field{journaltitle}{New England Journal of Medicine}
     \field{year}{1993}
+  \endentry
+
+  \entry{pneumonia}{article}{}
+    \name{author}{6}{}{%
+      {{hash=ZJR}{%
+         family={Zech},
+         familyi={Z\bibinitperiod},
+         given={John\bibnamedelima R.},
+         giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=BMA}{%
+         family={Badgeley},
+         familyi={B\bibinitperiod},
+         given={Marcus\bibnamedelima A.},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=LM}{%
+         family={Liu},
+         familyi={L\bibinitperiod},
+         given={Manway},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=CAB}{%
+         family={Costa},
+         familyi={C\bibinitperiod},
+         given={Anthony\bibnamedelima B.},
+         giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=TJJ}{%
+         family={Titano},
+         familyi={T\bibinitperiod},
+         given={Joseph\bibnamedelima J.},
+         giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=OEK}{%
+         family={Oermann},
+         familyi={O\bibinitperiod},
+         given={Eric\bibnamedelima Karl},
+         giveni={E\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Public Library of Science}%
+    }
+    \strng{namehash}{ZJR+1}
+    \strng{fullhash}{ZJRBMALMCABTJJOEK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Z}
+    \field{sortinithash}{Z}
+    \verb{doi}
+    \verb 10.1371/journal.pmed.1002683
+    \endverb
+    \field{number}{11}
+    \field{pages}{1\bibrangedash 17}
+    \field{title}{Variable generalization performance of a deep learning model
+  to detect pneumonia in chest radiographs: A cross-sectional study}
+    \verb{url}
+    \verb https://doi.org/10.1371/journal.pmed.1002683
+    \endverb
+    \field{volume}{15}
+    \field{journaltitle}{PLOS Medicine}
+    \field{month}{11}
+    \field{year}{2018}
   \endentry
 \enddatalist
 \endinput
