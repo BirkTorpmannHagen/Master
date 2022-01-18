@@ -100,17 +100,8 @@ class RandomDraw(nn.Module):
     def __init__(self):
         super(RandomDraw, self).__init__()
 
-    def forward(self, mask, rad):
-        possible_locations = np.argwhere(mask == 0)
-        location = possible_locations[:, np.random.choice(np.arange(possible_locations.shape[1]), 1)].squeeze()
-        location = location
-        location = list(location)
-        perturbation = mask_generator.generate_a_mask(rad=rad, location=location)
-        plt.imshow(perturbation, alpha=0.5)
-        plt.imshow(mask, alpha=0.5)
-        plt.scatter(x=location[0], y=location[1])
-        plt.show()
-        return (mask + perturbation > 0).long()  # todo verify
+    def forward(self, rad):
+        return mask_generator.generate_a_mask(rad=rad)
 
 
 if __name__ == '__main__':

@@ -16,7 +16,9 @@ class Inpainter(nn.Module):
         self.model = SegGenerator()
         self.model.load_state_dict(torch.load(path_to_state_dict))
 
-    def forward(self, img, mask, masked_image):
+    def forward(self, img, mask, masked_image=None):
+        mask = mask.unsqueeze(1)
+        masked_image = img * (1 - mask)
         polyp = self.model(masked_image)
         merged = (1 - mask) * img + (polyp * mask)
         return merged, polyp
@@ -26,7 +28,7 @@ class Inpainter(nn.Module):
                 DataLoader(KvasirSyntheticDataset("Datasets/HyperKvasir", split="test"),
                            batch_size=4)):
             with torch.no_grad():
-                merged, polyp = self.forward(image, mask, masked_image)
+                merged, polyp = self.forward(image, mask)
                 plt.title("Inpainted image")
                 plt.imshow(merged[0].T)
                 plt.show()
@@ -35,5 +37,5 @@ class Inpainter(nn.Module):
 
 
 if __name__ == '__main__':
-    inpainter = Inpainter("Predictors/Inpainters/deeplab-generator-550")
+    inpainter = Inpainter("Predictors/Inpainters/no-pretrain-deeplab-generator-4990")
     inpainter.get_test()

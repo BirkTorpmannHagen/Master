@@ -9,12 +9,15 @@ import numpy as np
 
 
 class ModelOfNaturalVariation(nn.Module):
-    def __init__(self, T0=0):
+    def __init__(self, T0=0, use_inpainter=False):
         super(ModelOfNaturalVariation, self).__init__()
         self.temp = T0
         self.linstep = 0.1
-        self.inpainter = Inpainter("Predictors/Inpainters/no-pretrain-deeplab-generator-4990")
-        self.perturbator = RandomDraw()
+        self.use_inpainter = use_inpainter
+        if self.use_inpainter:
+            self.inpainter = Inpainter("Predictors/Inpainters/no-pretrain-deeplab-generator-4990")
+            self.inpainter.eval()
+            self.perturbator = RandomDraw()
         self.pixelwise_augments, self.geometric_augments = self.get_encoded_transforms()
 
     def _map_to_range(self, max, min=0):
@@ -45,14 +48,18 @@ class ModelOfNaturalVariation(nn.Module):
         assert len(image.shape) == 4, "Image must be in BxCxHxW format"
         augmented_imgs = torch.zeros_like(image).cuda()
         augmented_masks = torch.zeros_like(mask).cuda()
+
         for batch_idx in range(image.shape[0]):  # random transforms to every image in the batch
             aug_img = image[batch_idx].squeeze().cpu().numpy().T
             aug_mask = mask[batch_idx].squeeze().cpu().numpy().T
-            # if np.random.rand() < self.temp:
-            #     # todo integrate inpainting
-            #     inpainting_mask = self.perturbator(mask=mask, rad=0.5)
-            #     inpaint = ((inpainting_mask - mask) != 0).astype(int)
-            # aug_img = self.inpainter(image=image[batch_idx], mask=mask[batch_idx])
+            if np.random.rand() < self.temp and self.use_inpainter:
+                # todo integrate inpainting
+                inpainting_mask_numpy = self.perturbator(rad=0.25)
+                inpainting_mask = torch.from_numpy(inpainting_mask_numpy).unsqueeze(0).to("cuda").float()
+                with torch.no_grad():
+                    aug_img, polyp = self.inpainter(img=image[batch_idx], mask=inpainting_mask)
+                aug_img = aug_img[0].cpu().numpy().T  # TODO fix this filth
+                aug_mask = np.clip(aug_mask + inpainting_mask_numpy, 0, 1)
             pixelwise = self.pixelwise_augments(image=aug_img)["image"]
             geoms = self.geometric_augments(image=pixelwise, mask=aug_mask)
             augmented_imgs[batch_idx] = torch.Tensor(geoms["image"].T)
