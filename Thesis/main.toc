@@ -9,72 +9,86 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.1}Colorectal Polyps, Medical Imaging, and Deep Learning}{3}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.2}Generalisation failure in the Wild}{4}%
+\contentsline {section}{\numberline {2.2}Generalisation failure in broader contexts}{4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.3}Generalisability Theory}{5}%
+\contentsline {subsection}{\numberline {2.2.1}Generalisation failure in Medical Imaging}{4}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {2.2.2}Generalisation failure in other domains}{5}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {2.3}Generalisability Theory}{6}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3.1}Generalisation through Empirical Risk Minimization}{6}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.2}A taxonomy of Generalisation Failure Modes}{7}%
+\contentsline {subsection}{\numberline {2.3.2}A taxonomy of Generalisation Failure Modes}{8}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Underspecification}{8}%
+\contentsline {subsection}{\numberline {2.3.3}Structural Misalignment}{8}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Overfitting}{8}%
+\contentsline {subsubsection}{Spurious correlations and shortcut learning}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Underfitting}{8}%
+\contentsline {subsection}{\numberline {2.3.4}Underspecification}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Structural misalignment}{8}%
+\contentsline {subsection}{\numberline {2.3.5}A Bayesian perspective of generalisation}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.3}A Bayesian perspective of generalisation}{8}%
+\contentsline {section}{\numberline {2.4}Inducing robust features}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.4}Mitigating generalisation failure}{8}%
+\contentsline {subsection}{\numberline {2.4.1}Adversarial Training}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4.1}Adversarial Training}{8}%
+\contentsline {subsection}{\numberline {2.4.2}Adversarial attacks and defences}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4.2}Adversarial attacks and defences}{8}%
+\contentsline {subsection}{\numberline {2.4.3}Improved Risk estimation}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4.3}Improved Risk estimation}{8}%
+\contentsline {subsubsection}{Data augmentation}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Data augmentation}{8}%
+\contentsline {subsubsection}{Distributional modelling}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Distributional modelling}{8}%
+\contentsline {subsection}{\numberline {2.4.4}Bayesian Learning}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.4.4}Bayesian Learning}{8}%
+\contentsline {subsection}{\numberline {2.4.5}}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Methodology}{9}%
+\contentsline {section}{\numberline {2.5}Generalizability of polyp segmentation}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Methodology}{9}%
+\contentsline {section}{\numberline {2.6}Putting it all together}{10}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}(algorithm name)}{9}%
+\contentsline {chapter}{\numberline {3}Methodology}{11}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.1}Model of natural variability}{9}%
+\contentsline {chapter}{Methodology}{11}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Gan-based polyp inpainting}{10}%
+\contentsline {section}{\numberline {3.1}PLACEHOLDER ALGORITHM NAME}{11}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.2}Geometric and pixel-wise transformations}{10}%
+\contentsline {subsection}{\numberline {3.1.1}Consistency Loss}{12}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}Baselines}{10}%
+\contentsline {subsection}{\numberline {3.1.2}Model of natural variation}{13}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.3}Datasets}{10}%
+\contentsline {subsubsection}{Gan-based polyp inpainting}{14}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.4}Metrics and evaluation}{10}%
+\contentsline {subsubsection}{Geometric and pixel-wise transformations}{14}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}Results}{11}%
+\contentsline {subsection}{\numberline {3.1.3}Adversarial sampling}{14}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Results}{11}%
+\contentsline {subsection}{\numberline {3.1.4}Difficulty annealing}{14}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Results}{13}%
+\contentsline {section}{\numberline {3.2}Baselines}{14}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Results}{13}%
+\contentsline {section}{\numberline {3.3}Datasets}{14}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.1}Augmentation Robustness and Consistency Loss}{13}%
+\contentsline {section}{\numberline {3.4}Metrics and evaluation}{14}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.1}Data augmentation}{13}%
+\contentsline {chapter}{\numberline {4}Results}{15}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.2}Consistency loss}{14}%
+\contentsline {chapter}{Results}{15}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.3}Adversarial Dice}{14}%
+\contentsline {chapter}{\numberline {5}Analysis}{17}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Discussion}{15}%
+\contentsline {chapter}{Analysis}{17}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Discussion}{15}%
+\contentsline {section}{\numberline {5.1}Augmentation Robustness and Consistency Loss}{17}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1.1}Data augmentation}{17}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1.2}Consistency loss}{18}%
+\defcounter {refsection}{0}\relax 
+\contentsline {subsection}{\numberline {5.1.3}Adversarial Dice}{18}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {6}Discussion}{19}%
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{Discussion}{19}%

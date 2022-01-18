@@ -1,47 +1,37 @@
-\chapter{Background}
+% !TeX spellcheck = en_US
+\chapter{Background} \label{background}
 \setcounter{chapter}{2}
 \section{Colorectal Polyps, Medical Imaging, and Deep Learning}
 	Polyps are small growths found in and around the inner lining of the large intestine. These polyps, also referred to as adenomas, can in time develop into cancerous tumours, or carcinomas, in a process known as the adenoma-carcinoma sequence \cite{ACS}. Though the majority of polyps do not undergo this process, identifying polyps nonetheless constitutes an important step towards preventing colorectal cancer. Indeed, resection of these polyps has been shown to reduce the incidence of colorectal cancer by a significant margin \cite{resection}. 
 	
-	Though colorectal cancer remains as one of the leading causes of cancer-related death worldwide (source), mortality rates have nonetheless declined in large part to increased use of screening colonoscopy, which in turn allows for the opportunity for preemptive treatment. Polyps are, however, by nature somewhat difficukt to detect and are routinely missed by clinicians, with miss rates ranging upwards of 27\% for diminutive  polyps \cite{missrate1, missrate2}.
+	Though colorectal cancer remains as one of the leading causes of cancer-related death worldwide (source), mortality rates have nonetheless declined in large part to increased use of screening colonoscopy, which in turn has facilitated the use of more preemptive treatment. Polyps are, however, by nature somewhat difficult to detect and are routinely missed by clinicians, with miss rates ranging upwards of 27\% for diminutive (<2.5mm) polyps  \cite{missrate1, missrate2}.
 	
-	Naturally, reducing this miss rate has the potential to further reduce incidence rates. There has been a significant body of work dedicated to for instance workflow optimization using both optical and mechanical approaches, for instance chromoendoscopy, wherein stains or dyes are applied at the time of endoscopy, or the use of alternative lighting such as narrow-band imaging, which increases the textural details that help distinguish polyps from their surrounding tissue. 
+	Reducing this miss rate has the potential to further reduce incidence rates. As a result, there has been a significant body of work dedicated to developing systems and techniques to aid in optimizing and effectivizing the screening procedure. One such example, referred to as chromoendoscopy, has been shown to reduce miss rates by (...) merely by employing the use of specific dyes prior to the colonoscopy. Similarly, the use of narrow-band imaging techniques, wherein light of specific wavelengths specifically designed to highlight the textural differences between the polyps and the surrounding tissue, has been shown to reduce miss rates by (...) 
 	
-	These systems do, however, require more equipment, training and expertise to effectively employ. Thus, automatic polyp segmentation using deep learning and convolutional neural networks (CNNs) has been identified as another diminutive detection method. This requires minimal training time on the part of the clinician, no additional equipment, and has been show to significantly increase detection rates when deployed in a clinical setting \cite{polyp-success-story}. 
-	
-	Naturally, these results are not unique to the detection of polyps. Indeed, medical imaging has in recent years proven to be one of the most promising applications of artificial intelligence and deep learning, having the capacity to significantly improve both the accuracy and efficiency of detection, diagnosis, and treatment of a wide variety of diseases \cite{dl_medical_imaging}. 
-	
-	%Some examples here
-	
-	There are, however, still several hurdles to overcome; recent research has shown that even state of the art deep-learning pipelines are prone to generalisation failure when deployed in practical settings, particularly when exposed to distributional shifts such as changes in demographics, imaging equipment, noise, and more despite exhibiting high performance on hold-out sets \cite{retinopathy, damour2020underspecification, pneumonia, shortcut_learning}. There is no reason to expect that polyps are exempt from this problem, given how pervasive such shortcomings are in similar tasks.
-	
-	Naturally, such systems are rendered practically useless should they fail to perform sufficiently outside of the very carefully controlled conditions upon which they are trained. Thus, for AI-assisted detection to be on any considerable merit, it has to infer causally reasonable patterns in the data that generalize well to other hospitals, demographics, imaging equipment, resolutions, and so on. Though a human would not find this type of generalisation very difficult, deep-learning (and for that matter, other data-driven approaches) regularly seem to fail in this regard. 
+	These systems do, however, require more equipment, training and expertise to effectively employ. Thus, automatic polyp segmentation using deep learning and convolutional neural networks (CNNs) has been identified as a possible diminutive detection method. This requires minimal training time on the part of the clinician, no additional equipment, and has been show to significantly increase detection rates when deployed in a clinical setting \cite{polyp-success-story}. 
 
-\section{Generalisation failure in the Wild} \label{case_studies}
+	This has spurred on a large body of research dedicated to improving on the performance and expanding the capabilities of deep-learning based systems for polyp detection and segmentation. Several challenges been also held, namely the Endotect challenge \cite{endotect}, EndoCV2020 \cite{endocv2020}, EndoCV2021 \cite{endocv2021}, and more.
+	
+	There are, however, still several hurdles to overcome; recent research has shown that even state of the art deep-learning pipelines are prone to generalisation failure when deployed in practical settings, particularly when exposed to distributional shifts such as changes in demographics, imaging equipment, noise, and more despite exhibiting high performance on hold-out sets \cite{retinopathy, damour2020underspecification, pneumonia, shortcut_learning}. As a result, the EndoCV2021 challange emloyed training data from several centers, with the data from one of the centers being hidden and used as generalisation test data. The results from this challange demomstrated the pervasiveness of generalisation failure, with every submitted model exhibiting significant performance reductions when evaluated on their hidden dataset (cite summary here). 
+	
+	Naturally, automatic segmentation systems are rendered practically useless should they fail to perform sufficiently outside of the very carefully controlled conditions upon which they are trained. Consequently, for any such system to have any practical merit, it has to have the capacity to infer causally reasonable patterns in the data that generalize well to other hospitals, demographics, imaging equipment, resolutions, and so on. Though a human would not find this type of generalisation very 
 
-	The medical domain is characterized by a number of key features that separate it from other areas where deep-learning typically excels. Training data is often scarce, the pathologies that constitute the classification targets are unevenly distributed and often exhibit high degrees of inter-class variability, and there can be a significant number of confounding variables. 
+\section{Generalisation failure in broader contexts} \label{case_studies}
+	\subsection{Generalisation failure in Medical Imaging}
+	Generalisation failure is not, of course, unique to the gastrointestinal domain. Indeed, though medical imaging has in recent years proven to be one of the most promising applications of artificial intelligence and deep learning, having the capacity to significantly improve both the accuracy and efficiency of detection, diagnosis, and treatment of a wide variety of diseases \cite{dl_medical_imaging}, they are nonetheless highly prone to generalisation failure. In addition to the already limited capabilities of deep neural networks to generalise, medical domains are subject to a number of other exacerbating factors that make generalisation all the more diffcult. Training data is often scarce, the pathologies that constitute the classification targets are unevenly distributed and often exhibit high degrees of inter-class and within-class variability. Moreover, due to the sheer scope of the data involved, there are inevitably a significant number of confounding variables both during training and in deployment.  
 		
 	For instance, a deep-learning based classifier which successfully detected pneumonia in X-ray scans across a number of hospitals with striking accuracy was determined to be basing its predictions not on any lesions or otherwise pathologically relevant features in the images, but rather on a hospital-specific metal token that was on every image, which it used in conjunction with learning the prevalence rate of pneumonia for the hospitals from which the data was collected. As a result, when deployed on data from hospitals that it had not seen during training, the system failed to generalize \cite{pneumonia}. 
 		
 	In another study, it was shown that a classifier intended to detect diabetic retinopathy exhibited significant variability in performance depending on the type of camera used. The same study also showed that the same type of performance variability could be found when detecting skin-conditions across demographics with differing skin tones. \cite{damour2020underspecification}. 
-	
-	Though there has been limited literature detailing the generalisability of pipelines trained to segment polyps, there is no reason to believe that it is somehow exempt from the same problems that impact the aforementioned tasks. To illustrate this, a brief meta analysis can be performed. Table
-	\begin{table}
-		\centering
-		\begin{tabularx}{\textwidth}{X | X X}
-			Model & IID & Mean OOD \\
-			\hline
-			DeepLabV3 & ... & ... \\
-			U-Net & ... & ... \\
-			FPN & ... & ... \\
-			DDA-net & ... & ... \\
-			Divergent-net & ... & ...\\
-		\end{tabularx}
-				\label{table:polyp-case}
-	\end{table}
-	There has been astonishingly little research into determining the generalisability of models designed for polyp-detection. As a result, a meta-analysis of a selection of such models is required. Several models, consisting of DDANet, DivergentNet, (...), were trained according to the hyperparameters provided in their respective papers and repositories. Table (...) shows their results when evaluated on separate datasets. Methodological details can be found in chapter (...). 
+	 
+	\subsection{Generalisation failure in other domains}
+	Naturally, non-medical domains are in no way immune to generalisation failure. In fact, one could easily argue that the vast majority of deep-learning pipelines fail to generalize altogether, and instead merely infer some set of inductive biases that, although perhaps causally incorrect, perform sufficiently well for general use. It has for instance been shown that CNNs trained on imagenet, one of the largest and most diverse datasets in the domain of computer vision, are heavily biased towards textural features\cite{texturebias}. Naturally, this is not necessarily causally accurate; a cat is not a cat because it has cat-like fur; nor is an elephant an elephant only because it has skin of an elephant. By manually increasing shape bias, it has been shown that the performance of such CNNs improves both in robustness to perturbations and iid accuracy.
 
-	Naturally, non-medical domains are in no way immune to generalisation failure. In fact, one could easily argue that the vast majority of deep-learning pipelines fail to generalize altogether, and instead merely infer some set of inductive biases that, although perhaps causally incorrect, perform sufficiently well for general use. It has for instance been shown that CNNs trained on imagenet, one of the largest and most diverse datasets in the domain of computer vision, are heavily biased towards textural features\cite{texturebias}. Naturally, this is not necessarily causally accurate; a cat is not a cat because it has cat-like fur; nor is an elephant an elephant only because it has the skin of an elephant. By manually increasing shape bias, it has been shown that the performance of such CNNs improves both in robustness to perturbations and iid accuracy.
+	\begin{figure}[H]
+		\includegraphics[width=\linewidth]{example-image-a}
+		\caption{}
+		\label{cat_elephant}
+	\end{figure}
 	
 	Another characteristic of deep learning that supports this argument is the effectiveness of adversarial attacks \cite{adversarial_bugs_features}, which specifically target weaknesses in the inductive biases within DNNs through any number of means in an attempt to induce high rates of incorrect, yet highly confident predictions. Gradient-based adversarial attacks, for instance, use the gradients of the model to break even the most sophisticated and well-trained pipelines merely by adding some carefully crafted, yet visually imperceptible noise to the inputs \cite{adversarial_attacks}. Even without access to the gradients, there exists a multitude of so-called black-box attacks that only use output samples to generate similarly effective attacks (cite). Finally, it has been shown that adding minor visual distractions to objects, for example adding bits of tape or graffiti to stop signs, dramatically increases misclassification rates \cite{physical_attacks}. 
 	
@@ -73,28 +63,52 @@
 		\end{equation}
 		To reiterate, the central idea with this approach to machine learning is that the training data can be considered a finite iid sampling of the underlying distribution. As such, by the central limit theorem, the hold-out performance of the computed hypothesis will approach iid-optimal performance given a sufficient amount of training data and some sufficiently capable and regularized training procedure. This should in theory allow deep learning systems to be able to generalize, since the empirical risk in theory can approximate the true risk arbitrarily well given sufficient training data support.
 	\subsection{A taxonomy of Generalisation Failure Modes}
-		As the analysis in \ref{case_studies} shows, ERM nonetheless readily fails to generate generalisable predictors with respect to out-of-distribution data). Understanding exactly why this is the case is a subject of ongoing study, and the literature around the matter is highly fragmented. Naturally, generalisation is a complex and highly multifaceted phenomenon, with roots in any number of different factors, so there does not typically exist one unique property that sufficiently fully characterizes every instance of generalisation failure. To conduct a proper analysis thereof, it is as such beneficial to construct a taxonomy over the various forms of generalisation failure, the properties that induce them, and the how these properties emerge with respect to empirical risk minimization. First, consider the assumptions upon which ERM is based, namely that:
+		As the analysis in \ref{case_studies} shows, ERM nonetheless readily fails to generate generalisable predictors with respect to out-of-distribution data). Understanding exactly why this is the case is a subject of ongoing study, and the literature around the matter is highly fragmented. Consequently, in an attempt to synthesize the findings from the often conflicting literature, it is beneficial to construct a taxonomy over the various forms of generalisation failure, the properties that induce them, and the how these properties emerge with respect to empirical risk minimization. First, consider the assumptions upon which ERM is based, namely that:
 		\begin{enumerate}
 			\item The empirical risk is a good approximation of the true risk \(R(h)\) \label{overfit}
 			\item \(f\) exists in \(\mathcal{H}\) \label{underfit}
 			\item \(\{x_i, y_i\}\) is an IID sampling of \(P(x,y)\). This is the aforementioned iid assumption. \label{internal_misalignment}
 			\item \(P(x,y)\) (and, given that \ref{internal_misalignment} is true, \(\{x_i, y_i\}\)) is independently and identically distributed to full space of input-output pairs one might expect in deployment, henceforth denoted by \(P_{\infty}(x,y)\). \label{external_misalignment}
 			\item \(\hat{h}\) is unique in in \(\mathcal{H}\) \label{underspecification}
-		\end{enumerate}  
+			\item The optimizer consistently finds \(\hat{h}\), given that it exists and is unique \label{opt}
+		\end{enumerate}  	
 		
-		Violations of any one of these assumptions induces a corresponding generalisation failure mode. The behavior that violations of assumptions \ref{underfit} and \ref{overfit} correspond is well understood and fairly easy to detect, and is referred to as underfitting and overfitting respectively, but violations of the remaining assumptions, result in more subtle forms of failure, namely internal misalignment, external misalignment, and underspecification respectively for assumptions \ref{internal_misalignment}, \ref{external_misalignment} and \ref{underspecification}.
+		The behavior that violations of assumptions \ref{underfit} and \ref{overfit} is well understood and fairly easy to detect, corresponding to underfitting and overfitting respectively, but violations of the remaining assumptions result in more subtle forms of generalisation failure. The general consensus is that generalisation failure can in broad strokes be attributed to either underspecification or structural misalignment. The following sections will attempt to summarize and synthesize the analyses within the literature, and connect each of the generalisation failure modes they identify to the above violations.
+		
+		\subsection{Structural Misalignment}
+		Generalisation failure is often attributed to a structural misalignment between the training domain and the deployment domain, and that deep learning pipelines are particularly predisposed to inferring causally inviable but nonetheless empirical-risk-minimizing inductive biases that lack robustness to structural differences. For example: assume hospital A employs normal white-light endoscopy, and hospital B employs narrow-band endoscopy. Though one might expect the pipeline to learn features that are invariant to lighting conditions, and thus that a predictor trained on data from hospital A may generalize to hospital B, this is in no way guaranteed since the difference between the respective modalities cannot be directly accounted for through conventional ERM. 
+		
+		Though this not altogether preclude the pipeline from generating a generalisable predictor, it does make it highly unlikely. Since ERM really only minimises empirical risk, the model will instead learn highly predictive, but nonetheless causally inconsistent features. Using the same example as above, the model may instead learn to associate the characteristic texture of polyps under narrow-band imaging with a positive prediction, and rely entirely on this property in order to make predictions, which naturally does not translate well to white-light imaging. Similarly, the model trained on the white-light modality may learn to focus more on particular color- and shape-based features, which likewise may not transfer well to narrow-band imaging. This corresponds to a violation of assumption \ref{external_misalignment}. If training on a dataset from hospital A, even assuming an infinite or otherwise theoretically optimal dataset that fully encapsulates the space of polyp images using white-light imaging - i.e \(P(x,y)\), the pipeline will rarely if ever learn causally viable patterns that transfer well to the space of all possible polyps images across all possible non-destructive lighting conditions, or \(P_{\infty}(x,y)\). 
+
+		\begin{figure}[H]
+			\includegraphics[width=\linewidth]{example-image-b}
+			\caption{}
+			\label{imaging_modalities}
+		\end{figure}
+
+
+		In the above example, the patterns the respective pipelines infer,  though not particularly representative of the broader context of what makes a polyp a polyp, make sense from a perspective of causality when considered from the perspective of either of the two hypothetical datasets. When considering only narrow-band imaging, it makes sense to heavily weigh the texture of the polyps. When considering only white-light imaging, it makes sense to heavily weight the shape and colour of the polyps. Generalisation failure is then in this case and by this line of reasoning entirely dependent on the structural misalignment and distributional shift corresponding to the change in imaging techniques as opposed to any erroneous logic in the pipeline itself. Ideally, the pipeline should of course detect patterns that generalize well regardless of lighting conditions, but it is not reasonable to expect the pipeline to draw this conclusion autonomously. Instead, the pipeline has to be "told" to keep this invariance in mind during training a priori. If some hypothetical change to the pipeline were to manage to induce this invariance, the structural misalignment between the dataset would no longer be an issue, ceteris paribus.  
+		
+		\subsubsection{Spurious correlations and shortcut learning}
+		In the above example, it is assumed that the inductive biases inferred in either domain are causally viable within for the respective imaging modalities. This is, as it turns out, not necessarily the case. As examplified in section \ref{case_studies}, deep learning pipelines readily exploit predictive but nonetheless causally incorrect patterns. 
+		
+		% adversarial attacks features not bugs
+		% shortcut learning 
+		
+		\subsection{Underspecification}
+		\cite{damour2020underspecification} argues that this purely structural view of generalisation failure is flawed, 
 			
-		\subsubsection{Underspecification}
-		\subsubsection{Overfitting}
-		\subsubsection{Underfitting}
-		\subsubsection{Structural misalignment}
-		
 		\subsection{A Bayesian perspective of generalisation}
-\section{Mitigating generalisation failure}
+		
+\section{Inducing robust features}
 	\subsection{Adversarial Training}
 		\subsection{Adversarial attacks and defences}
 	\subsection{Improved Risk estimation}
 		\subsubsection{Data augmentation}
 		\subsubsection{Distributional modelling}
 	\subsection{Bayesian Learning}
-	
+	\subsection{}
+
+\section{Generalizability of polyp segmentation}
+
+\section{Putting it all together}

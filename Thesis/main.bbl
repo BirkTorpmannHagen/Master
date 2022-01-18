@@ -17,6 +17,91 @@
 \endgroup
 
 \datalist[entry]{nty/global//global/global}
+  \entry{endocv2021}{article}{}
+    \name{author}{4}{}{%
+      {{hash=AS}{%
+         family={Ali},
+         familyi={A\bibinitperiod},
+         given={Sharib},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=GN}{%
+         family={Ghatwary},
+         familyi={G\bibinitperiod},
+         given={Noha},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=JD}{%
+         family={Jha},
+         familyi={J\bibinitperiod},
+         given={Debesh},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=HP}{%
+         family={Halvorsen},
+         familyi={H\bibinitperiod},
+         given={Pal},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AS+1}
+    \strng{fullhash}{ASGNJDHP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{title}{EndoCV 2021 3rd International Workshop and Chal-lenge on
+  Computer Vision in En-doscopy}
+  \endentry
+
+  \entry{endocv2020}{inproceedings}{}
+    \name{author}{5}{}{%
+      {{hash=AS}{%
+         family={Ali},
+         familyi={A\bibinitperiod},
+         given={Sharib},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=DC}{%
+         family={Daul},
+         familyi={D\bibinitperiod},
+         given={Christian},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=RJ}{%
+         family={Rittscher},
+         familyi={R\bibinitperiod},
+         given={Jens},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SD}{%
+         family={Stoyanov},
+         familyi={S\bibinitperiod},
+         given={Danail},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=GE}{%
+         family={Grisan},
+         familyi={G\bibinitperiod},
+         given={Enrico},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \list{organization}{1}{%
+      {CEUR Workshop Proceedings}%
+    }
+    \strng{namehash}{AS+1}
+    \strng{fullhash}{ASDCRJSDGE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \field{booktitle}{CEUR Workshop Proceedings}
+    \field{title}{Preface to: EndoCV2020Computer Vision in Endoscopy}
+    \field{volume}{2595}
+    \field{year}{2020}
+  \endentry
+
   \entry{polyp-success-story}{article}{}
     \name{author}{9}{}{%
       {{hash=BI}{%
@@ -868,6 +953,62 @@
     \field{journaltitle}{Endoscopy}
     \field{month}{04}
     \field{year}{2008}
+  \endentry
+
+  \entry{endotect}{inbook}{}
+    \name{author}{6}{}{%
+      {{hash=HS}{%
+         family={Hicks},
+         familyi={H\bibinitperiod},
+         given={Steven},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=JD}{%
+         family={Jha},
+         familyi={J\bibinitperiod},
+         given={Debesh},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=TV}{%
+         family={Thambawita},
+         familyi={T\bibinitperiod},
+         given={Vajira},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=HP}{%
+         family={Halvorsen},
+         familyi={H\bibinitperiod},
+         given={Pål},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=HH}{%
+         family={Hammer},
+         familyi={H\bibinitperiod},
+         given={Hugo},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=RM}{%
+         family={Riegler},
+         familyi={R\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HS+1}
+    \strng{fullhash}{HSJDTVHPHHRM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \verb{doi}
+    \verb 10.1007/978-3-030-68793-9_18
+    \endverb
+    \field{isbn}{978-3-030-68792-2}
+    \field{pages}{263\bibrangedash 274}
+    \field{title}{The EndoTect 2020 Challenge: Evaluation and Comparison of
+  Classification, Segmentation and Inference Time for Endoscopy}
+    \field{month}{02}
+    \field{year}{2021}
   \endentry
 
   \entry{adversarial_bugs_features}{misc}{}
