@@ -102,6 +102,48 @@
     \field{year}{2020}
   \endentry
 
+  \entry{IRM}{misc}{}
+    \name{author}{4}{}{%
+      {{hash=AM}{%
+         family={Arjovsky},
+         familyi={A\bibinitperiod},
+         given={Martin},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BL}{%
+         family={Bottou},
+         familyi={B\bibinitperiod},
+         given={Léon},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=GI}{%
+         family={Gulrajani},
+         familyi={G\bibinitperiod},
+         given={Ishaan},
+         giveni={I\bibinitperiod},
+      }}%
+      {{hash=LPD}{%
+         family={Lopez-Paz},
+         familyi={L\bibinithyphendelim P\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{AM+1}
+    \strng{fullhash}{AMBLGILPD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{A}
+    \field{sortinithash}{A}
+    \verb{eprint}
+    \verb 1907.02893
+    \endverb
+    \field{title}{Invariant Risk Minimization}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{stat.ML}
+    \field{year}{2020}
+  \endentry
+
   \entry{polyp-success-story}{article}{}
     \name{author}{9}{}{%
       {{hash=BI}{%
@@ -812,6 +854,37 @@
     \warn{\item Invalid format of field 'month'}
   \endentry
 
+  \entry{corruption_robustness}{misc}{}
+    \name{author}{2}{}{%
+      {{hash=HD}{%
+         family={Hendrycks},
+         familyi={H\bibinitperiod},
+         given={Dan},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=DT}{%
+         family={Dietterich},
+         familyi={D\bibinitperiod},
+         given={Thomas},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HDDT1}
+    \strng{fullhash}{HDDT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \verb{eprint}
+    \verb 1903.12261
+    \endverb
+    \field{title}{Benchmarking Neural Network Robustness to Common Corruptions
+  and Perturbations}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2019}
+  \endentry
+
   \entry{missrate1}{article}{}
     \name{author}{15}{}{%
       {{hash=HD}{%
@@ -1009,6 +1082,42 @@
   Classification, Segmentation and Inference Time for Endoscopy}
     \field{month}{02}
     \field{year}{2021}
+  \endentry
+
+  \entry{noise_robustness}{misc}{}
+    \name{author}{3}{}{%
+      {{hash=HH}{%
+         family={Hosseini},
+         familyi={H\bibinitperiod},
+         given={Hossein},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=XB}{%
+         family={Xiao},
+         familyi={X\bibinitperiod},
+         given={Baicen},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=PR}{%
+         family={Poovendran},
+         familyi={P\bibinitperiod},
+         given={Radha},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HHXBPR1}
+    \strng{fullhash}{HHXBPR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \verb{eprint}
+    \verb 1704.05051
+    \endverb
+    \field{title}{Google's Cloud Vision API Is Not Robust To Noise}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.CV}
+    \field{year}{2017}
   \endentry
 
   \entry{adversarial_bugs_features}{misc}{}
@@ -1307,6 +1416,59 @@
     \field{volume}{19}
     \field{journaltitle}{Annual Review of Biomedical Engineering}
     \field{year}{2017}
+  \endentry
+
+  \entry{adversarial_training}{inproceedings}{}
+    \name{author}{6}{}{%
+      {{hash=SA}{%
+         family={Shrivastava},
+         familyi={S\bibinitperiod},
+         given={Ashish},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=PT}{%
+         family={Pfister},
+         familyi={P\bibinitperiod},
+         given={Tomas},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=TO}{%
+         family={Tuzel},
+         familyi={T\bibinitperiod},
+         given={Oncel},
+         giveni={O\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Susskind},
+         familyi={S\bibinitperiod},
+         given={Joshua},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=WW}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Wenda},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=WR}{%
+         family={Webb},
+         familyi={W\bibinitperiod},
+         given={Russell},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SA+1}
+    \strng{fullhash}{SAPTTOSJWWWR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{booktitle}{Proceedings of the IEEE Conference on Computer Vision and
+  Pattern Recognition (CVPR)}
+    \field{title}{Learning From Simulated and Unsupervised Images Through
+  Adversarial Training}
+    \field{year}{2017}
+    \warn{\item Invalid format of field 'month'}
   \endentry
 
   \entry{resection}{article}{}
