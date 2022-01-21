@@ -21,3 +21,14 @@ def log_iou(fname, epoch, ious: torch.Tensor):
     for iou in serialized_ious:
         df = df.append(dict(zip(["epoch", "iou"], [epoch, iou])), ignore_index=True)
     df.to_csv(fname, index=False)
+
+
+def log_full(config, result_dict):
+    try:
+        df = pd.read_csv(config[""])
+    except FileNotFoundError:
+        df = pd.DataFrame(columns=["epoch", "iou"])
+    serialized_ious = ious.flatten().numpy()
+    for iou in serialized_ious:
+        df = df.append(dict(zip(["epoch", "iou"], [epoch, iou])), ignore_index=True)
+    df.to_csv(fname, index=False)

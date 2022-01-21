@@ -35,8 +35,8 @@ def get_generalizability_gap(modelpath):
 
     kvasir_ious = eval(kvasir, model)
     etis_ious = eval(etis, model)
-    print(np.mean(kvasir_ious),
-          np.mean(etis_ious))
+    print(f"{modelpath} \t \t {np.mean(kvasir_ious)} \t {np.mean(etis_ious)}")
+    return kvasir_ious, etis_ious
 
 
 if __name__ == '__main__':

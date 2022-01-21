@@ -7,7 +7,6 @@ from torch.utils.data import DataLoader
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirClassificationDataset
 from Models import backbones
 from Models import inpainters
-from Pretraining.deeplab_pretrainer import pretrain_encoder
 from Tests.metrics import iou
 from utils import logging
 from model_of_natural_variation.model import ModelOfNaturalVariation
@@ -20,7 +19,8 @@ class ConsistencyTrainer(VanillaTrainer):
         super(ConsistencyTrainer, self).__init__(model_str, id, config)
         self.mnv = ModelOfNaturalVariation(T0=1).to(self.device)
         self.criterion = ConsistencyLoss().to(self.device)
-        self.train_loader = DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir"), batch_size=8)
+        self.train_loader = DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir"), batch_size=8, shuffle=True)
+        self.nakedcloss = NakedConsistencyLoss()
 
     def train_epoch(self):
         self.model.train()
@@ -47,16 +47,18 @@ class ConsistencyTrainer(VanillaTrainer):
         return np.mean(losses)
 
     def train(self):
+
         best_val_loss = 1000
         print("Starting Segmentation training")
         for i in range(self.epochs):
             training_loss = np.abs(self.train_epoch())
-            val_loss, ious = self.validate(epoch=i, plot=False)
+            val_loss, ious, closs = self.validate(epoch=i, plot=False)
             gen_ious = self.validate_generalizability(epoch=i, plot=False)
             logging.log_iou(f"logs/augmented-training_log_{self.model_str}_pretrainmode={self.pretrain}_{self.id}", i,
                             ious.cpu())
             mean_iou = torch.mean(ious)
             gen_iou = torch.mean(gen_ious)
+            mean_closs = np.mean(closs)
             self.scheduler.step(i)
             # self.mnv.step()
             print(
@@ -66,7 +68,8 @@ class ConsistencyTrainer(VanillaTrainer):
                 f" val_loss={val_loss} \t"
                 f" ood_iou={gen_iou}\t"
                 f" val_iou={mean_iou} \t"
-                f" gen_prop={gen_iou / mean_iou}"
+                f" gen_prop={gen_iou / mean_iou} \t,"
+                f" consistency={1 - mean_closs}"
             )
 
             if val_loss < best_val_loss:
@@ -86,6 +89,7 @@ class ConsistencyTrainer(VanillaTrainer):
         # todo refactor to make this prettier
         self.model.eval()
         losses = []
+        closses = []
         ious = torch.empty((0,))
         with torch.no_grad():
             for x, y, fname in self.val_loader:
@@ -98,17 +102,19 @@ class ConsistencyTrainer(VanillaTrainer):
                 batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
                 loss = self.criterion(aug_mask, mask, aug_output, output, torch.mean(batch_ious))
                 losses.append(np.abs(loss.item()))
+                closses.append(self.nakedcloss(aug_mask, mask, aug_output, output).item())
                 ious = torch.cat((ious, batch_ious.cpu().flatten()))
                 if plot:
-                    # plt.imshow(y[0, 0].cpu().numpy(), alpha=0.5)
+                    plt.imshow(y[0, 0].cpu().numpy(), alpha=0.5)
                     plt.imshow(image[0].permute(1, 2, 0).cpu().numpy())
                     plt.imshow((output[0, 0].cpu().numpy() > 0.5).astype(int), alpha=0.5)
-                    # plt.imshow(y[0, 0].cpu().numpy().astype(int), alpha=0.5)
+                    plt.imshow(y[0, 0].cpu().numpy().astype(int), alpha=0.5)
                     plt.title("IoU {} at epoch {}".format(iou(output[0, 0], mask[0, 0]), epoch))
                     plt.show()
                     plot = False  # plot one example per epoch
         avg_val_loss = np.mean(losses)
-        return avg_val_loss, ious
+        avg_closs = np.mean(closses)
+        return avg_val_loss, ious, closses
 
     def test(self):
         self.model.eval()
@@ -162,8 +168,8 @@ class AdversarialConsistencyTrainer(ConsistencyTrainer):
 
     def __init__(self, model_str, id, config):
         super(ConsistencyTrainer, self).__init__(model_str, id, config)
-        self.mnv = ModelOfNaturalVariation(T0=0.25).to(self.device)
-        self.num_adv_samples = 25
+        self.mnv = ModelOfNaturalVariation(T0=1).to(self.device)
+        self.num_adv_samples = 1
         self.naked_closs = NakedConsistencyLoss()
         self.criterion = ConsistencyLoss().to(self.device)
 
@@ -198,5 +204,5 @@ class AdversarialConsistencyTrainer(ConsistencyTrainer):
             loss.backward()
             self.optimizer.step()
             losses.append(np.abs(loss.item()))
-        self.mnv.step()  # increase difficulty
+        # self.mnv.step()  # increase difficulty
         return np.mean(losses)

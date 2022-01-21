@@ -9,7 +9,7 @@ if __name__ == '__main__':
               "epochs": 250}
     # trainer = ContrastiveTrainer(model_str="DeepLab", id="fully_stochastic_weights", config=config)
     # trainer.train()
-    for i in range(2, 10):
-        # trainer = ConsistencyTrainer(model_str="DeepLab", id=f"augments_inpainter_{i}", config=config)
-        trainer = AdversarialConsistencyTrainer(model_str="DeepLab", id=f"adversarial_{i}", config=config)
+    for i in range(0, 10):
+        trainer = ConsistencyTrainer(model_str="DeepLab", id=f"sanity_check_{i}", config=config)
+        # trainer = AdversarialConsistencyTrainer(model_str="DeepLab", id=f"adversarial_{i}_sanity_check", config=config)
         trainer.train()

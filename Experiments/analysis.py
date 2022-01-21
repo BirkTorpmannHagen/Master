@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from os import listdir
 from os.path import join
+import pandas as pd
 
 
 def get_predictorwise_distribution(experiment_path):
@@ -23,4 +24,8 @@ def get_datawise_distribution(experiment_path):
 
 
 if __name__ == '__main__':
-    get_predictorwise_distribution("Experiments/Data/Normal-Pipelines/DeepLab")
+    df_ood = pd.read_csv("ood.csv")
+    df_iid = pd.read_csv("iid.csv")
+    print(np.mean(df_ood["ood"]), np.mean([df_iid["ood"]]))
+    # df_iid = df["Augmented" not in df["name"]]
+    # get_predictorwise_distribution("Experiments/Data/Normal-Pipelines/DeepLab")

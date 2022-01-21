@@ -1,0 +1,17 @@
+name,iid,ood
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_1_last_epoch ,0.8332314491271973,0.445310890674591
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_4_last_epoch ,0.8196122050285339,0.4623357951641083
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_2_last_epoch ,0.8339250087738037,0.469820111989975
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_2 ,0.8309024572372437,0.4502509236335754
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_3_last_epoch ,0.8375941514968872,0.4505090415477752
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_8batch3 ,0.8345595598220825,0.482694536447525
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_3 ,0.8299129605293274,0.4375953376293182
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_8batch2_last_epoch ,0.8426028490066528,0.4816501438617706
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_0 ,0.8239819407463074,0.4592476785182953
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_1 ,0.8294630646705627,0.4463298618793487
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_8batch1 ,0.8246220946311951,0.4579115808010101
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_4 ,0.8204634785652161,0.4585343897342682
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_8batch3_last_epoch ,0.8298269510269165,0.4689582884311676
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_8batch4 ,0.8120822906494141,0.4535941779613495
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_8batch2 ,0.8358365893363953,0.4513038396835327
+Predictors/Vanilla/DeepLab/pretrainmode=imagenet_250_epochs_8batch1_last_epoch ,0.8332890272140503,0.5048708915710449
