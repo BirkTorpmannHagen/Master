@@ -19,5 +19,5 @@ module load cuda11.0/nsight/11.0.3
 module load cuda11.0/profiler/11.0.3
 module load cuda11.0/toolkit/11.0.3
 
-EXPORT PYTHONPATH=$PWD
-srun python Experiments/train_augmented_pipeline.py
+export PYTHONPATH=$PWD
+srun python Experiments/train_augmented_pipeline.py 0
