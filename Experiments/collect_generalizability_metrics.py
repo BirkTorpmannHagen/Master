@@ -1,11 +1,12 @@
+from os import listdir
+
+import numpy as np
+from torch.utils.data import DataLoader
+
+from DataProcessing.etis import EtisDataset
+from DataProcessing.hyperkvasir import KvasirSegmentationDataset
 from Models.backbones import *
 from Tests.metrics import iou
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset
-from DataProcessing.etis import EtisDataset
-from torch.utils.data import DataLoader
-from os import listdir
-import numpy as np
-import matplotlib.pyplot as plt
 
 
 def eval(dataset, model):

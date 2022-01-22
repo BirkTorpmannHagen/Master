@@ -3,15 +3,13 @@ import numpy as np
 import torch
 import torch.nn
 import torchvision.transforms as transforms
-from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
-from torch.autograd import Variable
-from torch.utils.data import DataLoader
-from torchvision.utils import save_image
-from Models.inpainters import SegGenerator, SegDiscriminator
-from DataProcessing.hyperkvasir import KvasirInpaintingDataset
-from DataProcessing.etis import EtisDataset
 from PIL import Image
-from tqdm import tqdm
+from torch.autograd import Variable
+from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
+from torch.utils.data import DataLoader
+
+from DataProcessing.hyperkvasir import KvasirInpaintingDataset
+from Models.inpainters import SegGenerator, SegDiscriminator
 from model_of_natural_variation.polyp_inpainter import Inpainter
 
 

@@ -1,5 +1,4 @@
-from training.consistency_trainers import ConsistencyTrainer, AdversarialConsistencyTrainer, \
-    ConsistencyTrainerUsingAugmentation
+from training.consistency_trainers import ConsistencyTrainer
 
 if __name__ == '__main__':
     config = {"model": "DeepLab",

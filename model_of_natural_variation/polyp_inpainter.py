@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
-import torch.nn as nn
 import torch
-from torchvision.transforms import Normalize
+import torch.nn as nn
+from torch.utils.data.dataloader import DataLoader
+
 # from model_of_natural_variation.gmcnn.model.net_with_dropout import InpaintingModel_GMCNN_Given_Mask
 from DataProcessing.hyperkvasir import KvasirSyntheticDataset
-from torch.utils.data.dataloader import DataLoader
 from Models.inpainters import SegGenerator
 
 

@@ -1,9 +1,8 @@
 from os import listdir
 from os.path import join
 
-import matplotlib.pyplot as plt
 from PIL.Image import open
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset
 from torchvision import transforms
 
 

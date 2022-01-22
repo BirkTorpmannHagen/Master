@@ -1,6 +1,6 @@
+import segmentation_models_pytorch.utils.losses as vanilla_losses
 import torch
 import torch.nn as nn
-import segmentation_models_pytorch.utils.losses as vanilla_losses
 
 
 class ConsistencyLoss(nn.Module):

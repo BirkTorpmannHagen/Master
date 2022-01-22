@@ -1,14 +1,11 @@
+import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
-import torch
-import torch.nn as nn
-import numpy
-import bezier.curve as bezier
 import scipy.ndimage as filt
-import cv2
+import torch.nn as nn
+
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset
-from itertools import combinations_with_replacement
-import sys
 from utils import mask_generator
 
 

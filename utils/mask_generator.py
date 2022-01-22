@@ -1,9 +1,9 @@
+from random import randint
+
+import cv2 as cv
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.special import binom
-import matplotlib.pyplot as plt
-import argparse
-from random import randint
-import cv2 as cv
 
 bernstein = lambda n, k, t: binom(n, k) * t ** k * (1. - t) ** (n - k)
 

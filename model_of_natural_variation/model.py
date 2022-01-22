@@ -1,11 +1,7 @@
-import matplotlib.pyplot as plt
-import torch
-
-from model_of_natural_variation.perturbator import RandomDraw
 import albumentations as alb
-from model_of_natural_variation.polyp_inpainter import Inpainter
-import torch.nn as nn
 import numpy as np
+import torch
+import torch.nn as nn
 
 
 class ModelOfNaturalVariationInpainter(nn.Module):

@@ -1,6 +1,5 @@
 import segmentation_models_pytorch as backbones
 import torch.nn as nn
-import torch
 
 """
 Model wrappers

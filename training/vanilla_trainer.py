@@ -2,16 +2,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import segmentation_models_pytorch.utils.losses as vanilla_losses
 import torch.optim.optimizer
-from DataProcessing.etis import EtisDataset
-
 from torch.utils.data import DataLoader
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirClassificationDataset
+
+from DataProcessing.etis import EtisDataset
+from DataProcessing.hyperkvasir import KvasirSegmentationDataset
 from Models import backbones
-from Models import inpainters
 from Tests.metrics import iou
-from utils import logging
-from model_of_natural_variation.model import ModelOfNaturalVariation
 from losses.consistency_losses import NakedConsistencyLoss
+from model_of_natural_variation.model import ModelOfNaturalVariation
+from utils import logging
 
 
 class VanillaTrainer:

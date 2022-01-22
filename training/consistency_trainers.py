@@ -1,17 +1,14 @@
-from training.vanilla_trainer import VanillaTrainer
 import matplotlib.pyplot as plt
 import numpy as np
-import segmentation_models_pytorch.utils.losses as vanilla_losses
 import torch.optim.optimizer
 from torch.utils.data import DataLoader
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirClassificationDataset
-from Models import backbones
-from Models import inpainters
+
+from DataProcessing.hyperkvasir import KvasirSegmentationDataset
 from Tests.metrics import iou
-from utils import logging
-from model_of_natural_variation.model import ModelOfNaturalVariation
 from losses.consistency_losses import *
-import torch.nn as nn
+from model_of_natural_variation.model import ModelOfNaturalVariation
+from training.vanilla_trainer import VanillaTrainer
+from utils import logging
 
 
 class ConsistencyTrainer(VanillaTrainer):
@@ -58,7 +55,7 @@ class ConsistencyTrainer(VanillaTrainer):
             gen_iou = float(torch.mean(gen_ious))
             consistency = 1 - np.mean(closs)
             test_iou = np.mean(self.test().numpy())
-            
+
             self.config["lr"] = [group['lr'] for group in self.optimizer.param_groups]
             logging.log_full(epoch=i, id=self.id, config=self.config, result_dict=
             {"train_loss": training_loss, "val_loss": val_loss,

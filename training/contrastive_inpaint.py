@@ -1,8 +1,9 @@
-from Models import backbones, inpainters
-import torch.nn as nn
 import torch
+import torch.nn as nn
+
+from Models import backbones, inpainters
+from model_of_natural_variation import perturbator
 from training.vanilla_trainer import VanillaTrainer
-from model_of_natural_variation import polyp_inpainter, perturbator
 
 
 class perturbation_loss(nn.Module):

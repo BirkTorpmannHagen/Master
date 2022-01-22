@@ -9,8 +9,9 @@ from PIL.Image import open
 from torch.nn.functional import one_hot
 from torch.utils.data import Dataset
 from torchvision import transforms
-from utils.mask_generator import generate_a_mask
+
 import DataProcessing.augmentation as aug
+from utils.mask_generator import generate_a_mask
 
 
 class KvasirClassificationDataset(Dataset):

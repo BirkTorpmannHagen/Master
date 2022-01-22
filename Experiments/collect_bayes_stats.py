@@ -1,6 +1,8 @@
+from itertools import combinations
+
 import numpy as np
 import torch
-from itertools import combinations
+
 from Models.backbones import *
 
 
