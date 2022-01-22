@@ -23,12 +23,16 @@ def log_iou(fname, epoch, ious: torch.Tensor):
     df.to_csv(fname, index=False)
 
 
-def log_full(config, result_dict):
+def log_full(epoch, id, config, result_dict, type):
+    data = {**config, **result_dict}
+
     try:
-        df = pd.read_csv(config[""])
+        df = pd.read_csv(f"logs/{type}/{config['model']}/{id}.csv")
     except FileNotFoundError:
-        df = pd.DataFrame(columns=["epoch", "iou"])
-    serialized_ious = ious.flatten().numpy()
-    for iou in serialized_ious:
-        df = df.append(dict(zip(["epoch", "iou"], [epoch, iou])), ignore_index=True)
-    df.to_csv(fname, index=False)
+        print("File not found, creating new")
+        df = pd.DataFrame(columns=data)
+    data["epoch"] = epoch
+
+    # data now contains all scores for every sample, so iterate over samples
+    new_df = df.append(data, ignore_index=True)
+    new_df.to_csv(f"logs/{type}/{config['model']}/{id}.csv", index=False)

@@ -15,9 +15,8 @@ import torch.nn as nn
 
 
 class ConsistencyTrainer(VanillaTrainer):
-    def __init__(self, model_str, id, config):
-        super(ConsistencyTrainer, self).__init__(model_str, id, config)
-        self.mnv = ModelOfNaturalVariation(T0=1).to(self.device)
+    def __init__(self, id, config):
+        super(ConsistencyTrainer, self).__init__(id, config)
         self.criterion = ConsistencyLoss().to(self.device)
         self.train_loader = DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir"), batch_size=8, shuffle=True)
         self.nakedcloss = NakedConsistencyLoss()
@@ -49,16 +48,23 @@ class ConsistencyTrainer(VanillaTrainer):
     def train(self):
 
         best_val_loss = 1000
+        best_consistency = 0
         print("Starting Segmentation training")
         for i in range(self.epochs):
             training_loss = np.abs(self.train_epoch())
             val_loss, ious, closs = self.validate(epoch=i, plot=False)
             gen_ious = self.validate_generalizability(epoch=i, plot=False)
-            logging.log_iou(f"logs/augmented-training_log_{self.model_str}_pretrainmode={self.pretrain}_{self.id}", i,
-                            ious.cpu())
-            mean_iou = torch.mean(ious)
-            gen_iou = torch.mean(gen_ious)
-            mean_closs = np.mean(closs)
+            mean_iou = float(torch.mean(ious))
+            gen_iou = float(torch.mean(gen_ious))
+            consistency = 1 - np.mean(closs)
+            test_iou = np.mean(self.test().numpy())
+            
+            self.config["lr"] = [group['lr'] for group in self.optimizer.param_groups]
+            logging.log_full(epoch=i, id=self.id, config=self.config, result_dict=
+            {"train_loss": training_loss, "val_loss": val_loss,
+             "iid_val_iou": mean_iou, "iid_test_iou": test_iou, "ood_iou": gen_iou,
+             "consistency": consistency}, type="consistency")
+
             self.scheduler.step(i)
             # self.mnv.step()
             print(
@@ -69,24 +75,27 @@ class ConsistencyTrainer(VanillaTrainer):
                 f" ood_iou={gen_iou}\t"
                 f" val_iou={mean_iou} \t"
                 f" gen_prop={gen_iou / mean_iou} \t,"
-                f" consistency={1 - mean_closs}"
+                f" consistency={consistency}"
             )
 
             if val_loss < best_val_loss:
-                test_ious = self.test()
                 best_val_loss = val_loss
                 np.save(
-                    f"Experiments/Data/Augmented-Pipelines/{self.model_str}/pretrainmode={self.pretrain}_{self.id}",
-                    test_ious)
-                print(f"Saving new best model. IID test-set mean iou: {float(np.mean(test_ious.numpy()))}")
+                    f"Experiments/Data/Augmented-Pipelines/{self.model_str}/{self.id}",
+                    test_iou)
+                print(f"Saving new best model. IID test-set mean iou: {test_iou}")
                 torch.save(self.model.state_dict(),
-                           f"Predictors/Augmented/{self.model_str}/pretrainmode={self.pretrain}_{self.id}")
-                print("saved in: ", f"Predictors/Augmented/{self.model_str}/pretrainmode={self.pretrain}_{self.id}")
+                           f"Predictors/Augmented/{self.model_str}/{self.id}")
+                print("saved in: ", f"Predictors/Augmented/{self.model_str}/{self.id}")
+
+            if consistency > best_consistency:
+                best_consistency = consistency
+                torch.save(self.model.state_dict(),
+                           f"Predictors/Augmented/{self.model_str}/maximum_consistency{self.id}")
         torch.save(self.model.state_dict(),
-                   f"Predictors/Augmented/{self.model_str}/pretrainmode={self.pretrain}_{self.id}_last_epoch")
+                   f"Predictors/Augmented/{self.model_str}/{self.id}_last_epoch")
 
     def validate(self, epoch, plot=False):
-        # todo refactor to make this prettier
         self.model.eval()
         losses = []
         closses = []
