@@ -1,5 +1,7 @@
 Datasets/
-Predictors/
+Predictors/*
+Predictors/!/**/
+Predictors/!.*
 model_of_natural_variation/inpaint_examples/
 __pycache__/
 *.pyc
