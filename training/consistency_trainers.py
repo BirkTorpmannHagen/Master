@@ -27,16 +27,9 @@ class ConsistencyTrainer(VanillaTrainer):
             aug_img, aug_mask = self.mnv(image, mask)
             self.optimizer.zero_grad()
             output = self.model(image)
-            # if np.random.rand() < 0.5:
-            #     target = mask
-            #     output = self.model(image)
-            # else:
-            #     target = aug_mask
-            #     output = self.model(aug_img)
             aug_output = self.model(aug_img)
             mean_iou = torch.mean(iou(output, mask))
             loss = self.criterion(aug_mask, mask, aug_output, output, mean_iou)
-            # loss = 2 * self.jaccard_test(output, target)
             loss.backward()
             self.optimizer.step()
             losses.append(np.abs(loss.item()))
@@ -92,7 +85,7 @@ class ConsistencyTrainer(VanillaTrainer):
         torch.save(self.model.state_dict(),
                    f"Predictors/Augmented/{self.model_str}/{self.id}_last_epoch")
 
-    def validate(self, epoch, plot=False):
+    def validate(self, epoch=None, plot=False):
         self.model.eval()
         losses = []
         closses = []
@@ -140,9 +133,16 @@ class ConsistencyTrainerUsingAugmentation(ConsistencyTrainer):
         Uses vanilla data augmentation with p=0.5 instead of a a custom loss
     """
 
-    def __init__(self, model_str, id, config):
-        super(ConsistencyTrainerUsingAugmentation, self).__init__(model_str, id, config)
-        self.jaccard_test = vanilla_losses.JaccardLoss()
+    def __init__(self, id, config):
+        super(ConsistencyTrainerUsingAugmentation, self).__init__(id, config)
+        self.jaccard = vanilla_losses.JaccardLoss()
+        self.prob = 0
+
+    def get_iou_weights(self, image, mask):
+        self.model.eval()
+        with torch.no_grad():
+            output = self.model(image)
+        return torch.mean(iou(output, mask))
 
     def train_epoch(self):
         self.model.train()
@@ -152,15 +152,15 @@ class ConsistencyTrainerUsingAugmentation(ConsistencyTrainer):
             mask = y.to("cuda")
             aug_img, aug_mask = self.mnv(image, mask)
             self.optimizer.zero_grad()
-            if np.random.rand() < 0.5:
+
+            if np.random.rand() > self.get_iou_weights(image, mask):
                 target = mask
                 output = self.model(image)
             else:
                 target = aug_mask
                 output = self.model(aug_img)
-            aug_output = self.model(aug_img)
-            mean_iou = torch.mean(iou(output, mask))
-            loss = self.jaccard_test(output, target)
+            self.prob = torch.mean(iou(output, mask))
+            loss = self.jaccard(output, target)
             loss.backward()
             self.optimizer.step()
             losses.append(np.abs(loss.item()))
@@ -172,10 +172,10 @@ class AdversarialConsistencyTrainer(ConsistencyTrainer):
         Adversariall samples difficult
     """
 
-    def __init__(self, model_str, id, config):
-        super(ConsistencyTrainer, self).__init__(model_str, id, config)
+    def __init__(self, id, config):
+        super(ConsistencyTrainer, self).__init__(id, config)
         self.mnv = ModelOfNaturalVariation(T0=1).to(self.device)
-        self.num_adv_samples = 1
+        self.num_adv_samples = 10
         self.naked_closs = NakedConsistencyLoss()
         self.criterion = ConsistencyLoss().to(self.device)
 
@@ -188,6 +188,7 @@ class AdversarialConsistencyTrainer(ConsistencyTrainer):
                 adv_aug_img, adv_aug_mask = self.mnv(image, mask)
                 adv_aug_output = self.model(adv_aug_img)
                 severity = self.naked_closs(adv_aug_mask, mask, adv_aug_output, output)
+
                 if severity > max_severity:
                     max_severity = severity
                     aug_img = adv_aug_img
@@ -201,14 +202,14 @@ class AdversarialConsistencyTrainer(ConsistencyTrainer):
         for x, y, fname in self.train_loader:
             image = x.to("cuda")
             mask = y.to("cuda")
+            self.optimizer.zero_grad()
             output = self.model(image)
             aug_img, aug_mask = self.sample_adversarial(image, mask, output)
-            self.optimizer.zero_grad()
-            mean_iou = torch.mean(iou(output, mask))
+            # aug_img, aug_mask = self.mnv(image, mask)
             aug_output = self.model(aug_img)
+            mean_iou = torch.mean(iou(output, mask))
             loss = self.criterion(aug_mask, mask, aug_output, output, mean_iou)
             loss.backward()
             self.optimizer.step()
             losses.append(np.abs(loss.item()))
-        # self.mnv.step()  # increase difficulty
         return np.mean(losses)
