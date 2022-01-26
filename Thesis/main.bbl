@@ -658,6 +658,54 @@
     \field{year}{2020}
   \endentry
 
+  \entry{spatial_robustness}{misc}{}
+    \name{author}{5}{}{%
+      {{hash=EL}{%
+         family={Engstrom},
+         familyi={E\bibinitperiod},
+         given={Logan},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=TB}{%
+         family={Tran},
+         familyi={T\bibinitperiod},
+         given={Brandon},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=TD}{%
+         family={Tsipras},
+         familyi={T\bibinitperiod},
+         given={Dimitris},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=SL}{%
+         family={Schmidt},
+         familyi={S\bibinitperiod},
+         given={Ludwig},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=MA}{%
+         family={Madry},
+         familyi={M\bibinitperiod},
+         given={Aleksander},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{EL+1}
+    \strng{fullhash}{ELTBTDSLMA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{E}
+    \field{sortinithash}{E}
+    \verb{eprint}
+    \verb 1712.02779
+    \endverb
+    \field{title}{Exploring the Landscape of Spatial Robustness}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2019}
+  \endentry
+
   \entry{physical_attacks}{article}{}
     \name{author}{8}{}{%
       {{hash=EI}{%
@@ -852,6 +900,37 @@
     \field{journaltitle}{Nature Machine Intelligence}
     \field{year}{2020}
     \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{benchmarking_robustness}{misc}{}
+    \name{author}{2}{}{%
+      {{hash=HD}{%
+         family={Hendrycks},
+         familyi={H\bibinitperiod},
+         given={Dan},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=DT}{%
+         family={Dietterich},
+         familyi={D\bibinitperiod},
+         given={Thomas},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HDDT1}
+    \strng{fullhash}{HDDT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \verb{eprint}
+    \verb 1903.12261
+    \endverb
+    \field{title}{Benchmarking Neural Network Robustness to Common Corruptions
+  and Perturbations}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2019}
   \endentry
 
   \entry{corruption_robustness}{misc}{}
@@ -1174,6 +1253,48 @@
     \field{year}{2019}
   \endentry
 
+  \entry{cleverhans}{misc}{}
+    \name{author}{4}{}{%
+      {{hash=KJ}{%
+         family={Kauffmann},
+         familyi={K\bibinitperiod},
+         given={Jacob},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=RL}{%
+         family={Ruff},
+         familyi={R\bibinitperiod},
+         given={Lukas},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=MG}{%
+         family={Montavon},
+         familyi={M\bibinitperiod},
+         given={Grégoire},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=MKR}{%
+         family={Müller},
+         familyi={M\bibinitperiod},
+         given={Klaus-Robert},
+         giveni={K\bibinithyphendelim R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KJ+1}
+    \strng{fullhash}{KJRLMGMKR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \verb{eprint}
+    \verb 2006.10609
+    \endverb
+    \field{title}{The Clever Hans Effect in Anomaly Detection}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2020}
+  \endentry
+
   \entry{ACS}{article}{}
     \name{author}{4}{}{%
       {{hash=LA}{%
@@ -1242,6 +1363,55 @@
     \field{journaltitle}{Br. J. Surg.}
     \field{month}{07}
     \field{year}{2002}
+  \endentry
+
+  \entry{sensitivity}{misc}{}
+    \name{author}{5}{}{%
+      {{hash=NR}{%
+         family={Novak},
+         familyi={N\bibinitperiod},
+         given={Roman},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=BY}{%
+         family={Bahri},
+         familyi={B\bibinitperiod},
+         given={Yasaman},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=ADA}{%
+         family={Abolafia},
+         familyi={A\bibinitperiod},
+         given={Daniel\bibnamedelima A.},
+         giveni={D\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=PJ}{%
+         family={Pennington},
+         familyi={P\bibinitperiod},
+         given={Jeffrey},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SDJ}{%
+         family={Sohl-Dickstein},
+         familyi={S\bibinithyphendelim D\bibinitperiod},
+         given={Jascha},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{NR+1}
+    \strng{fullhash}{NRBYADAPJSDJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{N}
+    \field{sortinithash}{N}
+    \verb{eprint}
+    \verb 1802.08760
+    \endverb
+    \field{title}{Sensitivity and Generalization in Neural Networks: an
+  Empirical Study}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{stat.ML}
+    \field{year}{2018}
   \endentry
 
   \entry{missrate2}{article}{}
@@ -1371,6 +1541,30 @@
     \field{eprinttype}{arXiv}
     \field{eprintclass}{cs.LG}
     \field{year}{2020}
+  \endentry
+
+  \entry{causality}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=SB}{%
+         family={Schölkopf},
+         familyi={S\bibinitperiod},
+         given={Bernhard},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SB1}
+    \strng{fullhash}{SB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \verb{eprint}
+    \verb 1911.10500
+    \endverb
+    \field{title}{Causality for Machine Learning}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2019}
   \endentry
 
   \entry{dl_medical_imaging}{article}{}
@@ -1594,6 +1788,93 @@
     \field{year}{1993}
   \endentry
 
+  \entry{skin_shortcut}{article}{}
+    \name{author}{11}{}{%
+      {{hash=WJ}{%
+         family={Winkler},
+         familyi={W\bibinitperiod},
+         given={Julia},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=FC}{%
+         family={Fink},
+         familyi={F\bibinitperiod},
+         given={Christine},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=TF}{%
+         family={Toberer},
+         familyi={T\bibinitperiod},
+         given={Ferdinand},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=EA}{%
+         family={Enk},
+         familyi={E\bibinitperiod},
+         given={Alexander},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=KT}{%
+         family={Kränke},
+         familyi={K\bibinitperiod},
+         given={Teresa},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=HWR}{%
+         family={Hofmann-Wellenhof},
+         familyi={H\bibinithyphendelim W\bibinitperiod},
+         given={Rainer},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=TL}{%
+         family={Thomas},
+         familyi={T\bibinitperiod},
+         given={Luc},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=LA}{%
+         family={Lallas},
+         familyi={L\bibinitperiod},
+         given={Aimilios},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=BA}{%
+         family={Blum},
+         familyi={B\bibinitperiod},
+         given={Andreas},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=SW}{%
+         family={Stolz},
+         familyi={S\bibinitperiod},
+         given={Wilhelm},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=HH}{%
+         family={Haenssle},
+         familyi={H\bibinitperiod},
+         given={Holger},
+         giveni={H\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WJ+1}
+    \strng{fullhash}{WJFCTFEAKTHWRTLLABASWHH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \verb{doi}
+    \verb 10.1001/jamadermatol.2019.1735
+    \endverb
+    \field{title}{Association Between Surgical Skin Markings in Dermoscopic
+  Images and Diagnostic Performance of a Deep Learning Convolutional Neural
+  Network for Melanoma Recognition}
+    \field{volume}{155}
+    \field{journaltitle}{JAMA Dermatology}
+    \field{month}{08}
+    \field{year}{2019}
+  \endentry
+
   \entry{pneumonia}{article}{}
     \name{author}{6}{}{%
       {{hash=ZJR}{%
@@ -1656,6 +1937,55 @@
     \field{journaltitle}{PLOS Medicine}
     \field{month}{11}
     \field{year}{2018}
+  \endentry
+
+  \entry{randomlabels}{misc}{}
+    \name{author}{5}{}{%
+      {{hash=ZC}{%
+         family={Zhang},
+         familyi={Z\bibinitperiod},
+         given={Chiyuan},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Bengio},
+         familyi={B\bibinitperiod},
+         given={Samy},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=HM}{%
+         family={Hardt},
+         familyi={H\bibinitperiod},
+         given={Moritz},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=RB}{%
+         family={Recht},
+         familyi={R\bibinitperiod},
+         given={Benjamin},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=VO}{%
+         family={Vinyals},
+         familyi={V\bibinitperiod},
+         given={Oriol},
+         giveni={O\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{ZC+1}
+    \strng{fullhash}{ZCBSHMRBVO1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Z}
+    \field{sortinithash}{Z}
+    \verb{eprint}
+    \verb 1611.03530
+    \endverb
+    \field{title}{Understanding deep learning requires rethinking
+  generalization}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2017}
   \endentry
 \enddatalist
 \endinput

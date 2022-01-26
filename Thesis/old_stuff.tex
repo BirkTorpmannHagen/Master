@@ -18,3 +18,18 @@
 	
 
 	Generalization failure is then in this case and by this line of reasoning entirely dependent on the structural misalignment and distributional shift corresponding to the change in imaging techniques as opposed to any erroneous logic in the pipeline itself. Ideally, the pipeline should of course detect patterns that generalize well regardless of lighting conditions, but it is not reasonable to expect the pipeline to draw this conclusion autonomously. Instead, the pipeline has to be "told" to keep this invariance in mind during training a priori. If some hypothetical change to the pipeline were to manage to induce this invariance, the structural misalignment between the dataset would no longer be an issue, ceteris paribus.
+
+	The behavior that violations of assumptions \ref{underfit} and \ref{overfit} is well understood and fairly easy to detect, corresponding to underfitting and overfitting respectively, but violations of the remaining assumptions result in more subtle forms of generalization failure. 
+		
+	The general consensus is that generalization
+	failure can in broad strokes be attributed to either underspecification or structural misalignment. The following sections will attempt to summarize and synthesize the analyses within the literature, and connect each of the generalization
+	failure modes they identify to the above violations.
+
+	In broad strokes, the generalisation failure modes identified in the literature can be categorized as belonging to one of the following phenomena:
+		\begin{itemize}
+			\item Pareidolia
+			\item Underspecification
+			\item Causal agnosticism 
+		\end{itemize}
+		
+		, consider the problem of classifying images of cows and camels as the respective animals, wherein the dataset consists of images of cows in grass fields and pastures, and camels in deserts. To be generous, let us assume that we have sufficient quantities of data to ensure that the pipeline is perfectly invariant to the pose of the respective animals, to lighting conditions, geometric transforms, weather, etc. One may then expect that the pipeline correctly learns to classify the two, and attains high accuracies, and indeed when evaluated on iid data - i.e cows in fields and camels in deserts, this would be correct. However, what would then happen if one such predictor encountered a cow in the desert and a camel in a grass pasture? This, of course, constitutes a distributional shift, and as such we cannot expect the models to generalize. The predictor may have learned just fine exactly what constitutes a cow and a camel, but it might just as easily have learned to associate deserts with camels and pastures with cows. And from a purely statistical perspective, both are equally correct interpretations. From a causal perspective, however, it is of course entirely nonsensical to assume the respective animals are wholly defined by their surroundings.

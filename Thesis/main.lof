@@ -5,9 +5,13 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces }}{5}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces }}{6}%
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.2}{\ignorespaces }}{9}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces A linear model cannot fit polynomial data}}{9}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.3}{\ignorespaces A model with excessive capacity interpolates unneccesarily complex patterns}}{10}%
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.4}{\ignorespaces }}{12}%
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.20)  20 JAN 2022 19:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.20)  26 JAN 2022 15:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -662,77 +662,80 @@ Chapter 2.
 [3
 
 ] [4]
-<example-image-a.pdf, id=68, 321.2pt x 240.9pt>
+<example-image-a.pdf, id=66, 321.2pt x 240.9pt>
 File: example-image-a.pdf Graphic file (type pdf)
 <use example-image-a.pdf>
-Package pdftex.def Info: example-image-a.pdf  used on input line 31.
+Package pdftex.def Info: example-image-a.pdf  used on input line 29.
 (pdftex.def)             Requested size: 360.0pt x 270.00832pt.
- [5 </usr/share/texlive/texmf-dist/tex/latex/mwe/example-image-a.pdf>] [6] [7] [8]
-<example-image-b.pdf, id=94, 321.2pt x 240.9pt>
-File: example-image-b.pdf Graphic file (type pdf)
-<use example-image-b.pdf>
-Package pdftex.def Info: example-image-b.pdf  used on input line 95.
-(pdftex.def)             Requested size: 360.0pt x 270.00832pt.
- [9 </usr/share/texlive/texmf-dist/tex/latex/mwe/example-image-b.pdf>] [10]
-
-LaTeX Warning: Citation 'clever_hans' on page 11 undefined on input line 108.
-
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [11]) (/home/birk/Documents/Master/Thesis/methodology.tex [12]
+ [5] [6 </usr/share/texlive/texmf-dist/tex/latex/mwe/example-image-a.pdf>] [7] [8]
+<illustrations/regression_example.png, id=92, 462.528pt x 346.896pt>
+File: illustrations/regression_example.png Graphic file (type png)
+<use illustrations/regression_example.png>
+Package pdftex.def Info: illustrations/regression_example.png  used on input line 80.
+(pdftex.def)             Requested size: 360.0pt x 270.01141pt.
+<illustrations/overfit.png, id=93, 462.528pt x 346.896pt>
+File: illustrations/overfit.png Graphic file (type png)
+<use illustrations/overfit.png>
+Package pdftex.def Info: illustrations/overfit.png  used on input line 90.
+(pdftex.def)             Requested size: 360.0pt x 270.01141pt.
+ [9 </home/birk/Documents/Master/Thesis/illustrations/regression_example.png>]
+LaTeX Font Info:    Trying to load font information for U+fplmbb on input line 94.
+ (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ufplmbb.fd
+File: ufplmbb.fd 2003/10/30 Fontinst v1.914 font definitions for U/fplmbb.
+) [10 </home/birk/Documents/Master/Thesis/illustrations/overfit.png>] [11]
+<example-image-b.pdf, id=107, 321.2pt x 240.9pt>
+File: example-image-b.pdf Graphic file (type pdf)
+<use example-image-b.pdf>
+Package pdftex.def Info: example-image-b.pdf  used on input line 109.
+(pdftex.def)             Requested size: 360.0pt x 270.00832pt.
+ [12 </usr/share/texlive/texmf-dist/tex/latex/mwe/example-image-b.pdf>] [13] [14]) (/home/birk/Documents/Master/Thesis/methodology.tex [15] [16
+
+]
 Chapter 3.
-[13
-
-] [14] [15]) (/home/birk/Documents/Master/Thesis/results.tex [16]
+[17] [18] [19]) (/home/birk/Documents/Master/Thesis/results.tex [20]
 Chapter 4.
-) (/home/birk/Documents/Master/Thesis/analysis.tex [17
+) (/home/birk/Documents/Master/Thesis/analysis.tex [21
 
-] [18
+] [22
 
 ]
 Chapter 5.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [19]) (/home/birk/Documents/Master/Thesis/discussion.tex [20]
+ [23]) (/home/birk/Documents/Master/Thesis/discussion.tex [24]
 Chapter 6.
-) [21
+) [25
 
-] [22
+] [26
 
-] [23] [24
+] [27] [28
 
 ]
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 43.
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-) [25] [26] (/home/birk/Documents/Master/Thesis/main.aux)
-
-LaTeX Warning: There were undefined references.
-
-
-Package biblatex Warning: Please (re)run BibTeX on the file(s):
-(biblatex)                main
-(biblatex)                and rerun LaTeX afterwards.
-
+) [29] [30] [31] (/home/birk/Documents/Master/Thesis/main.aux)
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12388 strings out of 481239
- 216976 string characters out of 5920377
- 684278 words of memory out of 5000000
- 27384 multiletter control sequences out of 15000+600000
- 584837 words of font info for 114 fonts, out of 8000000 for 9000
+ 12434 strings out of 481239
+ 218538 string characters out of 5920377
+ 687869 words of memory out of 5000000
+ 27425 multiletter control sequences out of 15000+600000
+ 583258 words of font info for 115 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,18n,45p,2123b,2203s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1095.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvro8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on /home/birk/Documents/Master/Thesis/main.pdf (40 pages, 256408 bytes).
+ 41i,18n,45p,1563b,2203s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmbb.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1095.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
+Output written on /home/birk/Documents/Master/Thesis/main.pdf (45 pages, 288218 bytes).
 PDF statistics:
- 209 PDF objects out of 1000 (max. 8388607)
- 146 compressed objects within 2 object streams
+ 225 PDF objects out of 1000 (max. 8388607)
+ 154 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
