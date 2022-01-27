@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.20)  27 JAN 2022 12:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.7.20)  27 JAN 2022 16:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -482,20 +482,20 @@ File: l3backend-pdfmode.def 2020-02-03 L3 backend support: PDF mode
 ) (/home/birk/Documents/Master/Thesis/main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count399
@@ -568,63 +568,63 @@ Package biblatex Warning: BibTeX reported the following issues
 (biblatex)                - Invalid format of field 'month'.
 
 )
-Package biblatex Info: Reference section=0 on input line 18.
-Package biblatex Info: Reference segment=0 on input line 18.
-LaTeX Font Info:    Trying to load font information for T1+phv on input line 21.
+Package biblatex Info: Reference section=0 on input line 19.
+Package biblatex Info: Reference segment=0 on input line 19.
+LaTeX Font Info:    Trying to load font information for T1+phv on input line 22.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/t1phv.fd
 File: t1phv.fd 2001/06/04 scalable font definitions for T1/phv.
 )
 <DUO_UiO_segl.png, id=1, 142.3719pt x 142.3719pt>
 File: DUO_UiO_segl.png Graphic file (type png)
 <use DUO_UiO_segl.png>
-Package pdftex.def Info: DUO_UiO_segl.png  used on input line 21.
+Package pdftex.def Info: DUO_UiO_segl.png  used on input line 22.
 (pdftex.def)             Requested size: 170.71652pt x 170.73027pt.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} </home/birk/Documents/Master/Thesis/DUO_UiO_segl.png>] [2]
 LaTeX Font Info:    Font shape `T1/ppl/bx/n' in size <24> not available
-(Font)              Font shape `T1/ppl/b/n' tried instead on input line 21.
+(Font)              Font shape `T1/ppl/b/n' tried instead on input line 22.
  [1]
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 21.
+LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 22.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 )
-LaTeX Font Info:    Trying to load font information for T1+cmss on input line 21.
+LaTeX Font Info:    Trying to load font information for T1+cmss on input line 22.
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
 File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 21.
+LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 22.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 21.
+LaTeX Font Info:    Trying to load font information for OML+zplm on input line 22.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 21.
+LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 22.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 21.
+LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 22.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 21.
+LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 22.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 21.
+(Font)              scaled to size 11.40997pt on input line 22.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 21.
+(Font)              scaled to size 8.33606pt on input line 22.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 21.
+(Font)              scaled to size 6.25204pt on input line 22.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 21.
+(Font)              scaled to size 11.40997pt on input line 22.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 21.
+(Font)              scaled to size 8.33606pt on input line 22.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 21.
+(Font)              scaled to size 6.25204pt on input line 22.
  [1] [1
 
 
@@ -695,47 +695,59 @@ Package pdftex.def Info: example-image-b.pdf  used on input line 109.
 
 ]
 Chapter 3.
-[17] [18]) (/home/birk/Documents/Master/Thesis/results.tex [19] [20]
-Chapter 4.
-) (/home/birk/Documents/Master/Thesis/analysis.tex [21
+[17]
+<illustrations/loss_vis.drawio.png, id=131, 649.42625pt x 688.5725pt>
+File: illustrations/loss_vis.drawio.png Graphic file (type png)
+<use illustrations/loss_vis.drawio.png>
+Package pdftex.def Info: illustrations/loss_vis.drawio.png  used on input line 25.
+(pdftex.def)             Requested size: 360.0pt x 381.71046pt.
 
-] [22
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [18] [19 </home/birk/Documents/Master/Thesis/illustrations/loss_vis.drawio.png>] [20]) (/home/birk/Documents/Master/Thesis/results.tex
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [21] [22]
+Chapter 4.
+) (/home/birk/Documents/Master/Thesis/analysis.tex [23
+
+] [24
 
 ]
 Chapter 5.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [23]) (/home/birk/Documents/Master/Thesis/discussion.tex [24]
+ [25]) (/home/birk/Documents/Master/Thesis/discussion.tex [26]
 Chapter 6.
-) [25
+) [27
 
-] [26
+] [28
 
-] [27] [28
+] [29] [30
 
 ]
-LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 43.
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 44.
  (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
-) [29] [30] [31] (/home/birk/Documents/Master/Thesis/main.aux)
+) [31] [32] [33] (/home/birk/Documents/Master/Thesis/main.aux)
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12437 strings out of 481239
- 218653 string characters out of 5920377
- 688575 words of memory out of 5000000
- 27428 multiletter control sequences out of 15000+600000
+ 12444 strings out of 481239
+ 218865 string characters out of 5920377
+ 688586 words of memory out of 5000000
+ 27434 multiletter control sequences out of 15000+600000
  583258 words of font info for 115 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,18n,45p,1563b,2203s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmbb.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/share/texmf/fonts/type1/public/lm/lmss17.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1095.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1095.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on /home/birk/Documents/Master/Thesis/main.pdf (45 pages, 289593 bytes).
+Output written on /home/birk/Documents/Master/Thesis/main.pdf (47 pages, 303301 bytes).
 PDF statistics:
- 225 PDF objects out of 1000 (max. 8388607)
- 154 compressed objects within 2 object streams
+ 233 PDF objects out of 1000 (max. 8388607)
+ 158 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
