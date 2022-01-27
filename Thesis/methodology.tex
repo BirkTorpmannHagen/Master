@@ -1,24 +1,21 @@
 \chapter{Methods and Implementation}
 \setcounter{chapter}{3}
-    As described in earlier sections, good generalizability can only be achieved if the pipeline can reliably produce predictors that infer the right inductive biases and consequently generate robust features. Naturally, the set of correct inductive biases are not known, so any such pipeline instead has to learn to not infer the wrong inductive biases. To achieve this, a model of natural variance is constructed, which aims to encapsulate all the variability one might expect to see in the domain. This model can then be leveraged to force the pipeline to be robust to natural variance through contrastive learning.  The central idea, then, is that it is more likely that the model learns to infer generalizable inductive biases as opposed to learning to learning to simply be robust to all possible configurations of a large amount of transformations. 
-	
-	To evaluate this, several predictors are trained from several pipelines with and without \alg. Their performance is then evaluated on both a stress-test, and two separate polyp datasets, namely Etis-larib and EndoCV2021). 
 \section{\alg}
-	Summarizing the key points made in chapter \ref{background}, generalization is in large part a function of the set of inductive biases that one imbues in the pipeline and how well one can describe these inductive biases in a way that permits the model to learn them. The problem then boils down to the following questions:
+	Summarizing the key points made in chapter \ref{background}, generalization is in large part a function of the causal robustness of the features it learns. The problem then boils down to the following questions:
 	\begin{enumerate}
-		\item How can behaviour consistent with the inductive biases be rewarded for the specific task? \label{loss}
-		\item How can the pertinent inductive biases be expressed in the context of deep learning? \label{mnv}
-		\item How can we robustly optimize for consistent inductive biases? \label{training}
+		\item How can behaviour consistent with the causal structure of a problem be rewarded? \label{loss}
+		\item How can the pertinent inductive biases that underpin this causal structure be expressed? \label{mnv}
+		\item How can we optimize for causally consistent inductive biases? \label{training}
 	\end{enumerate}
 	
-	%TODO connect
+	(Justifications here)
 
 	\subsection{Consistency Loss}
-	Consistency can be expressed as the degree to which a certain model resists change when subjected to some form of perturbation. For a segmentation task, this corresponds to the model outputting corresponding segmentation masks for both the perturbed and unperturbed inputs. Of course, since the perturbation is not excluded from modifying the segmentation polyps themselves, it is necessary to also take into account the expected change due to the perturbation, and discount this from the overall change from the unperturbed to the perturbed domain. In simpler terms, the loss needs to describe the discrepancy between the expected change in the segmentation predictions due to the perturbation(s) and the actual change in the segmentation predictions. This loss will be referred to as the naked consistency loss (for reasons that will soon be made clear). Formally, this can be expressed as follows:
+	Consistency can be expressed as the degree to which a certain model resists change when subjected to some form of perturbation. In the context of segmentation, this corresponds to the model outputting corresponding segmentation masks for both the perturbed and unperturbed images. Of course, since the perturbation is not precluded from modifying the polyps themselves through distortions and so on, it is necessary to also take into account the expected change due to the perturbation, and discount this from the overall expression. In simpler terms, the loss needs to describe the discrepancy between the expected change in the segmentation predictions due to the perturbation(s) and the actual change in the segmentation predictions. This loss will be referred to as the naked consistency loss (for reasons that will soon be made clear). Formally, this can be expressed as follows:
 
 	Let \(Y:=\{y,\hat{y}:=f(x)\}\) be the set consisting of the segmentation predictions and masks for the unperturbed samples, and \(\epsilon(\cdot)\) be some perturbation function. Then, let \(A:=\{a:=\epsilon(y),\hat{a}:=f(\epsilon(x))\}\) be the set consisting of segmentation predictions and masks for the perturbed samples. The naked consistency loss can then be expressed as follows: 
 	\begin{equation}
-		L_c = \frac{1}{\{y \cup a \}} \sum \{y\ominus\hat{y}\ominus a\ominus\hat{a}\}
+		L_c = \frac{1}{\sum\{y \cup a \}} \sum \{y\ominus\hat{y}\ominus a\ominus\hat{a}\}
 	\end{equation}
 	Where \(\ominus \) denotes the symmetric difference. 
 	
@@ -30,28 +27,35 @@
 	\begin{equation}
 		L = L_{task} + L_c
 	\end{equation}
-	%explain why this is bad
-	
-	Another approach is to  
-		
+	This, however, leads to unstable behaviour and often inhibits convergence, since the consistency term quickly starts gaining precedence if the segmentation task is difficult (see appendix). Consequently, adaptive weighing is required. To avoid getting stuck in broad local minima early, the training should in the early stages be biased towards acheiving semi-decent segmentation performance. Later on, when segmentation performance is starting to become reasonably high, the pipeline should shift towards trying to optimize for consistency. This can be acheived by weighing each term according to a desired performance metric, for instance intersection over union (IoU):
+	\begin{equation}
+		L = (1-IoU)\times L_{task} + IoU \times L_c
+	\end{equation}
+	If Jaccard loss is used, this is also equivalent to:
+	\begin{equation}
+		L = {L_{jac}}^2 + (1-L_{jac})\times L_c
+	\end{equation}
 	
   	\subsection{Model of natural variation}
-  		In order to account for any natural variation one may expect to find in deployment, it is necessary to construct a model which can parameterize the variability that is encountered, in other words a model of natural variability (MNV) Naturally, there is no way of knowing the full extent of all the types of variability one may find in the wild, but it may nonetheless be sufficient to model some subset thereof. This, naturally, requires some knowledge of the domain from which the dataset is collected. Similarly to how adding rotational augmentations is a bad idea for classification of hand-written numbers, certain transformations may or may not be suitable for use within a MNV.
+  		In order to account for any natural variation one may expect to find in deployment, it is necessary to construct a model which can parameterize the variability that is encountered. This model of natual variation, or MNV, can then be leveraged in conjunction with consistency loss to facilitate the learning of features that are robust to the types of variation the MNV defines. Naturally, there is no way of knowing the full extent of all the types of variability one may find in the wild, but it may nonetheless be sufficient to model some subset thereof. This, naturally, requires some knowledge of the domain from which the dataset is collected. Similarly to how adding rotational augmentations is a bad idea for classification of hand-written numbers, certain transformations may or may not be suitable for use within a MNV.
   		
-  		In the case of polyp-segmentation, it is clear that it is necessary to account for variability in for instance lighting, polyp-size, polyp-shape, polyp-location, camera-quality, color-shifts, blurs, optical distortions, and affine transformations. Thus, a model is required that can (more or less) parametrize this variability. Broadly speaking, these transformations can be categorized as follows:
+  		In the case of polyp-segmentation, it is clear that it is necessary to account for variability in for instance lighting, image-resolution, polyp-size, polyp-shape, polyp-location, camera-quality, color-shifts, blurs, optical distortions, and affine transformations. Thus, a model is required that can (more or less) parametrize this variability. Broadly speaking, these transformations can be categorized as follows:
   		\begin{itemize}
   			\item Pixel-wise variability, which affect only the image, i.e color-shifts, brightness shifts, contrast-shifts, lighting, blurs etc
   			\item Geometric variability, which affect both the image and the segmentation mask by some parametrizable quantity, i.e affine transforms and distortions
   			\item Manifold variablity, which affects both the image and the segmentation mask depending on a learned model of the distribution,  i.e the size, shape and location of polyps
   		\end{itemize}
-  		Pixel-wise variability and geometric variability can be modeled fairly trivially through the use of the same transformations typically used for data-augmentation. Manifold-variability, however, is somewhat more difficult. Similar to how \cite{modelbased} employs cross-dataset style-transfer, it is necessary to find some way to model the distributional properties of the data, and then apply perturbations using the resulting model. Since both the size, shape, and position of polyps can be expected to vary, a model that can change all these factors is necessary. To this end, an in-painting model can be constructed. In particular, a GAN-inpainter.	
+  		Pixel-wise variability and geometric variability can be modeled fairly trivially through the use of the same transformations typically used in conventional data-augmentation. Manifold-variability, however, is somewhat more difficult. Similar to how \cite{modelbased} and \cite{cyclegan} employ cross-dataset style-transfer to account for more implicit distributional shift, it is necessary to find some way to model the distributional properties of the data, and then apply perturbations using the resulting model. Since both the size, shape, and position of polyps can be expected to vary, a model that can change all these factors is necessary. To this end, an inpainting model can be constructed. In particular, a GAN-inpainter. 
   		\subsubsection{Gan-based polyp inpainting}
   		\subsubsection{Geometric and pixel-wise transformations}
-  	\subsection{Adversarial sampling}
-  	\subsection{Difficulty annealing}
-  	 			
-\section{Baselines}
-Several models were tested (...)
-\section{Datasets}
-
-\section{Metrics and evaluation}
+  	\subsection{Training methods}
+		\subsubsection{Consistency Training}
+		\subsection{Adversarial Consistency Training}
+		\subsection{Augmentation only training}
+\section{Baselines and Metrics}
+    \subsection{Baseline Models}
+    \subsection{Performance Metrics}
+    \subsection{Datasets}
+\section{Experiments}
+    \subsection{MNV-testing}
+	\subsection{Training methods}

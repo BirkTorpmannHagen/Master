@@ -33,3 +33,19 @@
 		\end{itemize}
 		
 		, consider the problem of classifying images of cows and camels as the respective animals, wherein the dataset consists of images of cows in grass fields and pastures, and camels in deserts. To be generous, let us assume that we have sufficient quantities of data to ensure that the pipeline is perfectly invariant to the pose of the respective animals, to lighting conditions, geometric transforms, weather, etc. One may then expect that the pipeline correctly learns to classify the two, and attains high accuracies, and indeed when evaluated on iid data - i.e cows in fields and camels in deserts, this would be correct. However, what would then happen if one such predictor encountered a cow in the desert and a camel in a grass pasture? This, of course, constitutes a distributional shift, and as such we cannot expect the models to generalize. The predictor may have learned just fine exactly what constitutes a cow and a camel, but it might just as easily have learned to associate deserts with camels and pastures with cows. And from a purely statistical perspective, both are equally correct interpretations. From a causal perspective, however, it is of course entirely nonsensical to assume the respective animals are wholly defined by their surroundings.
+
+
+		As described in earlier sections, good generalizability can only be achieved if the pipeline can reliably generate predictors that learn causally reasonable features and consequently encode robust inductive biases. Naturally, knowing what features are causal and which are confounding is an intractable problem; otherwise generalization would simply be a matter of precisely expressing the right inductive biases algorithmically, through conventional image analysis. As a result, it is instead necessary to consider what constitutes are \texit{non-robust} features, and ensure that the model does not try to leverage these features during prediction. 
+
+		To achieve this, a model of natural variation (MNV) is constructed, which aims to encapsulate the variability one might expect to see in the domain. This model can then be leveraged to force the DNN to be robust to the space of transformations that it defines. It is of course impossible to fully encapsulate all the possible variability one may see in the wild, but that is not necessarily obligatory so long as the search space is limited to areas wherein robust features are required. The key idea here is that it is more likely that the model learns causally viable features, than spurious features that somehow nonetheless exhibit invariance to a large space of transformations. 
+		
+		The construction of such a model is of course not necessarily trivial. The MNV has to be non-destructive - i.e, the model should not transform the input beyond recogniton - yet it cannot be too lenient either. The model should optimally also not affect the properties of the image that correspond to causal structure. To give a simple example: a model that classifies hand-written digits should not be invariant to rotation, as the orientation of the number 6 or 9 has causal significance, and should consequently not be included in a MNV. For more complex tasks, designing this model therefore requires some supervision - if the image at any point becomes difficult to distinguish to the human eye, the augmentations are too severe. 
+	
+		There are also several possible approaches as to how such a model can be leveraged. In this thesis, these approaches are as follows:
+		\begin{itemize}
+			\item MNV as data augmentation
+			\item MNV consistency training
+			\item Adversarial MNV consistency training
+		\end{itemize}
+	
+		T

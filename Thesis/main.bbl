@@ -1543,6 +1543,50 @@
     \field{year}{2020}
   \endentry
 
+  \entry{cyclegan}{article}{}
+    \name{author}{4}{}{%
+      {{hash=SV}{%
+         family={Sandfort},
+         familyi={S\bibinitperiod},
+         given={Veit},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=YK}{%
+         family={Yan},
+         familyi={Y\bibinitperiod},
+         given={Ke},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=PP}{%
+         family={Pickhardt},
+         familyi={P\bibinitperiod},
+         given={Perry},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=SR}{%
+         family={Summers},
+         familyi={S\bibinitperiod},
+         given={Ronald},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SV+1}
+    \strng{fullhash}{SVYKPPSR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \verb{doi}
+    \verb 10.1038/s41598-019-52737-x
+    \endverb
+    \field{title}{Data augmentation using generative adversarial networks
+  (CycleGAN) to improve generalizability in CT segmentation tasks}
+    \field{volume}{9}
+    \field{journaltitle}{Scientific Reports}
+    \field{month}{11}
+    \field{year}{2019}
+  \endentry
+
   \entry{causality}{misc}{}
     \name{author}{1}{}{%
       {{hash=SB}{%
