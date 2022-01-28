@@ -3,7 +3,7 @@ import numpy as np
 import torch.optim.optimizer
 from torch.utils.data import DataLoader
 
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset
+from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
 from Tests.metrics import iou
 from losses.consistency_losses import *
 from model_of_natural_variation.model import ModelOfNaturalVariation
@@ -15,7 +15,6 @@ class ConsistencyTrainer(VanillaTrainer):
     def __init__(self, id, config):
         super(ConsistencyTrainer, self).__init__(id, config)
         self.criterion = ConsistencyLoss().to(self.device)
-        self.train_loader = DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir"), batch_size=8, shuffle=True)
         self.nakedcloss = NakedConsistencyLoss()
 
     def train_epoch(self):
@@ -137,6 +136,8 @@ class ConsistencyTrainerUsingAugmentation(ConsistencyTrainer):
         super(ConsistencyTrainerUsingAugmentation, self).__init__(id, config)
         self.jaccard = vanilla_losses.JaccardLoss()
         self.prob = 0
+        self.dataset = KvasirMNVset("Datasets/HyperKvasir", "train")
+        self.train_loader = DataLoader(self.dataset, batch_size=config["batch_size"], shuffle=True)
 
     def get_iou_weights(self, image, mask):
         self.model.eval()
@@ -144,23 +145,28 @@ class ConsistencyTrainerUsingAugmentation(ConsistencyTrainer):
             output = self.model(image)
         return torch.mean(iou(output, mask))
 
+    def get_consistency(self, image, mask, augmented, augmask):
+        self.model.eval()
+        with torch.no_grad():
+            output = self.model(image)
+        self.model.train()
+        return torch.mean(iou(output, mask))
+
     def train_epoch(self):
         self.model.train()
         losses = []
-        for x, y, fname in self.train_loader:
+        plotted = False
+        for x, y, fname, flag in self.train_loader:
             image = x.to("cuda")
             mask = y.to("cuda")
-            aug_img, aug_mask = self.mnv(image, mask)
+            if not plotted:
+                plt.imshow(image.cpu().numpy()[0].T)
+                plt.title(f"Augmenting, p    < {self.dataset.p} = {flag[0]}")
+                plt.show()
+                plotted = True
             self.optimizer.zero_grad()
-
-            if np.random.rand() > self.get_iou_weights(image, mask):
-                target = mask
-                output = self.model(image)
-            else:
-                target = aug_mask
-                output = self.model(aug_img)
-            self.prob = torch.mean(iou(output, mask))
-            loss = self.jaccard(output, target)
+            output = self.model(image)
+            loss = self.jaccard(output, mask)
             loss.backward()
             self.optimizer.step()
             losses.append(np.abs(loss.item()))
@@ -213,3 +219,10 @@ class AdversarialConsistencyTrainer(ConsistencyTrainer):
             self.optimizer.step()
             losses.append(np.abs(loss.item()))
         return np.mean(losses)
+
+
+class StrictConsistencyTrainer(ConsistencyTrainer):
+    def __init__(self, id, config):
+        super(StrictConsistencyTrainer, self).__init__(id, config)
+        self.criterion = StrictConsistencyLoss()
+

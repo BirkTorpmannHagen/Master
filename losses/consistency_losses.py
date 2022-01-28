@@ -56,3 +56,18 @@ class NakedConsistencyLoss(nn.Module):
         ) / torch.sum(torch.clamp(new_mask + old_mask + new_seg + old_seg, 0, 1) + self.epsilon)  # normalizing factor
         # perturbation_loss = torch.sum(perturbation_loss)
         return perturbation_loss
+
+
+class StrictConsistencyLoss(nn.Module):
+    def __init__(self, adaptive=True):
+        super(StrictConsistencyLoss, self).__init__()
+        self.epsilon = 1e-5
+        self.adaptive = adaptive
+        self.jaccard = vanilla_losses.JaccardLoss()
+
+    def forward(self, new_mask, old_mask, new_seg, old_seg, iou_weight=None):
+        if iou_weight is not None:
+            return iou_weight * self.jaccard(new_seg, new_mask) + (1 - iou_weight) * self.jaccard(old_seg, old_mask)
+        return 0.5 * self.jaccard(new_seg, new_mask) + 0.5 * self.jaccard(old_seg, old_mask)
+        # return perturbation_loss
+        # return self.jaccard(old_seg, old_mask) + self.jaccard(new_seg, new_mask)

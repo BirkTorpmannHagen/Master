@@ -9,7 +9,7 @@ from PIL.Image import open
 from torch.nn.functional import one_hot
 from torch.utils.data import Dataset
 from torchvision import transforms
-
+from model_of_natural_variation.model import ModelOfNaturalVariation
 import DataProcessing.augmentation as aug
 from utils.mask_generator import generate_a_mask
 
@@ -56,7 +56,6 @@ class KvasirSegmentationDataset(Dataset):
     """
         Dataset class that fetches images with the associated segmentation mask.
         Employs "vanilla" augmentations
-        TODO add deterministic train/val split
     """
 
     def __init__(self, path, split="train", augment=True):
@@ -106,6 +105,30 @@ class KvasirSegmentationDataset(Dataset):
         mask = self.common_transforms(PIL.Image.fromarray(mask))
         mask = (mask > 0.5).float()
         return image, mask, self.split_fnames[index]
+
+
+class KvasirMNVset(KvasirSegmentationDataset):
+    def __init__(self, path, split):
+        super(KvasirMNVset, self).__init__(path, split, augment=False)
+        self.mnv = ModelOfNaturalVariation(1)
+        self.p = 0.5
+
+    def __getitem__(self, index):
+        image = np.array(open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
+        mask = np.array(open(join(join(self.path, "masks/"), self.split_fnames[index])).convert("L"))
+        image = self.common_transforms(PIL.Image.fromarray(image))
+        mask = self.common_transforms(PIL.Image.fromarray(mask))
+        mask = (mask > 0.5).float()
+        flag = False
+        if self.split == "train" and np.random.rand() < self.p:
+            flag = True
+            image, mask = self.mnv(image.unsqueeze(0), mask.unsqueeze(0))
+            image = image.squeeze()
+            mask = mask.squeeze(0)  # todo make this less ugly
+        return image, mask, self.split_fnames[index], flag
+
+    def set_prob(self, prob):
+        self.p = prob
 
 
 class KvasirInpaintingDataset(Dataset):

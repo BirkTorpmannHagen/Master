@@ -24,9 +24,19 @@ def get_datawise_distribution(experiment_path):
         plt.show()
 
 
+def plot_training_progression(csv_name):
+    df = pd.read_csv(csv_name)
+    plt.plot(df["epoch"], df["iid_test_iou"], label="IID")
+    plt.plot(df["epoch"], df["ood_iou"], label="OOD")
+    plt.plot(df["epoch"], df["iid_test_iou"] - df["ood_iou"], label="Diff")
+    plt.legend()
+    plt.ylim((0, 1))
+    plt.xlim((0, 250))
+    plt.show()
+
+
 if __name__ == '__main__':
-    df_ood = pd.read_csv("ood.csv")
-    df_iid = pd.read_csv("iid.csv")
-    print(np.mean(df_ood["ood"]), np.mean([df_iid["ood"]]))
+    plot_training_progression("logs/consistency/DeepLab/0.csv")
+    plot_training_progression("logs/consistency/DeepLab/1.csv")
     # df_iid = df["Augmented" not in df["name"]]
     # get_predictorwise_distribution("Experiments/Data/Normal-Pipelines/DeepLab")

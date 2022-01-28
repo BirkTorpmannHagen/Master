@@ -99,10 +99,9 @@ class ModelOfNaturalVariation(nn.Module):
         return pixelwise, geometric
 
     def forward(self, image, mask):
-        assert len(image.shape) == 4, "Image must be in BxCxHxW format"
+        # assert len(image.shape) == 4, "Image must be in BxCxHxW format"
         augmented_imgs = torch.zeros_like(image)
         augmented_masks = torch.zeros_like(mask)
-
         for batch_idx in range(image.shape[0]):  # random transforms to every image in the batch
             aug_img = image[batch_idx].squeeze().cpu().numpy().T
             aug_mask = mask[batch_idx].squeeze().cpu().numpy().T
