@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -p dgx2q # partition (queue)
 #SBATCH -N 1 # number of nodes
-#SBATCH -c 8 # number of cores
+#SBATCH -c 4 # number of cores
 #SBATCH -w g001
 #SBATCH --gres=gpu:1
 #       #SBATCH --mem 128G # memory pool for all cores   # Removed due to bug in Slurm 20.02.5
@@ -19,5 +19,17 @@ module load cuda11.0/nsight/11.0.3
 module load cuda11.0/profiler/11.0.3
 module load cuda11.0/toolkit/11.0.3
 
+if [ -n "$SLURM_CPUS_PER_TASK" ]; then
+  omp_threads=$SLURM_CPUS_PER_TASK
+else
+  omp_threads=4
+fi
+export OMP_NUM_THREADS=$omp_threads        # OpenMP, Numpy
+export MKL_NUM_THREADS=$omp_threads   # Intel MKL
+export NUMEXPR_NUM_THREADS=$omp_threads      # Python3 Multiproc
+# export OPENBLAS_NUM_THREADS=2     # Using OpenBLAS?
+# export VECLIB_MAXIMUM_THREADS=2    # Accelware Vector Lib
+
+conda activate master
 export PYTHONPATH=$PWD
-srun python Experiments/train_augmented_pipeline.py "$1"
+srun python Experiments/train_augmented_pipeline.py 1
