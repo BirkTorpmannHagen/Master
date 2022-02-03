@@ -658,6 +658,70 @@
     \field{year}{2020}
   \endentry
 
+  \entry{visual_cortex}{article}{}
+    \name{author}{6}{}{%
+      {{hash=DJ}{%
+         family={Dapello},
+         familyi={D\bibinitperiod},
+         given={Joel},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=MT}{%
+         family={Marques},
+         familyi={M\bibinitperiod},
+         given={Tiago},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Schrimpf},
+         familyi={S\bibinitperiod},
+         given={Martin},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=GF}{%
+         family={Geiger},
+         familyi={G\bibinitperiod},
+         given={Franziska},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=CDD}{%
+         family={Cox},
+         familyi={C\bibinitperiod},
+         given={David\bibnamedelima D.},
+         giveni={D\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=DJJ}{%
+         family={DiCarlo},
+         familyi={D\bibinitperiod},
+         given={James\bibnamedelima J.},
+         giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Cold Spring Harbor Laboratory}%
+    }
+    \strng{namehash}{DJ+1}
+    \strng{fullhash}{DJMTSMGFCDDDJJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{D}
+    \field{sortinithash}{D}
+    \verb{doi}
+    \verb 10.1101/2020.06.16.154542
+    \endverb
+    \verb{eprint}
+    \verb https://www.biorxiv.org/content/early/2020/06/17/2020.06.16.154542.fu
+    \verb ll.pdf
+    \endverb
+    \field{title}{Simulating a Primary Visual Cortex at the Front of CNNs
+  Improves Robustness to Image Perturbations}
+    \verb{url}
+    \verb https://www.biorxiv.org/content/early/2020/06/17/2020.06.16.154542
+    \endverb
+    \field{journaltitle}{bioRxiv}
+    \field{year}{2020}
+  \endentry
+
   \entry{spatial_robustness}{misc}{}
     \name{author}{5}{}{%
       {{hash=EL}{%
@@ -774,6 +838,52 @@
     \field{journaltitle}{CoRR}
     \field{eprinttype}{arXiv}
     \field{year}{2017}
+  \endentry
+
+  \entry{doubleencdec}{article}{}
+    \name{author}{3}{}{%
+      {{hash=GA}{%
+         family={Galdran},
+         familyi={G\bibinitperiod},
+         given={Adrian},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=CG}{%
+         family={Carneiro},
+         familyi={C\bibinitperiod},
+         given={Gustavo},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=BMAG}{%
+         family={Ballester},
+         familyi={B\bibinitperiod},
+         given={Miguel A.\bibnamedelima González},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod\bibinitdelim
+  G\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer International Publishing}%
+    }
+    \strng{namehash}{GACGBMAG1}
+    \strng{fullhash}{GACGBMAG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \verb{doi}
+    \verb 10.1007/978-3-030-68763-2_22
+    \endverb
+    \field{isbn}{9783030687632}
+    \field{issn}{1611-3349}
+    \field{pages}{293–307}
+    \field{title}{Double Encoder-Decoder Networks for Gastrointestinal Polyp
+  Segmentation}
+    \verb{url}
+    \verb http://dx.doi.org/10.1007/978-3-030-68763-2_22
+    \endverb
+    \field{journaltitle}{Lecture Notes in Computer Science}
+    \field{year}{2021}
   \endentry
 
   \entry{texturebias}{misc}{}
@@ -900,6 +1010,166 @@
     \field{journaltitle}{Nature Machine Intelligence}
     \field{year}{2020}
     \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{polyp_augmentation}{article}{}
+    \name{author}{3}{}{%
+      {{hash=GR}{%
+         family={Ghimirea},
+         familyi={G\bibinitperiod},
+         given={Raman},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=PS}{%
+         family={Poudelb},
+         familyi={P\bibinitperiod},
+         given={Sahadev},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=LSW}{%
+         family={Leec},
+         familyi={L\bibinitperiod},
+         given={Sang-Woong},
+         giveni={S\bibinithyphendelim W\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GRPSLSW1}
+    \strng{fullhash}{GRPSLSW1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{title}{An Augmentation Strategy with Lightweight Network for Polyp
+  Segmentation}
+    \field{year}{2021}
+  \endentry
+
+  \entry{attention_generalizability}{inproceedings}{}
+    \name{author}{6}{}{%
+      {{hash=GR}{%
+         family={Gu},
+         familyi={G\bibinitperiod},
+         given={Ran},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=ZJ}{%
+         family={Zhang},
+         familyi={Z\bibinitperiod},
+         given={Jingyang},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=HR}{%
+         family={Huang},
+         familyi={H\bibinitperiod},
+         given={Rui},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=LW}{%
+         family={Lei},
+         familyi={L\bibinitperiod},
+         given={Wenhui},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=WG}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={Guotai},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=ZS}{%
+         family={Zhang},
+         familyi={Z\bibinitperiod},
+         given={Shaoting},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \name{editor}{7}{}{%
+      {{hash=dBM}{%
+         prefix={de},
+         prefixi={d\bibinitperiod},
+         family={Bruijne},
+         familyi={B\bibinitperiod},
+         given={Marleen},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=CPC}{%
+         family={Cattin},
+         familyi={C\bibinitperiod},
+         given={Philippe\bibnamedelima C.},
+         giveni={P\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+      {{hash=CS}{%
+         family={Cotin},
+         familyi={C\bibinitperiod},
+         given={St{\'e}phane},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=PN}{%
+         family={Padoy},
+         familyi={P\bibinitperiod},
+         given={Nicolas},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=SS}{%
+         family={Speidel},
+         familyi={S\bibinitperiod},
+         given={Stefanie},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=ZY}{%
+         family={Zheng},
+         familyi={Z\bibinitperiod},
+         given={Yefeng},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=EC}{%
+         family={Essert},
+         familyi={E\bibinitperiod},
+         given={Caroline},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Springer International Publishing}%
+    }
+    \strng{namehash}{GR+2}
+    \strng{fullhash}{GRZJHRLWWGZS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \field{abstract}{%
+    Domain generalizable model is attracting increasing attention in medical
+  image analysis since data is commonly acquired from different institutes with
+  various imaging protocols and scanners. To tackle this challenging domain
+  generalization problem, we propose a Domain Composition and Attention-based
+  network (DCA-Net) to improve the ability of domain representation and
+  generalization. First, we present a domain composition method that represents
+  one certain domain by a linear combination of a set of basis representations
+  (i.e., a representation bank). Second, a novel plug-and-play parallel domain
+  preceptor is proposed to learn these basis representations and we introduce a
+  divergence constraint function to encourage the basis representations are as
+  divergent as possible. Then, a domain attention module is proposed to learn
+  the linear combination coefficients of the basis representations. The result
+  of liner combination is used to calibrate the feature maps of an input image,
+  which enables the model to generalize to different and even unseen domains.
+  We validate our method on public prostate MRI dataset acquired from six
+  different institutions with apparent domain shift. Experimental results show
+  that our proposed model can generalizes well on different and even unseen
+  domains and it outperforms state-of-the-art methods on the multi-domain
+  prostate segmentation task. Code is available at
+  https://github.com/HiLab-git/DCA-Net.%
+    }
+    \field{booktitle}{Medical Image Computing and Computer Assisted
+  Intervention -- MICCAI 2021}
+    \field{isbn}{978-3-030-87199-4}
+    \field{pages}{241\bibrangedash 250}
+    \field{title}{Domain Composition and Attention for Unseen-Domain
+  Generalizable Medical Image Segmentation}
+    \list{location}{1}{%
+      {Cham}%
+    }
+    \field{year}{2021}
   \endentry
 
   \entry{benchmarking_robustness}{misc}{}
@@ -1163,6 +1433,50 @@
     \field{year}{2021}
   \endentry
 
+  \entry{endoensemble}{article}{}
+    \name{author}{5}{}{%
+      {{hash=HA}{%
+         family={Honga},
+         familyi={H\bibinitperiod},
+         given={Ayoung},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=LG}{%
+         family={Leeb},
+         familyi={L\bibinitperiod},
+         given={Giwan},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=LH}{%
+         family={Leec},
+         familyi={L\bibinitperiod},
+         given={Hyunseok},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Seod},
+         familyi={S\bibinitperiod},
+         given={Jihyun},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=YD}{%
+         family={Yeoe},
+         familyi={Y\bibinitperiod},
+         given={Doyeob},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{HA+1}
+    \strng{fullhash}{HALGLHSJYD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{title}{Deep Learning Model Generalization with Ensemble in
+  Endoscopic Images}
+    \field{year}{2021}
+  \endentry
+
   \entry{noise_robustness}{misc}{}
     \name{author}{3}{}{%
       {{hash=HH}{%
@@ -1295,6 +1609,41 @@
     \field{year}{2020}
   \endentry
 
+  \entry{uacanet}{inproceedings}{}
+    \name{author}{3}{}{%
+      {{hash=KT}{%
+         family={Kim},
+         familyi={K\bibinitperiod},
+         given={Taehun},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=LH}{%
+         family={Lee},
+         familyi={L\bibinitperiod},
+         given={Hyemin},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=KD}{%
+         family={Kim},
+         familyi={K\bibinitperiod},
+         given={Daijin},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KTLHKD1}
+    \strng{fullhash}{KTLHKD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{booktitle}{Proceedings of the 29th ACM International Conference on
+  Multimedia}
+    \field{pages}{2167\bibrangedash 2175}
+    \field{title}{UACANet: Uncertainty Augmented Context Attention for Polyp
+  Segmentation}
+    \field{year}{2021}
+  \endentry
+
   \entry{ACS}{article}{}
     \name{author}{4}{}{%
       {{hash=LA}{%
@@ -1363,6 +1712,98 @@
     \field{journaltitle}{Br. J. Surg.}
     \field{month}{07}
     \field{year}{2002}
+  \endentry
+
+  \entry{covid}{article}{}
+    \name{author}{7}{}{%
+      {{hash=MM}{%
+         family={Momeny},
+         familyi={M\bibinitperiod},
+         given={Mohammad},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=NAA}{%
+         family={Neshat},
+         familyi={N\bibinitperiod},
+         given={Ali\bibnamedelima Asghar},
+         giveni={A\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=HMA}{%
+         family={Hussain},
+         familyi={H\bibinitperiod},
+         given={Mohammad\bibnamedelima Arafat},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=KS}{%
+         family={Kia},
+         familyi={K\bibinitperiod},
+         given={Solmaz},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=MM}{%
+         family={Marhamati},
+         familyi={M\bibinitperiod},
+         given={Mahmoud},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=JA}{%
+         family={Jahanbakhshi},
+         familyi={J\bibinitperiod},
+         given={Ahmad},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=HG}{%
+         family={Hamarneh},
+         familyi={H\bibinitperiod},
+         given={Ghassan},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \keyw{Learning-to-augment, Data augmentation, Noise, X-ray images,
+  Classification, COVID-19, Deep learning}
+    \strng{namehash}{MM+1}
+    \strng{fullhash}{MMNAAHMAKSMMJAHG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{M}
+    \field{sortinithash}{M}
+    \field{abstract}{%
+    Chest X-ray images are used in deep convolutional neural networks for the
+  detection of COVID-19, the greatest human challenge of the 21st century.
+  Robustness to noise and improvement of generalization are the major
+  challenges in designing these networks. In this paper, we introduce a
+  strategy for data augmentation using the determination of the type and value
+  of noise density to improve the robustness and generalization of deep CNNs
+  for COVID-19 detection. Firstly, we present a learning-to-augment approach
+  that generates new noisy variants of the original image data with optimized
+  noise density. We apply a Bayesian optimization technique to control and
+  choose the optimal noise type and its parameters. Secondly, we propose a
+  novel data augmentation strategy, based on denoised X-ray images, that uses
+  the distance between denoised and original pixels to generate new data. We
+  develop an autoencoder model to create new data using denoised images
+  corrupted by the Gaussian and impulse noise. A database of chest X-ray
+  images, containing COVID-19 positive, healthy, and non-COVID pneumonia cases,
+  is used to fine-tune the pre-trained networks (AlexNet, ShuffleNet, ResNet18,
+  and GoogleNet). The proposed method performs better results compared to the
+  state-of-the-art learning to augment strategies in terms of sensitivity
+  (0.808), specificity (0.915), and F-Measure (0.737). The source code of the
+  proposed method is available at
+  https://github.com/mohamadmomeny/Learning-to-augment-strategy.%
+    }
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.compbiomed.2021.104704
+    \endverb
+    \field{issn}{0010-4825}
+    \field{pages}{104704}
+    \field{title}{Learning-to-augment strategy using noisy and denoised data:
+  Improving generalizability of deep CNN for the detection of COVID-19 in X-ray
+  images}
+    \verb{url}
+    \verb https://www.sciencedirect.com/science/article/pii/S0010482521004984
+    \endverb
+    \field{volume}{136}
+    \field{journaltitle}{Computers in Biology and Medicine}
+    \field{year}{2021}
   \endentry
 
   \entry{sensitivity}{misc}{}
@@ -1587,6 +2028,154 @@
     \field{year}{2019}
   \endentry
 
+  \entry{augmentation_prostate}{article}{}
+    \name{author}{20}{}{%
+      {{hash=STH}{%
+         family={Sanford},
+         familyi={S\bibinitperiod},
+         given={Thomas\bibnamedelima H.},
+         giveni={T\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=ZL}{%
+         family={Zhang},
+         familyi={Z\bibinitperiod},
+         given={Ling},
+         giveni={L\bibinitperiod},
+      }}%
+      {{hash=HSA}{%
+         family={Harmon},
+         familyi={H\bibinitperiod},
+         given={Stephanie\bibnamedelima A.},
+         giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Sackett},
+         familyi={S\bibinitperiod},
+         given={Jonathan},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=YD}{%
+         family={Yang},
+         familyi={Y\bibinitperiod},
+         given={Dong},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=RH}{%
+         family={Roth},
+         familyi={R\bibinitperiod},
+         given={Holger},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=XZ}{%
+         family={Xu},
+         familyi={X\bibinitperiod},
+         given={Ziyue},
+         giveni={Z\bibinitperiod},
+      }}%
+      {{hash=KD}{%
+         family={Kesani},
+         familyi={K\bibinitperiod},
+         given={Deepak},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=MS}{%
+         family={Mehralivand},
+         familyi={M\bibinitperiod},
+         given={Sherif},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BRH}{%
+         family={Baroni},
+         familyi={B\bibinitperiod},
+         given={Ronaldo\bibnamedelima H.},
+         giveni={R\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=BT}{%
+         family={Barrett},
+         familyi={B\bibinitperiod},
+         given={Tristan},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=GR}{%
+         family={Girometti},
+         familyi={G\bibinitperiod},
+         given={Rossano},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=OA}{%
+         family={Oto},
+         familyi={O\bibinitperiod},
+         given={Aytekin},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=PAS}{%
+         family={Purysko},
+         familyi={P\bibinitperiod},
+         given={Andrei\bibnamedelima S.},
+         giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=XS}{%
+         family={Xu},
+         familyi={X\bibinitperiod},
+         given={Sheng},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=PPA}{%
+         family={Pinto},
+         familyi={P\bibinitperiod},
+         given={Peter\bibnamedelima A.},
+         giveni={P\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=XD}{%
+         family={Xu},
+         familyi={X\bibinitperiod},
+         given={Daguang},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=WBJ}{%
+         family={Wood},
+         familyi={W\bibinitperiod},
+         given={Bradford\bibnamedelima J.},
+         giveni={B\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+      {{hash=CPL}{%
+         family={Choyke},
+         familyi={C\bibinitperiod},
+         given={Peter\bibnamedelima L.},
+         giveni={P\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=TB}{%
+         family={Turkbey},
+         familyi={T\bibinitperiod},
+         given={Baris},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{STH+1}
+    \strng{fullhash}{STHZLHSASJYDRHXZKDMSBRHBTGROAPASXSPPAXDWBJCPLTB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \verb{doi}
+    \verb 10.2214/AJR.19.22347
+    \endverb
+    \verb{eprint}
+    \verb https://doi.org/10.2214/AJR.19.22347
+    \endverb
+    \field{note}{PMID: 33052737}
+    \field{number}{6}
+    \field{pages}{1403\bibrangedash 1410}
+    \field{title}{Data Augmentation and Transfer Learning to Improve
+  Generalizability of an Automated Prostate Segmentation Model}
+    \verb{url}
+    \verb https://doi.org/10.2214/AJR.19.22347
+    \endverb
+    \field{volume}{215}
+    \field{journaltitle}{American Journal of Roentgenology}
+    \field{year}{2020}
+  \endentry
+
   \entry{causality}{misc}{}
     \name{author}{1}{}{%
       {{hash=SB}{%
@@ -1707,6 +2296,165 @@
   Adversarial Training}
     \field{year}{2017}
     \warn{\item Invalid format of field 'month'}
+  \endentry
+
+  \entry{divergentnets}{misc}{}
+    \name{author}{4}{}{%
+      {{hash=TV}{%
+         family={Thambawita},
+         familyi={T\bibinitperiod},
+         given={Vajira},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=HSA}{%
+         family={Hicks},
+         familyi={H\bibinitperiod},
+         given={Steven\bibnamedelima A.},
+         giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=HP}{%
+         family={Halvorsen},
+         familyi={H\bibinitperiod},
+         given={Pål},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=RMA}{%
+         family={Riegler},
+         familyi={R\bibinitperiod},
+         given={Michael\bibnamedelima A.},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{TV+1}
+    \strng{fullhash}{TVHSAHPRMA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+    \verb{eprint}
+    \verb 2107.00283
+    \endverb
+    \field{title}{DivergentNets: Medical Image Segmentation by Network
+  Ensemble}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{eess.IV}
+    \field{year}{2021}
+  \endentry
+
+  \entry{ddanet}{misc}{}
+    \name{author}{7}{}{%
+      {{hash=TNK}{%
+         family={Tomar},
+         familyi={T\bibinitperiod},
+         given={Nikhil\bibnamedelima Kumar},
+         giveni={N\bibinitperiod\bibinitdelim K\bibinitperiod},
+      }}%
+      {{hash=JD}{%
+         family={Jha},
+         familyi={J\bibinitperiod},
+         given={Debesh},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=AS}{%
+         family={Ali},
+         familyi={A\bibinitperiod},
+         given={Sharib},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=JHD}{%
+         family={Johansen},
+         familyi={J\bibinitperiod},
+         given={Håvard\bibnamedelima D.},
+         giveni={H\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=JD}{%
+         family={Johansen},
+         familyi={J\bibinitperiod},
+         given={Dag},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=RMA}{%
+         family={Riegler},
+         familyi={R\bibinitperiod},
+         given={Michael\bibnamedelima A.},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=HP}{%
+         family={Halvorsen},
+         familyi={H\bibinitperiod},
+         given={Pål},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{TNK+1}
+    \strng{fullhash}{TNKJDASJHDJDRMAHP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{T}
+    \field{sortinithash}{T}
+    \verb{eprint}
+    \verb 2012.15245
+    \endverb
+    \field{title}{DDANet: Dual Decoder Attention Network for Automatic Polyp
+  Segmentation}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{eess.IV}
+    \field{year}{2020}
+  \endentry
+
+  \entry{bayesian_case}{misc}{}
+    \name{author}{1}{}{%
+      {{hash=WAG}{%
+         family={Wilson},
+         familyi={W\bibinitperiod},
+         given={Andrew\bibnamedelima Gordon},
+         giveni={A\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WAG1}
+    \strng{fullhash}{WAG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \verb{eprint}
+    \verb 2001.10995
+    \endverb
+    \field{title}{The Case for Bayesian Deep Learning}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2020}
+  \endentry
+
+  \entry{bayesian_generalization}{misc}{}
+    \name{author}{2}{}{%
+      {{hash=WAG}{%
+         family={Wilson},
+         familyi={W\bibinitperiod},
+         given={Andrew\bibnamedelima Gordon},
+         giveni={A\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=IP}{%
+         family={Izmailov},
+         familyi={I\bibinitperiod},
+         given={Pavel},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WAGIP1}
+    \strng{fullhash}{WAGIP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{W}
+    \field{sortinithash}{W}
+    \verb{eprint}
+    \verb 2002.08791
+    \endverb
+    \field{title}{Bayesian Deep Learning and a Probabilistic Perspective of
+  Generalization}
+    \field{eprinttype}{arXiv}
+    \field{eprintclass}{cs.LG}
+    \field{year}{2020}
   \endentry
 
   \entry{resection}{article}{}
@@ -1917,6 +2665,38 @@
     \field{journaltitle}{JAMA Dermatology}
     \field{month}{08}
     \field{year}{2019}
+  \endentry
+
+  \entry{reverse_attention}{article}{}
+    \name{author}{3}{}{%
+      {{hash=YC}{%
+         family={Yua},
+         familyi={Y\bibinitperiod},
+         given={ChengHui},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=YJ}{%
+         family={Yana},
+         familyi={Y\bibinitperiod},
+         given={JiangPeng},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=LX}{%
+         family={Lia},
+         familyi={L\bibinitperiod},
+         given={Xiu},
+         giveni={X\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{YCYJLX1}
+    \strng{fullhash}{YCYJLX1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{Y}
+    \field{sortinithash}{Y}
+    \field{title}{Parallel Res2Net-based Network with Reverse Attention for
+  Polyp Segmentation}
+    \field{year}{2021}
   \endentry
 
   \entry{pneumonia}{article}{}
