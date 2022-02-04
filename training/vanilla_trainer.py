@@ -17,7 +17,7 @@ class VanillaTrainer:
     def __init__(self, id, config):
         """
 
-        :param model: String describing the model type. Can be DeepLab, Divergent, ... TODO
+        :param model: String describing the model type. Can be DeepLab, TriUnet, ... TODO
         :param config: Contains hyperparameters : lr, epochs, batch_size, T_0, T_mult
         """
         self.config = config
@@ -43,7 +43,7 @@ class VanillaTrainer:
         elif self.model_str == "FPN":
             self.model = segmentation_models.FPN().to(self.device)
         else:
-            raise AttributeError("model_str not valid; choices are DeepLab, Divergent, Polyp, FPN, Unet")
+            raise AttributeError("model_str not valid; choices are DeepLab, TriUnet, Polyp, FPN, Unet")
 
         self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
         self.criterion = vanilla_losses.JaccardLoss()
