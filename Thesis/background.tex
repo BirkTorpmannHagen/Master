@@ -25,7 +25,7 @@
 	\subsection{Generalization failure in other domains}
 	Naturally, non-medical domains are in no way immune to generalization failure. In fact, one could easily argue that the vast majority of deep-learning pipelines fail to generalize altogether, and instead merely infer some set of inductive biases that, although perhaps causally incorrect, perform sufficiently well for general use. It has for instance been shown that CNNs trained on imagenet, one of the largest and most diverse datasets in the domain of computer vision, are heavily biased towards textural features\cite{texturebias}. Naturally, this is not necessarily causally accurate; a cat is not a cat because it has cat-like fur; nor is an elephant an elephant only because it has skin of an elephant. By manually increasing shape bias, it has been shown that the performance of such CNNs improves both in robustness to perturbations and iid accuracy.
 
-	\begin{figure}[H]
+	\begin{figure}[h]
 		\includegraphics[width=\linewidth]{example-image-a}
 		\caption{}
 		\label{cat_elephant}
@@ -76,7 +76,7 @@
 		Violations of assumptions \ref{underfit} and \ref{overfit} correspond to well known and fairly well understood forms of generalization failure, namely underfitting and overfitting. One can however argue that these factors can be all but discounted as plausible explanations for the pervasiveness of generalization failure. 
 		
 		Underfitting occurs when the model simply lacks the complexity required to encapsulate the patterns necessary to form generalizable predictions. To give a simple example - consider the problem of trying to fit a linear model to the following dataset: 
-		\begin{figure}[H]
+		\begin{figure}[h]
 			\includegraphics[width=\linewidth]{illustrations/regression_example.png}
 			\caption{A linear model cannot fit polynomial data}
 			\label{underfit example}
@@ -86,7 +86,7 @@
 		It is commonly accepted that DNNs are not particularly susceptible to underfitting. Modern DNNs, as it turns out, can after all be shown to have infinite effective capacity for practical purposes. It can for instance be shown that even a 2-layer feedforward neural network is capable of fitting noise to random labels with 100\% accuracy \cite{randomlabels}. Assuming this ability translates to a capacity to generalize (which may not necessarily be the case, as will be discussed in chapter \ref{discussion}), it is fairly reasonable to expect that the hypothesis space of the highly complex models used today contains a generalizable predictor. 
 
 		This is also evidenced by the fact that practically all deep learning pipelines take considerable steps towards avoiding the exact opposite of underfitting - overfitting. Overfitting occurs when the model learns patterns that by conventional wisdom are too complex to be likely to actually describe the process(es) that generate them. Once again, to give a somewhat simple example: 
-		\begin{figure}[H]
+		\begin{figure}[h]
 			\includegraphics[width=\linewidth]{illustrations/overfit.png}
 			\caption{A model with excessive capacity interpolates unneccesarily complex patterns}
 			\label{Overfit example}
@@ -105,7 +105,7 @@
 		
 		To illustrate, consider the rather pertinent example of training a model exclusively on either white-light or narrow-band endoscopy. Assume that there are two datasets, each containing samples depicting identical scenes, with the only difference being that dataset A employs white-light endoscopy, whereas dataset B employs narrow-band endoscopy. Ideally, a model trained on either dataset should generate predictors that can generalize to the other, and though one may be optimistic and hope this is the case, this is in no way guaranteed. The causal structure behind the decisions - i.e what exactly makes a polyp a polyp - is never considered at any point in the training process. Instead, the models will simply try to leverage whatever predictive patterns can be found the training data. The model trained on narrow-band images may for instance principally consider the textural characteristic of the polyps, which narrow-band endoscopy enhances. Conversely, the model trained on white-light, lacking access to these textural characteristics, may instead consider more color- or shape-based features. Naturally, if this narrow-band-texture-biased model is deployed in white-light endoscopy, it is not likely to succeed since its principal discriminative features no longer are particularly useful. Similarly, the color-biased model would fail when deployed in narrow-band endoscopy since the colours it once used to distinguish polyps are no longer predictive in narrow-band images.  
 
-		\begin{figure}[H]
+		\begin{figure}[h]
 			\includegraphics[width=\linewidth]{example-image-b}
 			\caption{}
 			\label{imaging_modalities}
@@ -128,27 +128,32 @@
 
 		Note that this does not however presuppose anything about the relative occurrence rates of generalizable and non-generalizable predictors. It may not necessarily even be the case that the pipeline can return a generalizable predictor at all. Only that there exists a multitude of risk-equivalent predictors in the search space the optimizer typically explores. Nor does it presuppose anything about the distribution of predictors, only that there is indeed a distribution. 
 
-		This is evidenced by the fact that generalizability can vary greatly depending on the choice of random seed used during training. In the foundational paper on underspecification in deep learning, for instance, it was highligted that certain classification pipelines can produce predictors that vary in ood accuracy by up to 10\% \cite{damour2020underspecification}. This is a function of the robustness of the learned features and how likely the pipeine is to return the corresponding predictors. 
-
-	\subsection{A Bayesian perspective of generalization}
-		With this in mind, one can start considering the statistical properties of a pipeline. In particular, one can leverage 
-\section{Generating generalizable predictors}
-	In light of the growing interest in generalization failure, there has been several attempts at increasing generalizability through modifications to the typical ERM pipeline. This section will survey some of these methodss, and put them in context with the theory as outlined above. 
-	\subsection{Adversarial Training}
-		\subsection{Adversarial attacks and defences}
-	\subsection{Improved Risk estimation}
-		\subsubsection{Data augmentation}
-		\subsubsection{Distributional modelling}
-	\subsection{Bayesian Learning}
+		This is evidenced by the fact that generalizability can vary greatly depending on the choice of random seed used during training. In the foundational paper on underspecification in deep learning, for instance, it was highligted that certain classification pipelines can produce predictors that vary in ood accuracy by up to 10\% \cite{damour2020underspecification}. This is a function of the robustness of the learned features and how likely the pipeline is to return the corresponding predictors. 
+	\subsection{A probablisitic perspective of generalization}
+		As established, modern deep learning pipelines are not capable of reliably returning generalizable predictors. However, they are not necessarily precluded from it. One can to some extent model this probabilistically by considering the distribution of parameters given the training data, \(p(w | \mathcal{D})\). 
+		% Key point: pretraining = more support
+		
+\section{Related work on generalizable deep learning}
+	To summarize, generalization failure occurs due to the weaknesses inherent to ERM. The features that ERM learn to incorporate are often spurious, and the predictors that leverage them are often returned practically arbitrarily from the pipeline. The approaches that have exhibited the highest degrees of success towards increasing generalization as a consequence tend to address these issues in some way or another. 
 	
+	One of the most well-studied approaches to increasing generalizability is the use of data augmentation. Data augmentation is typically implemented in deep learning pipelines in order to prevent overfitting, often in conjunction with other regularization methods. Naturally, overfitting also constitutes generalizability failure in its own right, but augmentation has also been shown to have positive effects for out-of-distribution generalization. It has for instance been shown that carefully designing augmentation procedures increases the generalizability of polyp segmentation models \cite{polyp_augmentation} and prostate segmentation \cite{augmentation_prostate}. There has also been a large body of work dedicated to leveraging recent advances in generative models such as generative adversarial networks (GANs) and variational autoencoders (VaEs) to serve as synthetic data augmentation. These types of approaches have also been been shown to increase generalizability in CT segmentation \cite{cyclegan} and x-ray based covid detection \cite{covid}. Data augmentation facilitates generalization by implicitly biasing the pipeline towards credible inductive biases, as the empirical risk will be best minimized by leveraging features that are conducive to minimizing risk across both synthetic or otherwise augmented data and unaugmented data. Naturally, the choice of augmentations that are used is an inductive bias in and of itself; by employing random rotations, rotational invariance is presupposed. By employing random cropping, image-space object size invariance is presupposed. By employing additive noise, invariance to additive noise is presupposed, and so on. From an ERM perspective, this corresponds to improving the empirical risk estimate; given enough data, all of these invariances may be learned automatically. With a finite and often fairly limited dataset, this may not necessarily be the case simply due to the large number of confounding variables involved. 
 
-\section{Related work on Generalizable Polyp Segmentation}
-	The EndoCV2021 challenge focused primarily on addressing methods to increase the robustness and generalizability. The approaches utilized by the submissions can by and large be assigned one of the following categories:
-	\begin{itemize}
-		\item Generalisation through regularization
-		\item Generalisation through ensembles
-		\item Generalisation through feature strengthening 
-	\end{itemize}
-	...
-	\section{Putting it all together}
-	...c
+	Another type of approach involves biasing the pipeline towards learning more structured and causally viable latent representations. This is also somewhat well understood when considered through the lens of regularization: drop-out and weight-decay are often employed in order to reduce overfitting under the assumption that a generalizable predictor should not base its decisions on only a few of the available neurons and that seperate neurons should instead encode independent representations of the input. Though there is limited research ont the effects of dropout on ood generalization, constraining the latent representations in DNNs has been shown to be effective method to increase generalizability. For polyp-segmentation it has for instance been shown that adding context-based attention layers to multiple blocks in a given network results in state-of-the-art IoU scores for out-of-distribution evaluation on certain datasets \cite{uacanet}. Other attention-based approaches have also shown promise in this regard \cite{attention_generalizability, reverse_attention}. This permits the model to learn and generate attention maps for its latent representations, thus in theory biasing the model towards learning more a more structured interretation of the data. 
+	
+	Multi-task and/or multistage learning has also been leveraged to this end. By jointly optimizing for multiple tasks/subtasks, the model can be biased towards learning features that describe the input data well independent of their performance on any one of the relevant tasks. For poylp-segmentation, for instance, it has been shown that adding image reconstruction as an auxiliary task \cite{ddanet} or decoupling the segmentation task into a coarse segmentation and refinement stage \cite{doubleencdec} increases generalizability. 
+
+	More closely supervised methods, wherein certain inductive biases have been explicitly introduced to the pipeline, have also been shown to have some promise. One paper for instance reported an increased robustness to image perturbations after adding a custom filter bank designed to emulate the primary visual cortex of primates to the front of the CNN \cite{visual_cortex}. Another reported that models trained on imagenet exhibited significantly higher robustness when explicitly biased towards shape-based features \cite{texturebias}. 
+	
+		
+	These approaches all provide workarounds to flaws with ERM, typically to limited practical effect. Consequently, a growing body of work has instead been investigating the idea of foregoing ERM altogether in favor of developing alternative training paradigms. In so-called Invariant Risk Minimization\cite{IRM}, for instance, the model trains to ignore spurious correlations by optimizing for predictors that exhibit stable performance across multiple training environments. A similar approach, namely model-based robust deep learning \cite{modelbased}, employs a similar idea in conjunction with distributional modelling. The model is trained such that it is robust to perturbations as generated by a so-called model of natural variation. If this model for instance describes the function mapping one training environment to another, this will then optimize for predictors that are invariant to the distributional shift this function corresponds to. 
+
+	Finally, Bayesian learning has also been shown to improve generalization. In particular, ensemble-based networks - which mathematically can be considered an approximation of Bayesian marginalization \cite{bayesian_case,bayesian_generalization} - have demonstrated high degrees of generalizability for polyp-segmentation \cite{divergentnets,endoensemble}. Since deep learning pipelines are typically underspecified, one can consider an ensemble of predictors to be a sampling of the distribution over parameters given training data. These predictors are of course unlikely to have learned identical representations, and consequently whatever spurious correlations inferred by one predictor may be countered by the features employed in another. Consequently, features that are stable across predictors and consequently more likely to generalize are weighed to a greater extent, in turn mitigating the effects of underspecification. Structural misalignment may nevertheless impact ensembles, and as such the effective returns are limited. 
+
+\section{Putting it all together}
+	To summarize, generalizability failure can in broad strokes be attributed to the fact that ERM does not and cannot differentiate between causal and non-causal patterns, and that there typically exists multiple equivalent predictors in the parameter space of any given DNN model. Consequently, increasing generalizability boils down to the following questions:
+	\begin{enumerate}
+		\item How can behaviour consistent with the causal structure of a problem be rewarded? \label{loss}
+		\item How can the inductive biases that underpin this causal structure be expressed? \label{mnv}
+		\item How can we optimize for causally consistent inductive biases?\label{training}
+	\end{enumerate}
+	
