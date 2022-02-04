@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from Models import backbones, inpainters
+from Models import segmentation_models, inpainters
 from model_of_natural_variation import perturbator
 from training.vanilla_trainer import VanillaTrainer
 
