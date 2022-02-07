@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from PIL.Image import open
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
+import DataProcessing.augmentation as aug
 
 
 class EtisDataset(Dataset):
@@ -17,9 +18,7 @@ class EtisDataset(Dataset):
         super(EtisDataset, self).__init__()
         self.path = path
         self.len = len(listdir(join(self.path, "ETIS-LaribPolypDB")))
-        self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
-                                                     transforms.ToTensor()
-                                                     ])
+        self.common_transforms = aug.pipeline_tranforms()
 
     def __len__(self):
         return self.len

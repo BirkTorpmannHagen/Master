@@ -62,9 +62,7 @@ class KvasirSegmentationDataset(Dataset):
         super(KvasirSegmentationDataset, self).__init__()
         self.path = join(path, "segmented-images/")
         self.fnames = listdir(join(self.path, "images"))
-        self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
-                                                     transforms.ToTensor()
-                                                     ])
+        self.common_transforms = aug.pipeline_tranforms()
         self.pixeltrans = aug.albumentation_pixelwise_transforms()
         self.segtrans = aug.albumentation_pixelwise_transforms()
         # deterministic partition
@@ -114,8 +112,8 @@ class KvasirMNVset(KvasirSegmentationDataset):
         self.p = 0.5
 
     def __getitem__(self, index):
-        image = np.array(open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
-        mask = np.array(open(join(join(self.path, "masks/"), self.split_fnames[index])).convert("L"))
+        image = np.array(open(join(self.path, "images/", self.split_fnames[index]).convert("RGB")))
+        mask = np.array(open(join(self.path, "masks/", self.split_fnames[index]).convert("L")))
         image = self.common_transforms(PIL.Image.fromarray(image))
         mask = self.common_transforms(PIL.Image.fromarray(mask))
         mask = (mask > 0.5).float()

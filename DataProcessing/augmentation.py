@@ -4,7 +4,7 @@ from torchvision import transforms
 
 def pipeline_tranforms():
     return transforms.Compose([
-        transforms.Resize((400, 400)),
+        transforms.Resize((512, 512)),
         transforms.ToTensor()
     ])
 

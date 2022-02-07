@@ -3,7 +3,7 @@ from itertools import combinations
 import numpy as np
 import torch
 
-from Models.backbones import *
+from Models.segmentation_models import *
 
 
 def get_avg_dist_hist(model1, model2, filenames):

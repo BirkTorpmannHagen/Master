@@ -1,33 +1,37 @@
 from os import listdir
 from os.path import join
-
+import matplotlib.pyplot as plt
 from PIL.Image import open
 from torch.utils.data import Dataset
-from torchvision import transforms
+import DataProcessing.augmentation as aug
+
+from PIL import Image
 
 
-class EtisDataset(Dataset):
-    """
-        Dataset class that fetches Etis-LaribPolypDB images with the associated segmentation mask.
-        Used for testing.
-    """
+class CVC_ClinicDB(Dataset):
+    def __init__(self, root_directory):
+        super(CVC_ClinicDB, self).__init__()
+        self.root = root_directory
+        self.mask_fnames = listdir(join(self.root, "Ground Truth"))
+        self.mask_locs = [join(self.root, "Ground Truth", i) for i in self.mask_fnames]
+        self.img_locs = [join(self.root, "Original", i) for i in
+                         self.mask_fnames]
+        self.common_transforms = aug.pipeline_tranforms()
 
-    def __init__(self, path):
-        # TODO CONVERT
-        super(EtisDataset, self).__init__()
-        self.path = path
-        self.len = len(listdir(join(self.path, "ETIS-LaribPolypDB")))
-        self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
-                                                     transforms.ToTensor()
-                                                     ])
+    def __getitem__(self, idx):
+        mask = self.common_transforms(open(self.mask_locs[idx]))
+        image = self.common_transforms(open(self.img_locs[idx]))
+        return image, mask, self.mask_fnames[idx]
 
     def __len__(self):
-        return self.len
+        return len(self.mask_fnames)
 
-    def __getitem__(self, index):
-        image = self.common_transforms(
-            open(join(self.path, "ETIS-LaribPolypDB/{}.jpg".format(index + 1))).convert("RGB"))
-        mask = self.common_transforms(
-            open(join(self.path, "GroundTruth/p{}.jpg".format(index + 1))).convert("RGB"))
-        mask = (mask > 0.5).float()
-        return image, mask, index + 1
+
+if __name__ == '__main__':
+    dataset = CVC_ClinicDB("Datasets/CVC-ClinicDB")
+    for img, mask, fname in dataset:
+        plt.imshow(img.T)
+        plt.imshow(mask.T, alpha=0.5)
+        plt.show()
+        input()
+    print("done")

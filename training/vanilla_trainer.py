@@ -6,9 +6,9 @@ from torch.utils.data import DataLoader
 
 from DataProcessing.etis import EtisDataset
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset
-from Models import backbones
+from Models import segmentation_models
 from Tests.metrics import iou
-from losses.consistency_losses import NakedConsistencyLoss
+from losses.consistency_losses import NakedConsistencyLoss, ConsistencyLoss
 from model_of_natural_variation.model import ModelOfNaturalVariation
 from utils import logging
 
@@ -17,7 +17,7 @@ class VanillaTrainer:
     def __init__(self, id, config):
         """
 
-        :param model: String describing the model type. Can be DeepLab, Divergent, ... TODO
+        :param model: String describing the model type. Can be DeepLab, TriUnet, ... TODO
         :param config: Contains hyperparameters : lr, epochs, batch_size, T_0, T_mult
         """
         self.config = config
@@ -30,19 +30,20 @@ class VanillaTrainer:
         self.model_str = config["model"]
         self.mnv = ModelOfNaturalVariation(T0=1).to(self.device)
         self.nakedcloss = NakedConsistencyLoss()
+        self.closs = ConsistencyLoss()
 
         if self.model_str == "DeepLab":
-            self.model = backbones.DeepLab("imagenet").to(self.device)
-        elif self.model_str == "Divergent":
-            self.model = backbones.DivergentNet().to(self.device)
+            self.model = segmentation_models.DeepLab().to(self.device)
+        elif self.model_str == "TriUnet":
+            self.model = segmentation_models.TriUnet().to(self.device)
         elif self.model_str == "DDANet":
             raise NotImplementedError
         elif self.model_str == "Unet":
-            raise NotImplementedError
+            self.model = segmentation_models.Unet().to(self.device)
         elif self.model_str == "FPN":
-            raise NotImplementedError
+            self.model = segmentation_models.FPN().to(self.device)
         else:
-            raise AttributeError("model_str not valid; choices are DeepLab, Divergent, Polyp, FPN, Unet")
+            raise AttributeError("model_str not valid; choices are DeepLab, TriUnet, Polyp, FPN, Unet")
 
         self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
         self.criterion = vanilla_losses.JaccardLoss()
@@ -135,7 +136,7 @@ class VanillaTrainer:
                 aug_output = self.model(aug_img)  # todo consider train on augmented vs non-augmented?
 
                 batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
-                loss = self.criterion(aug_mask, mask, aug_output, output, torch.mean(batch_ious))
+                loss = self.closs(aug_mask, mask, aug_output, output, torch.mean(batch_ious))
                 losses.append(np.abs(loss.item()))
                 closses.append(self.nakedcloss(aug_mask, mask, aug_output, output).item())
                 ious = torch.cat((ious, batch_ious.cpu().flatten()))

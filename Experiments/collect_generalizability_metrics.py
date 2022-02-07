@@ -1,11 +1,15 @@
 from os import listdir
 
+import pandas as pd
+import torch
 import numpy as np
 from torch.utils.data import DataLoader
-
+from utils.logging import log_full
 from DataProcessing.etis import EtisDataset
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset
-from Models.backbones import *
+from DataProcessing.endocv import EndoCV2020
+from DataProcessing.cvc import CVC_ClinicDB
+from Models.segmentation_models import *
 from Tests.metrics import iou
 
 
@@ -33,10 +37,14 @@ def get_generalizability_gap(modelpath):
 
     kvasir = DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir", split="test"))
     etis = DataLoader(EtisDataset("Datasets/ETIS-LaribPolypDB"))
-
+    EndoCV = DataLoader(EndoCV2020("Datasets/EndoCV2020-Endoscopy-Disease-Detection-Segmentation-subChallenge_data"))
+    CVC = DataLoader(CVC_ClinicDB("Datasets/CVC-ClinicDB"))
+    endocv_ious = eval(EndoCV, model)
     kvasir_ious = eval(kvasir, model)
     etis_ious = eval(etis, model)
-    print(f"{modelpath} \t \t {np.mean(kvasir_ious)} \t {np.mean(etis_ious)}")
+    cvc_ious = eval(CVC, model)
+    print(
+        f"{modelpath} \t \t {np.mean(kvasir_ious):.4f} \t {np.mean(etis_ious):.4f} \t {np.mean(endocv_ious):.4f} \t {np.mean(cvc_ious):.4f}")
     return kvasir_ious, etis_ious
 
 
@@ -49,15 +57,16 @@ if __name__ == '__main__':
     # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-9")
     # get_generalizability_gap("Predictors/Augmented/DeepLab/pretrainmode=imagenet_0")
     # get_generalizability_gap("Predictors/Augmented/DeepLab/pretrainmode=imagenet_1")
-    for fname in listdir("Predictors/Augmented/DeepLab/"):
+    for fname in sorted(listdir("Predictors/Augmented/DeepLab/")):
         try:
             get_generalizability_gap(f"Predictors/Augmented/DeepLab/{fname}")
-        except IsADirectoryError:
+        except Exception as e:
             continue
+    print("vanilla")
     for fname in listdir("Predictors/Vanilla/DeepLab/"):
         try:
             get_generalizability_gap(f"Predictors/Vanilla/DeepLab/{fname}")
-        except IsADirectoryError:
+        except:
             continue
     # get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs_2")
     # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_test2")
