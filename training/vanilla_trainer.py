@@ -76,8 +76,8 @@ class VanillaTrainer:
             training_loss = np.abs(self.train_epoch())
             val_loss, ious, closs = self.validate(epoch=i, plot=False)
             gen_ious = self.validate_generalizability(epoch=i, plot=False)
-            mean_iou = torch.mean(ious)
-            gen_iou = torch.mean(gen_ious)
+            mean_iou = float(torch.mean(ious))
+            gen_iou = float(torch.mean(gen_ious))
             consistency = 1 - np.mean(closs)
             test_ious = np.mean(self.test().numpy())
 

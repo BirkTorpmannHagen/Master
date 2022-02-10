@@ -27,7 +27,7 @@ def eval(dataset, model):
 
 
 def get_generalizability_gap(modelpath):
-    model = DeepLab("imagenet").to("cuda")
+    model = DeepLab().to("cuda")
     model.load_state_dict(torch.load(modelpath))
     # if modelpath.split("/")[1] == "DeepLab":
     #     model = DeepLab("imagenet").to("cuda")
@@ -57,16 +57,23 @@ if __name__ == '__main__':
     # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-9")
     # get_generalizability_gap("Predictors/Augmented/DeepLab/pretrainmode=imagenet_0")
     # get_generalizability_gap("Predictors/Augmented/DeepLab/pretrainmode=imagenet_1")
-    for fname in sorted(listdir("Predictors/Augmented/DeepLab/")):
-        try:
-            get_generalizability_gap(f"Predictors/Augmented/DeepLab/{fname}")
-        except Exception as e:
-            continue
-    print("vanilla")
-    for fname in listdir("Predictors/Vanilla/DeepLab/"):
-        try:
-            get_generalizability_gap(f"Predictors/Vanilla/DeepLab/{fname}")
-        except:
-            continue
+    get_generalizability_gap("Predictors/Vanilla/DeepLab/1_last_epoch")
+    get_generalizability_gap("Predictors/Augmented/DeepLab/resolution_test_last_epoch")
+    get_generalizability_gap("Predictors/Augmented/DeepLab/1_last_epoch")
+
+    # for fname in sorted(listdir("Predictors/Augmented/DeepLab/")):
+    #     try:
+    #         get_generalizability_gap(f"Predictors/Augmented/DeepLab/{fname}")
+    #     except Exception as e:
+    #         print(e)
+    #         continue
+    # print("vanilla")
+    # for fname in listdir("Predictors/Vanilla/DeepLab/"):
+    #     try:
+    #         get_generalizability_gap(f"Predictors/Vanilla/DeepLab/{fname}")
+    #     except:
+    #         continue
     # get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs_2")
     # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_test2")
+
+# %%

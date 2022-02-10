@@ -226,3 +226,31 @@ class StrictConsistencyTrainer(ConsistencyTrainer):
         super(StrictConsistencyTrainer, self).__init__(id, config)
         self.criterion = StrictConsistencyLoss()
 
+
+class ConsistencyTrainerUsingControlledAugmentation(ConsistencyTrainer):
+    """
+        Uses vanilla data augmentation with p=0.5 instead of a a custom loss and has two samples
+    """
+
+    def __init__(self, id, config):
+        super(ConsistencyTrainerUsingControlledAugmentation, self).__init__(id, config)
+        self.jaccard = vanilla_losses.JaccardLoss()
+        self.mnv = ModelOfNaturalVariation(1)
+
+    def train_epoch(self):
+        self.model.train()
+        losses = []
+        plotted = False
+        for x, y, fname in self.train_loader:
+            image = x.to("cuda")
+            mask = y.to("cuda")
+            aug_img, aug_mask = self.mnv(image, mask)
+            img_batch = torch.cat((image, aug_img))
+            mask_batch = torch.cat((mask, aug_mask))
+            self.optimizer.zero_grad()
+            output = self.model(img_batch)
+            loss = self.jaccard(output, mask_batch)
+            loss.backward()
+            self.optimizer.step()
+            losses.append(np.abs(loss.item()))
+        return np.mean(losses)
