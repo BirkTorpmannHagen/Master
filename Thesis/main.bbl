@@ -2259,6 +2259,30 @@
     \field{year}{2019}
   \endentry
 
+  \entry{electric_sheep}{article}{}
+    \name{author}{1}{}{%
+      {{hash=SJ}{%
+         family={Shane},
+         familyi={S\bibinitperiod},
+         given={Janelle},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SJ1}
+    \strng{fullhash}{SJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{title}{Do neural nets dream of electric sheep?}
+    \verb{url}
+    \verb https://www.aiweirdness.com/do-neural-nets-dream-of-electric-18-03-02
+    \verb /
+    \endverb
+    \field{journaltitle}{AI Wierdness}
+    \field{year}{2018}
+  \endentry
+
   \entry{dl_medical_imaging}{article}{}
     \name{author}{3}{}{%
       {{hash=SD}{%

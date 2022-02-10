@@ -19,7 +19,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3.1}Generalization through Empirical Risk Minimization}{6}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.2}Understanding Generalisation}{8}%
+\contentsline {subsection}{\numberline {2.3.2}Understanding Generalization}{8}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3.3}Underfitting, Overfitting and Regularization}{8}%
 \defcounter {refsection}{0}\relax 
@@ -71,22 +71,26 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {4}Results}{23}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Analysis}{25}%
+\contentsline {section}{\numberline {4.1}Standard Models}{24}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Analysis}{25}%
+\contentsline {section}{\numberline {4.2}Ensemble Models}{25}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.1}Augmentation Robustness and Consistency Loss}{25}%
+\contentsline {chapter}{\numberline {5}Analysis}{27}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.1}Data augmentation}{25}%
+\contentsline {chapter}{Analysis}{27}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.2}Consistency loss}{26}%
+\contentsline {section}{\numberline {5.1}Augmentation Robustness and Consistency Loss}{27}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.3}Adversarial Dice}{26}%
+\contentsline {subsection}{\numberline {5.1.1}Data augmentation}{27}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Discussion}{27}%
+\contentsline {subsection}{\numberline {5.1.2}Consistency loss}{28}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Discussion}{27}%
+\contentsline {subsection}{\numberline {5.1.3}Adversarial Dice}{28}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.1}}{27}%
+\contentsline {chapter}{\numberline {6}Discussion}{29}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.2}Auxilliary findings}{27}%
+\contentsline {chapter}{Discussion}{29}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.1}}{29}%
+\defcounter {refsection}{0}\relax 
+\contentsline {section}{\numberline {6.2}Auxilliary findings}{29}%
