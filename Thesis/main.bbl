@@ -144,6 +144,65 @@
     \field{year}{2020}
   \endentry
 
+  \entry{ensemble_machinereading}{article}{}
+    \name{author}{2}{}{%
+      {{hash=BR}{%
+         family={Baradaran},
+         familyi={B\bibinitperiod},
+         given={Razieh},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=AH}{%
+         family={Amirkhani},
+         familyi={A\bibinitperiod},
+         given={Hossein},
+         giveni={H\bibinitperiod},
+      }}%
+    }
+    \keyw{Natural Language Processing, Machine Reading Comprehension, Ensemble
+  learning}
+    \strng{namehash}{BRAH1}
+    \strng{fullhash}{BRAH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{abstract}{%
+    Machine Reading Comprehension (MRC) is an active field in natural language
+  processing with many successful developed models in recent years. Despite
+  their high in-distribution accuracy, these models suffer from two issues:
+  high training cost and low out-of-distribution accuracy. Even though some
+  approaches have been presented to tackle the generalization problem, they
+  have high, intolerable training costs. In this paper, we investigate the
+  effect of ensemble learning as a light approach to improve
+  out-of-distribution generalization of MRC systems by aggregating the outputs
+  of some pre-trained base models without retraining a big model. After
+  separately training the base models with different structures on different
+  datasets, they are ensembled using weighting and stacking approaches in
+  probabilistic and non-probabilistic settings. Three configurations are
+  investigated including heterogeneous, homogeneous, and hybrid on eight
+  datasets and six state-of-the-art models. We identify the important factors
+  in the effectiveness of ensemble methods. Also, we compare the robustness of
+  ensemble and fine-tuned models against data distribution shifts. The
+  experimental results show the effectiveness and robustness of the ensemble
+  approach in improving the out-of-distribution accuracy of MRC systems,
+  especially when the base models are similar in accuracies.%
+    }
+    \verb{doi}
+    \verb https://doi.org/10.1016/j.neucom.2021.08.095
+    \endverb
+    \field{issn}{0925-2312}
+    \field{pages}{229\bibrangedash 242}
+    \field{title}{Ensemble learning-based approach for improving generalization
+  capability of machine reading comprehension systems}
+    \verb{url}
+    \verb https://www.sciencedirect.com/science/article/pii/S0925231221012923
+    \endverb
+    \field{volume}{466}
+    \field{journaltitle}{Neurocomputing}
+    \field{year}{2021}
+  \endentry
+
   \entry{polyp-success-story}{article}{}
     \name{author}{9}{}{%
       {{hash=BI}{%

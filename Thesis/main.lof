@@ -5,7 +5,7 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces }}{6}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Classifiers trained on ImageNet are biased towards textural features}}{5}%
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {2.2}{\ignorespaces A linear model cannot fit polynomial data}}{9}%
 \defcounter {refsection}{0}\relax 
@@ -15,7 +15,7 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Visualisation of consistency loss sets, where white is a positive prediction. Note that loss is zero regardless of prediction correctness so long as it changes in the expected manner. Note also that the symmetric difference operators are associative}}{21}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Visualisation of SIC sets, where white is a positive prediction. Note that loss is zero regardless of prediction correctness so long as it changes in the expected manner. Note also that the symmetric difference operators are associative. Left shows an instance of consistent but partially incorrect predictions, and right shows an instance of inconsistent but partially correct predictions}}{20}%
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 

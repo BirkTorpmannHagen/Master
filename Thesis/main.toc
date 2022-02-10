@@ -13,7 +13,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.2.1}Generalization failure in Medical Imaging}{4}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.2.2}Generalization failure in other domains}{5}%
+\contentsline {subsection}{\numberline {2.2.2}Generalization Failure in General}{5}%
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.3}Generalisability Theory}{6}%
 \defcounter {refsection}{0}\relax 
@@ -27,70 +27,66 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsubsection}{Shortcut Learning}{12}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.3.5}Underspecification}{14}%
+\contentsline {subsection}{\numberline {2.3.5}Underspecification}{13}%
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.3.6}A probablisitic perspective of generalization}{14}%
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.4}Related work on generalizable deep learning}{14}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {2.5}Putting it all together}{16}%
+\contentsline {chapter}{\numberline {3}Methods and Implementation}{17}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {3}Methods and Implementation}{19}%
+\contentsline {section}{\numberline {3.1}Segmentation Inconsistency Coefficient}{18}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}PLACEHOLDER ALGORITHM NAME}{19}%
+\contentsline {section}{\numberline {3.2}Consistency Loss}{19}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.1}Consistency Loss}{19}%
+\contentsline {section}{\numberline {3.3}Perturbation Models}{21}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.2}Model of natural variation}{22}%
+\contentsline {subsubsection}{Gan-based polyp inpainting}{21}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Gan-based polyp inpainting}{23}%
+\contentsline {subsection}{\numberline {3.3.1}Geometric and pixel-wise transformations}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Geometric and pixel-wise transformations}{23}%
+\contentsline {section}{\numberline {3.4}PLACEHOLDER ALGORITHM NAME}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.3}Training methods}{23}%
+\contentsline {subsubsection}{Consistency Training}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Consistency Training}{23}%
+\contentsline {subsubsection}{Adversarial Consistency Training}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Adversarial Consistency Training}{23}%
+\contentsline {subsubsection}{}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsubsection}{Augmentation only training}{23}%
+\contentsline {section}{\numberline {3.5}Baselines and Generalizability Metrics}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}Baselines and Metrics}{23}%
+\contentsline {subsection}{\numberline {3.5.1}Baseline Models}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.1}Baseline Models}{23}%
+\contentsline {subsection}{\numberline {3.5.2}Performance Metrics}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.2}Performance Metrics}{23}%
+\contentsline {subsection}{\numberline {3.5.3}Datasets}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.3}Datasets}{23}%
+\contentsline {section}{\numberline {3.6}Implementation details}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.3}Implementation details}{23}%
+\contentsline {section}{\numberline {3.7}Experiments}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.4}Experiments}{23}%
+\contentsline {subsection}{\numberline {3.7.1}MNV-testing}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4.1}MNV-testing}{23}%
+\contentsline {subsection}{\numberline {3.7.2}Training methods}{22}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.4.2}Training methods}{23}%
+\contentsline {chapter}{\numberline {4}Results}{23}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}Results}{25}%
+\contentsline {chapter}{\numberline {5}Analysis}{25}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Results}{25}%
+\contentsline {chapter}{Analysis}{25}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Analysis}{27}%
+\contentsline {section}{\numberline {5.1}Augmentation Robustness and Consistency Loss}{25}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Analysis}{27}%
+\contentsline {subsection}{\numberline {5.1.1}Data augmentation}{25}%
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.1}Augmentation Robustness and Consistency Loss}{27}%
+\contentsline {subsection}{\numberline {5.1.2}Consistency loss}{26}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.1}Data augmentation}{27}%
+\contentsline {subsection}{\numberline {5.1.3}Adversarial Dice}{26}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.2}Consistency loss}{28}%
+\contentsline {chapter}{\numberline {6}Discussion}{27}%
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {5.1.3}Adversarial Dice}{28}%
+\contentsline {chapter}{Discussion}{27}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}Discussion}{29}%
+\contentsline {section}{\numberline {6.1}}{27}%
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{Discussion}{29}%
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.1}}{29}%
-\defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {6.2}Auxilliary findings}{29}%
+\contentsline {section}{\numberline {6.2}Auxilliary findings}{27}%

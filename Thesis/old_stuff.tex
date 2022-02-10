@@ -48,4 +48,4 @@
 			\item Adversarial MNV consistency training
 		\end{itemize}
 	
-		T
+		The reasoning behind this is that consistent behaviour should be rewarded even if the model has not quite learned how to perform to an adequate standard, as this is preferable to merely learning to perform well without any regard for consistency and by extension causality.  To illustrate, consider once more the example from chapter \ref{background}, namely the problem of acheiving generalisation from narrow-band to white-light imaging datasets and vice versa. Assume that the perturbation function simply maps between the respective lighting modalities. In this case, the loss will reward the model if it predicts identical segmentations regardless of lighting conditions, even if the predictions are incorrect. The model will nevertheless be trying to leverage features which are invariant to lighting, and consequently be more generalizable than a pipeline wherein the model is permitted to be leverage lighting-dependent features.
