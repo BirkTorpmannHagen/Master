@@ -458,6 +458,112 @@
     \field{year}{2013}
   \endentry
 
+  \entry{i-scan}{article}{}
+    \name{author}{5}{}{%
+      {{hash=BR}{%
+         family={Bisschops},
+         familyi={B\bibinitperiod},
+         given={Raf},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=TS}{%
+         family={Tejpar},
+         familyi={T\bibinitperiod},
+         given={Sabine},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=WH}{%
+         family={Willekens},
+         familyi={W\bibinitperiod},
+         given={Hilde},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=DHG}{%
+         family={De\bibnamedelima Hertogh},
+         familyi={D\bibinitperiod\bibinitdelim H\bibinitperiod},
+         given={Gert},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=VCE}{%
+         family={Van\bibnamedelima Cutsem},
+         familyi={V\bibinitperiod\bibinitdelim C\bibinitperiod},
+         given={Eric},
+         giveni={E\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{\copyright} Georg Thieme Verlag KG}%
+    }
+    \strng{namehash}{BR+1}
+    \strng{fullhash}{BRTSWHDHGVCE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{number}{04}
+    \field{pages}{342\bibrangedash 350}
+    \field{title}{Virtual chromoendoscopy (I-SCAN) detects more polyps in
+  patients with Lynch syndrome: a randomized controlled crossover trial}
+    \field{volume}{49}
+    \field{journaltitle}{Endoscopy}
+    \field{year}{2017}
+  \endentry
+
+  \entry{nbi}{article}{}
+    \name{author}{5}{}{%
+      {{hash=BK}{%
+         family={Boparai},
+         familyi={B\bibinitperiod},
+         given={KS},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=vdBF}{%
+         prefix={van\bibnamedelima den},
+         prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod},
+         family={Broek},
+         familyi={B\bibinitperiod},
+         given={FJC},
+         giveni={F\bibinitperiod},
+      }}%
+      {{hash=VES}{%
+         family={Van\bibnamedelima Eeden},
+         familyi={V\bibinitperiod\bibinitdelim E\bibinitperiod},
+         given={S},
+         giveni={S},
+      }}%
+      {{hash=FP}{%
+         family={Fockens},
+         familyi={F\bibinitperiod},
+         given={P},
+         giveni={P},
+      }}%
+      {{hash=DE}{%
+         family={Dekker},
+         familyi={D\bibinitperiod},
+         given={E},
+         giveni={E},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{\copyright} Georg Thieme Verlag KG Stuttgart{\textperiodcentered} New
+  York}%
+    }
+    \strng{namehash}{BK+1}
+    \strng{fullhash}{BKBFvdVESFPDE1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{B}
+    \field{sortinithash}{B}
+    \field{number}{08}
+    \field{pages}{676\bibrangedash 682}
+    \field{title}{Increased polyp detection using narrow band imaging compared
+  with high resolution endoscopy in patients with hyperplastic polyposis
+  syndrome}
+    \field{volume}{43}
+    \field{journaltitle}{Endoscopy}
+    \field{year}{2011}
+  \endentry
+
   \entry{damour2020underspecification}{misc}{}
     \name{author}{40}{}{%
       {{hash=DA}{%
@@ -829,6 +935,88 @@
     \field{year}{2019}
   \endentry
 
+  \entry{colorectal_cancer}{article}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{10}{}{%
+      {{hash=EPF}{%
+         family={Engstrom},
+         familyi={E\bibinitperiod},
+         given={Paul\bibnamedelima F},
+         giveni={P\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=AJP}{%
+         family={Arnoletti},
+         familyi={A\bibinitperiod},
+         given={Juan\bibnamedelima Pablo},
+         giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=BAB}{%
+         family={Benson},
+         familyi={B\bibinitperiod},
+         given={Al\bibnamedelima B},
+         giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod},
+      }}%
+      {{hash=CYJ}{%
+         family={Chen},
+         familyi={C\bibinitperiod},
+         given={Yi-Jen},
+         giveni={Y\bibinithyphendelim J\bibinitperiod},
+      }}%
+      {{hash=CMA}{%
+         family={Choti},
+         familyi={C\bibinitperiod},
+         given={Michael\bibnamedelima A},
+         giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=CHS}{%
+         family={Cooper},
+         familyi={C\bibinitperiod},
+         given={Harry\bibnamedelima S},
+         giveni={H\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=CA}{%
+         family={Covey},
+         familyi={C\bibinitperiod},
+         given={Anne},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=DRA}{%
+         family={Dilawari},
+         familyi={D\bibinitperiod},
+         given={Raza\bibnamedelima A},
+         giveni={R\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=EDS}{%
+         family={Early},
+         familyi={E\bibinitperiod},
+         given={Dayna\bibnamedelima S},
+         giveni={D\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=EPC}{%
+         family={Enzinger},
+         familyi={E\bibinitperiod},
+         given={Peter\bibnamedelima C},
+         giveni={P\bibinitperiod\bibinitdelim C\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Harborside Press, LLC}%
+    }
+    \strng{namehash}{EPF+1}
+    \strng{fullhash}{EPFAJPBABCYJCMACHSCADRAEDSEPC+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{E}
+    \field{sortinithash}{E}
+    \field{number}{8}
+    \field{pages}{778\bibrangedash 831}
+    \field{title}{Colon cancer}
+    \field{volume}{7}
+    \field{journaltitle}{Journal of the National Comprehensive Cancer Network}
+    \field{year}{2009}
+  \endentry
+
   \entry{physical_attacks}{article}{}
     \name{author}{8}{}{%
       {{hash=EI}{%
@@ -1100,6 +1288,28 @@
     \field{sortinithash}{G}
     \field{title}{An Augmentation Strategy with Lightweight Network for Polyp
   Segmentation}
+    \field{year}{2021}
+  \endentry
+
+  \entry{nbi_img}{article}{}
+    \name{author}{1}{}{%
+      {{hash=GOMS}{%
+         family={Group},
+         familyi={G\bibinitperiod},
+         given={Olympus Medical\bibnamedelima Systems},
+         giveni={O\bibinitperiod\bibinitdelim M\bibinitperiod\bibinitdelim
+  S\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GOMS1}
+    \strng{fullhash}{GOMS1}
+    \field{labelnamesource}{author}
+    \field{sortinit}{G}
+    \field{sortinithash}{G}
+    \verb{url}
+    \verb https://infomeddnews.com/narrow-band-imaging-fda-clearance/#
+    \endverb
+    \field{journaltitle}{Medical Device News Magazine}
     \field{year}{2021}
   \endentry
 
@@ -1624,6 +1834,39 @@
     \field{eprinttype}{arXiv}
     \field{eprintclass}{stat.ML}
     \field{year}{2019}
+  \endentry
+
+  \entry{screening}{article}{}
+    \name{author}{2}{}{%
+      {{hash=IIA}{%
+         family={Issa},
+         familyi={I\bibinitperiod},
+         given={Iyad\bibnamedelima A},
+         giveni={I\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=NM}{%
+         family={Noureddine},
+         familyi={N\bibinitperiod},
+         given={Malak},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Baishideng Publishing Group Inc}%
+    }
+    \strng{namehash}{IIANM1}
+    \strng{fullhash}{IIANM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{I}
+    \field{sortinithash}{I}
+    \field{number}{28}
+    \field{pages}{5086}
+    \field{title}{Colorectal cancer screening: An updated review of the
+  available options}
+    \field{volume}{23}
+    \field{journaltitle}{World journal of gastroenterology}
+    \field{year}{2017}
   \endentry
 
   \entry{cleverhans}{misc}{}
@@ -2257,6 +2500,34 @@
     \field{eprinttype}{arXiv}
     \field{eprintclass}{cs.LG}
     \field{year}{2019}
+  \endentry
+
+  \entry{machine_learning_theory}{book}{}
+    \name{author}{2}{}{%
+      {{hash=SSS}{%
+         family={Shalev-Shwartz},
+         familyi={S\bibinithyphendelim S\bibinitperiod},
+         given={Shai},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BDS}{%
+         family={Ben-David},
+         familyi={B\bibinithyphendelim D\bibinitperiod},
+         given={Shai},
+         giveni={S\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Cambridge university press}%
+    }
+    \strng{namehash}{SSSBDS1}
+    \strng{fullhash}{SSSBDS1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{S}
+    \field{sortinithash}{S}
+    \field{title}{Understanding machine learning: From theory to algorithms}
+    \field{year}{2014}
   \endentry
 
   \entry{electric_sheep}{article}{}
