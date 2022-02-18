@@ -30,6 +30,5 @@ export NUMEXPR_NUM_THREADS=$omp_threads      # Python3 Multiproc
 # export OPENBLAS_NUM_THREADS=2     # Using OpenBLAS?
 # export VECLIB_MAXIMUM_THREADS=2    # Accelware Vector Lib
 
-conda activate master
 export PYTHONPATH=$PWD
 srun python Experiments/train_augmented_pipeline.py 1
