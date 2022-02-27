@@ -3,7 +3,7 @@ from training.inductivenet_trainer import InductiveNetTrainer
 import sys
 
 if __name__ == '__main__':
-    config = {"model": "DeepLab",
+    config = {"model": "InductiveNet",
               "device": "cuda",
               "lr": 0.00001,
               "batch_size": 4,
