@@ -1,19 +1,27 @@
-import matplotlib.pyplot as plt
+import torch
 import numpy as np
-import segmentation_models_pytorch.utils.losses as vanilla_losses
+import matplotlib.pyplot as plt
 import torch.optim.optimizer
 from torch.utils.data import DataLoader
 
-from DataProcessing.etis import EtisDataset
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset
-from models import segmentation_models
+from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
 from Tests.metrics import iou
-from losses.consistency_losses import NakedConsistencyLoss, ConsistencyLoss
+from losses.consistency_losses import *
 from model_of_natural_variation.model import ModelOfNaturalVariation
+from training.vanilla_trainer import VanillaTrainer
 from utils import logging
+from training.consistency_trainers import ConsistencyTrainer
+from models.segmentation_models import InductiveNet
+from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
+from Tests.metrics import iou
+from losses.consistency_losses import *
+from model_of_natural_variation.model import ModelOfNaturalVariation
+from training.vanilla_trainer import VanillaTrainer
+from utils import logging
+from DataProcessing.etis import EtisDataset
 
 
-class VanillaTrainer:
+class InductiveNetTrainer:
     def __init__(self, id, config):
         """
 
@@ -27,26 +35,15 @@ class VanillaTrainer:
         self.epochs = config["epochs"]
         self.model = None
         self.id = id
-        self.model_str = config["model"]
+        self.model_str = "InductiveNet"
         self.mnv = ModelOfNaturalVariation(T0=1).to(self.device)
         self.nakedcloss = NakedConsistencyLoss()
         self.closs = ConsistencyLoss()
-
-        if self.model_str == "DeepLab":
-            self.model = segmentation_models.DeepLab().to(self.device)
-        elif self.model_str == "TriUnet":
-            self.model = segmentation_models.TriUnet().to(self.device)
-        elif self.model_str == "DDANet":
-            raise NotImplementedError
-        elif self.model_str == "Unet":
-            self.model = segmentation_models.Unet().to(self.device)
-        elif self.model_str == "FPN":
-            self.model = segmentation_models.FPN().to(self.device)
-        else:
-            raise AttributeError("model_str not valid; choices are DeepLab, TriUnet, Polyp, FPN, Unet")
+        self.model = InductiveNet().to(self.device)
 
         self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
-        self.criterion = vanilla_losses.JaccardLoss()
+        self.jaccard = vanilla_losses.JaccardLoss()
+        self.mse = nn.MSELoss()
         self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0=50, T_mult=2)
         self.train_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="train")
         self.val_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="val")
@@ -61,9 +58,13 @@ class VanillaTrainer:
         for x, y, fname in self.train_loader:
             image = x.to("cuda")
             mask = y.to("cuda")
+            aug_img, aug_mask = self.mnv(image, mask)
             self.optimizer.zero_grad()
-            output = self.model(image)
-            loss = self.criterion(output, mask)
+            aug_output, _ = self.model(aug_img)
+            output, reconstruction = self.model(image)
+            mean_iou = torch.mean(iou(output, mask))
+            loss = 0.5 * (self.closs(aug_mask, mask, aug_output, output, mean_iou) + self.mse(
+                image, reconstruction))
             loss.backward()
             self.optimizer.step()
             losses.append(np.abs(loss.item()))
@@ -72,19 +73,20 @@ class VanillaTrainer:
     def train(self):
         best_val_loss = 10
         print("Starting Segmentation training")
+        best_consistency = 0
         for i in range(self.epochs):
             training_loss = np.abs(self.train_epoch())
-            val_loss, ious, closs = self.validate(epoch=i, plot=False)
+            val_loss, ious, closs = self.validate(epoch=i, plot=True)
             gen_ious = self.validate_generalizability(epoch=i, plot=False)
             mean_iou = float(torch.mean(ious))
             gen_iou = float(torch.mean(gen_ious))
             consistency = 1 - np.mean(closs)
-            test_ious = np.mean(self.test().numpy())
+            test_iou = np.mean(self.test().numpy())
 
             self.config["lr"] = [group['lr'] for group in self.optimizer.param_groups]
             logging.log_full(epoch=i, id=self.id, config=self.config, result_dict=
             {"train_loss": training_loss, "val_loss": val_loss,
-             "iid_val_iou": mean_iou, "iid_test_iou": test_ious, "ood_iou": gen_iou,
+             "iid_val_iou": mean_iou, "iid_test_iou": test_iou, "ood_iou": gen_iou,
              "consistency": consistency}, type="vanilla")
 
             self.scheduler.step(i)
@@ -98,17 +100,21 @@ class VanillaTrainer:
                 f" gen_prop={gen_iou / mean_iou}"
             )
             if val_loss < best_val_loss:
-                test_ious = self.test()
                 best_val_loss = val_loss
                 np.save(
-                    f"Experiments/Data/Normal-Pipelines/{self.model_str}/{self.id}",
-                    test_ious)
-                print(f"Saving new best model. IID test-set mean iou: {float(np.mean(test_ious.numpy()))}")
+                    f"Experiments/Data/Augmented-Pipelines/{self.model_str}/{self.id}",
+                    test_iou)
+                print(f"Saving new best model. IID test-set mean iou: {test_iou}")
                 torch.save(self.model.state_dict(),
-                           f"Predictors/Vanilla/{self.model_str}/{self.id}")
-                print("saved in: ", f"Predictors/Vanilla/{self.model_str}/{self.id}")
-        torch.save(self.model.state_dict(),
-                   f"Predictors/Vanilla/{self.model_str}/{self.id}_last_epoch")
+                           f"Predictors/Augmented/{self.model_str}/{self.id}")
+                print("saved in: ", f"Predictors/Augmented/{self.model_str}/{self.id}")
+
+            if consistency > best_consistency:
+                best_consistency = consistency
+                torch.save(self.model.state_dict(),
+                           f"Predictors/Augmented/{self.model_str}/maximum_consistency{self.id}")
+            torch.save(self.model.state_dict(),
+                       f"Predictors/Augmented/{self.model_str}/{self.id}_last_epoch")
 
     def test(self):
         self.model.eval()
@@ -132,20 +138,22 @@ class VanillaTrainer:
                 image = x.to("cuda")
                 mask = y.to("cuda")
                 aug_img, aug_mask = self.mnv(image, mask)
-                output = self.model(image)
-                aug_output = self.model(aug_img)  # todo consider train on augmented vs non-augmented?
+                output, reconstruction = self.model(image)
+                aug_output, _ = self.model(aug_img)  # todo consider train on augmented vs non-augmented?
 
                 batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
-                loss = self.closs(aug_mask, mask, aug_output, output, torch.mean(batch_ious))
+                loss = 0.5 * (self.closs(aug_mask, mask, aug_output, output, torch.mean(batch_ious)) + self.mse(
+                    image, reconstruction))
                 losses.append(np.abs(loss.item()))
                 closses.append(self.nakedcloss(aug_mask, mask, aug_output, output).item())
                 ious = torch.cat((ious, batch_ious.cpu().flatten()))
+
                 if plot:
-                    plt.imshow(y[0, 0].cpu().numpy(), alpha=0.5)
-                    plt.imshow(image[0].permute(1, 2, 0).cpu().numpy())
-                    plt.imshow((output[0, 0].cpu().numpy() > 0.5).astype(int), alpha=0.5)
-                    plt.imshow(y[0, 0].cpu().numpy().astype(int), alpha=0.5)
-                    plt.title("IoU {} at epoch {}".format(iou(output[0, 0], mask[0, 0]), epoch))
+                    plt.imshow(output[0, 0].cpu().numpy(), alpha=0.5)
+                    plt.imshow(reconstruction[0].permute(1, 2, 0).cpu().numpy())
+                    # plt.imshow((output[0, 0].cpu().numpy() > 0.5).astype(int), alpha=0.5)
+                    # plt.imshow(y[0, 0].cpu().numpy().astype(int), alpha=0.5)
+                    # plt.title("IoU {} at epoch {}".format(iou(output[0, 0], mask[0, 0]), epoch))
                     plt.show()
                     plot = False  # plot one example per epoch
         avg_val_loss = np.mean(losses)
@@ -159,7 +167,7 @@ class VanillaTrainer:
             for x, y, index in DataLoader(EtisDataset("Datasets/ETIS-LaribPolypDB")):
                 image = x.to("cuda")
                 mask = y.to("cuda")
-                output = self.model(image)
+                output, _ = self.model(image)
                 batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
                 ious = torch.cat((ious, batch_ious.flatten()))
                 if plot:

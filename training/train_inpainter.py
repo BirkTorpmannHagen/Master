@@ -9,7 +9,7 @@ from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 from torch.utils.data import DataLoader
 
 from DataProcessing.hyperkvasir import KvasirInpaintingDataset
-from Models.inpainters import SegGenerator, SegDiscriminator
+from models.inpainters import SegGenerator, SegDiscriminator
 from model_of_natural_variation.polyp_inpainter import Inpainter
 
 

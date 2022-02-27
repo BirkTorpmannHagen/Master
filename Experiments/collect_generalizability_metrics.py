@@ -9,7 +9,7 @@ from DataProcessing.etis import EtisDataset
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset
 from DataProcessing.endocv import EndoCV2020
 from DataProcessing.cvc import CVC_ClinicDB
-from Models.segmentation_models import *
+from models.segmentation_models import *
 from Tests.metrics import iou
 
 

@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from DataProcessing.etis import EtisDataset
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset
-from Models.segmentation_models import DeepLab
+from models.segmentation_models import DeepLab
 from Tests.metrics import iou
 from utils.logging import log_iou
 

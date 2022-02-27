@@ -11,7 +11,7 @@ from torchvision.ops.focal_loss import sigmoid_focal_loss
 import utils.logging as logging
 from DataProcessing.augmentation import image_transforms
 from DataProcessing.hyperkvasir import KvasirClassificationDataset
-from Models.segmentation_models import DeepLab
+from models.segmentation_models import DeepLab
 
 
 def pretrain_encoder(seg_model, dataset, config):

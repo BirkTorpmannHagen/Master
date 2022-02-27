@@ -92,8 +92,8 @@ class KvasirSegmentationDataset(Dataset):
 
     def __getitem__(self, index):
 
-        image = np.array(open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
-        mask = np.array(open(join(join(self.path, "masks/"), self.split_fnames[index])).convert("L"))
+        image = np.array(open(join(self.path, "images/", self.split_fnames[index])).convert("RGB"))
+        mask = np.array(open(join(self.path, "masks/", self.split_fnames[index])).convert("L"))
         if self.split == "train" and self.augment == True:
             transformed = self.pixeltrans(image=image)
             image = transformed["image"]
@@ -112,8 +112,8 @@ class KvasirMNVset(KvasirSegmentationDataset):
         self.p = 0.5
 
     def __getitem__(self, index):
-        image = np.array(open(join(self.path, "images/", self.split_fnames[index]).convert("RGB")))
-        mask = np.array(open(join(self.path, "masks/", self.split_fnames[index]).convert("L")))
+        image = np.array(open(join(self.path, "images/", self.split_fnames[index])).convert("RGB"))
+        mask = np.array(open(join(self.path, "masks/", self.split_fnames[index])).convert("L"))
         image = self.common_transforms(PIL.Image.fromarray(image))
         mask = self.common_transforms(PIL.Image.fromarray(mask))
         mask = (mask > 0.5).float()

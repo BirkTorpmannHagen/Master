@@ -28,16 +28,21 @@ class ModelOfNaturalVariationInpainter(nn.Module):
             alb.ColorJitter(brightness=self._map_to_range(max=0.2),
                             contrast=self._map_to_range(max=0.2),
                             saturation=self._map_to_range(max=0.2),
-                            hue=self._map_to_range(max=0.05), p=self.temp),
-            alb.GaussNoise(var_limit=self._map_to_range(max=0.01), p=self.temp),
+                            hue=self._map_to_range(max=0.05), p=0.5),
+            alb.GaussNoise(var_limit=self._map_to_range(max=0.01), p=0.5),
             alb.ImageCompression(quality_lower=quality_lower,
                                  quality_upper=quality_upper,
-                                 p=self.temp)
+                                 p=self.temp),
+            alb.MotionBlur(),
+            alb.GlassBlur(sigma=self.temp / 2, p=0.2),
         ]
         )
         geometric = alb.Compose([alb.RandomRotate90(p=self.temp),
                                  alb.Flip(p=self.temp),
-                                 alb.OpticalDistortion(distort_limit=self.temp, p=self.temp)])
+                                 alb.OpticalDistortion(distort_limit=self.temp, p=self.temp, ),
+                                 alb.CoarseDropout(),
+                                 alb.RandomSizedCrop((256, 512), (256, 512))]
+                                )
         return pixelwise, geometric
 
     def forward(self, image, mask):
