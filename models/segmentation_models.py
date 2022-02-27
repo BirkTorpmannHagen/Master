@@ -1,4 +1,5 @@
 import segmentation_models_pytorch as smp
+import segmentation_models_pytorch.base as smp_base
 import torch.nn as nn
 import torch
 
@@ -35,6 +36,11 @@ class DeepLab(smp.DeepLabV3Plus):
         return self.model.forward(x)
 
 
+"""
+models
+"""
+
+
 class TriUnet(nn.Module):
     def __init__(self):
         super(TriUnet, self).__init__()
@@ -50,9 +56,23 @@ class TriUnet(nn.Module):
         return mask3
 
 
-class PolypNet(nn.Module):
+class InductiveNet(smp.DeepLabV3Plus):
+    """
+    Modified Deeplab with auxilliary task and extra decoder
+    """
+
     def __init__(self):
-        super(PolypNet, self).__init__()
+        super(InductiveNet, self).__init__(in_channels=3, classes=1,
+                                           activation="sigmoid")
+        self.reconstruction_decoder = smp.deeplabv3.model.DeepLabV3PlusDecoder(self.encoder.out_channels)
+        self.reconstruction_head = smp.base.SegmentationHead(self.reconstruction_decoder.out_channels, 3, kernel_size=1,
+                                                             upsampling=4)
 
     def forward(self, x):
-        pass
+        # return super(InductiveNet, self).forward(x)
+        features = self.encoder(x)
+        decoder_output = self.decoder(*features)
+        reconstructor_output = self.reconstruction_decoder(*features)
+        masks = self.segmentation_head(decoder_output)
+        reconstructed = self.reconstruction_head(reconstructor_output)
+        return masks, reconstructed
