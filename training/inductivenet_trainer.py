@@ -76,7 +76,7 @@ class InductiveNetTrainer:
         best_consistency = 0
         for i in range(self.epochs):
             training_loss = np.abs(self.train_epoch())
-            val_loss, ious, closs = self.validate(epoch=i, plot=True)
+            val_loss, ious, closs = self.validate(epoch=i, plot=False)
             gen_ious = self.validate_generalizability(epoch=i, plot=False)
             mean_iou = float(torch.mean(ious))
             gen_iou = float(torch.mean(gen_ious))
@@ -87,7 +87,7 @@ class InductiveNetTrainer:
             logging.log_full(epoch=i, id=self.id, config=self.config, result_dict=
             {"train_loss": training_loss, "val_loss": val_loss,
              "iid_val_iou": mean_iou, "iid_test_iou": test_iou, "ood_iou": gen_iou,
-             "consistency": consistency}, type="vanilla")
+             "consistency": consistency}, type="consistency")
 
             self.scheduler.step(i)
             print(
