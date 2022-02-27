@@ -31,4 +31,4 @@ export NUMEXPR_NUM_THREADS=$omp_threads      # Python3 Multiproc
 # export VECLIB_MAXIMUM_THREADS=2    # Accelware Vector Lib
 
 export PYTHONPATH=$PWD
-srun python Experiments/train_augmented_pipeline.py 1
+srun python Experiments/train_augmented_pipeline.py 10
