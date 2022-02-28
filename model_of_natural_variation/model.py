@@ -33,15 +33,11 @@ class ModelOfNaturalVariationInpainter(nn.Module):
             alb.ImageCompression(quality_lower=quality_lower,
                                  quality_upper=quality_upper,
                                  p=self.temp),
-            alb.MotionBlur(),
-            alb.GlassBlur(sigma=self.temp / 2, p=0.2),
         ]
         )
         geometric = alb.Compose([alb.RandomRotate90(p=self.temp),
                                  alb.Flip(p=self.temp),
-                                 alb.OpticalDistortion(distort_limit=self.temp, p=self.temp, ),
-                                 alb.CoarseDropout(),
-                                 alb.RandomSizedCrop((256, 512), (256, 512))]
+                                 alb.OpticalDistortion(distort_limit=self.temp, p=self.temp)]
                                 )
         return pixelwise, geometric
 
