@@ -32,6 +32,7 @@ export NUMEXPR_NUM_THREADS=$omp_threads      # Python3 Multiproc
 
 export PYTHONPATH=$PWD
 MODEL="DeepLab"
+echo "Starting jobs"
 srun python Experiments/train_augmented_pipeline.py 1 $MODEL &
 srun python Experiments/train_augmented_pipeline.py 2 $MODEL &
 srun python Experiments/train_augmented_pipeline.py 3 $MODEL &
@@ -42,3 +43,4 @@ srun python Experiments/train_augmented_pipeline.py 7 $MODEL &
 srun python Experiments/train_augmented_pipeline.py 8 $MODEL &
 srun python Experiments/train_augmented_pipeline.py 9 $MODEL &
 srun python Experiments/train_augmented_pipeline.py 10 $MODEL &
+echo "Jobs started"
