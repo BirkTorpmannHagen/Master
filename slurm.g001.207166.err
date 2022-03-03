@@ -1,2 +1,0 @@
-/home/bstorpma/.conda/envs/master/lib/python3.7/site-packages/albumentations/augmentations/functional.py:652: UserWarning: Image compression augmentation is most effective with uint8 inputs, float32 is used as input.
-  UserWarning,

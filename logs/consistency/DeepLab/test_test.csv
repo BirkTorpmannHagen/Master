@@ -1,2 +1,0 @@
-model,device,lr,batch_size,epochs,use_inpainter,train_loss,val_loss,iid_val_iou,iid_test_iou,ood_iou,consistency,epoch
-DeepLab,cuda,[1e-05],8,250,False,0.7592414927482605,0.7080503824353218,0.3491706848144531,0.3601491,0.10747362673282623,0.4702490389347076,0.0
