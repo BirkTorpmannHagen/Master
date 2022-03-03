@@ -5,15 +5,16 @@ import torch.optim.optimizer
 from torch.utils.data import DataLoader
 
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
-from Tests.metrics import iou
+from evaluation.metrics import iou
 from losses.consistency_losses import *
 from model_of_natural_variation.model import ModelOfNaturalVariation
 from training.vanilla_trainer import VanillaTrainer
 from utils import logging
 from training.consistency_trainers import ConsistencyTrainer
 from models.segmentation_models import InductiveNet
+from models.ensembles import TrainedEnsemble
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
-from Tests.metrics import iou
+from evaluation.metrics import iou
 from losses.consistency_losses import *
 from model_of_natural_variation.model import ModelOfNaturalVariation
 from training.vanilla_trainer import VanillaTrainer
@@ -33,7 +34,6 @@ class InductiveNetTrainer:
         self.lr = config["lr"]
         self.batch_size = config["batch_size"]
         self.epochs = config["epochs"]
-        self.model = None
         self.id = id
         self.model_str = "InductiveNet"
         self.mnv = ModelOfNaturalVariation(T0=1).to(self.device)
@@ -177,3 +177,11 @@ class InductiveNetTrainer:
                     plt.show()
                     plot = False  # plot one example per epoch (hacky, but works)
             return ious
+
+
+class InductiveNetEnsembleTrainer(InductiveNetTrainer):
+    def __init__(self, id, config):
+        super(InductiveNetEnsembleTrainer, self).__init__(id, config)
+        self.model = TrainedEnsemble("Singular")
+        self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
+        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0=50, T_mult=2)

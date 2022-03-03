@@ -225,7 +225,7 @@ def test_KvasirSegmentationDataset():
 
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
-    print("Segmentation Tests passed")
+    print("Segmentation evaluation passed")
 
 
 def test_KvasirClassificationDataset():
@@ -233,7 +233,7 @@ def test_KvasirClassificationDataset():
     for x, y, fname in torch.utils.data.DataLoader(dataset):
         assert isinstance(x, torch.Tensor)
         assert isinstance(y, torch.Tensor)
-    print("Classification Tests passed")
+    print("Classification evaluation passed")
 
 
 if __name__ == '__main__':

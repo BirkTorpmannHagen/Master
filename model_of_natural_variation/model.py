@@ -35,8 +35,8 @@ class ModelOfNaturalVariationInpainter(nn.Module):
                                  p=self.temp),
         ]
         )
-        geometric = alb.Compose([alb.RandomRotate90(p=self.temp),
-                                 alb.Flip(p=self.temp),
+        geometric = alb.Compose([alb.RandomRotate90(p=0.5),
+                                 alb.Flip(p=0.5),
                                  alb.OpticalDistortion(distort_limit=self.temp, p=self.temp)]
                                 )
         return pixelwise, geometric
