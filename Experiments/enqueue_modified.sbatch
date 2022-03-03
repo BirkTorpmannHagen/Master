@@ -33,14 +33,15 @@ export NUMEXPR_NUM_THREADS=$omp_threads      # Python3 Multiproc
 export PYTHONPATH=$PWD
 MODEL="DeepLab"
 echo "Starting jobs"
-srun python Experiments/train_augmented_pipeline.py 1 $MODEL &
-srun python Experiments/train_augmented_pipeline.py 2 $MODEL &
-srun python Experiments/train_augmented_pipeline.py 3 $MODEL &
-srun python Experiments/train_augmented_pipeline.py 4 $MODEL &
-srun python Experiments/train_augmented_pipeline.py 5 $MODEL &
-srun python Experiments/train_augmented_pipeline.py 6 $MODEL &
-srun python Experiments/train_augmented_pipeline.py 7 $MODEL &
-srun python Experiments/train_augmented_pipeline.py 8 $MODEL &
-srun python Experiments/train_augmented_pipeline.py 9 $MODEL &
-srun python Experiments/train_augmented_pipeline.py 10 $MODEL &
+srun python Experiments/train_predictors_for_model.py 1 $MODEL &
+srun python Experiments/train_predictors_for_model.py 2 $MODEL &
+srun python Experiments/train_predictors_for_model.py 3 $MODEL &
+srun python Experiments/train_predictors_for_model.py 4 $MODEL &
+srun python Experiments/train_predictors_for_model.py 5 $MODEL &
+srun python Experiments/train_predictors_for_model.py 6 $MODEL &
+srun python Experiments/train_predictors_for_model.py 7 $MODEL &
+srun python Experiments/train_predictors_for_model.py 8 $MODEL &
+srun python Experiments/train_predictors_for_model.py 9 $MODEL &
+srun python Experiments/train_predictors_for_model.py 10 $MODEL &
 echo "Jobs started"
+wait
