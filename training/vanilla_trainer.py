@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader
 from DataProcessing.etis import EtisDataset
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset
 from models import segmentation_models
-from Tests.metrics import iou
+from evaluation.metrics import iou
 from losses.consistency_losses import NakedConsistencyLoss, ConsistencyLoss
 from model_of_natural_variation.model import ModelOfNaturalVariation
 from utils import logging
@@ -36,21 +36,22 @@ class VanillaTrainer:
             self.model = segmentation_models.DeepLab().to(self.device)
         elif self.model_str == "TriUnet":
             self.model = segmentation_models.TriUnet().to(self.device)
-        elif self.model_str == "DDANet":
-            raise NotImplementedError
         elif self.model_str == "Unet":
             self.model = segmentation_models.Unet().to(self.device)
         elif self.model_str == "FPN":
             self.model = segmentation_models.FPN().to(self.device)
+        elif self.model_str == "InductiveNet":
+            self.model = segmentation_models.InductiveNet().to(self.device)
+
         else:
             raise AttributeError("model_str not valid; choices are DeepLab, TriUnet, Polyp, FPN, Unet")
 
         self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
         self.criterion = vanilla_losses.JaccardLoss()
         self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0=50, T_mult=2)
-        self.train_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="train")
-        self.val_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="val")
-        self.test_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="test")
+        self.train_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="train", augment=False)
+        self.val_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="val", augment=False)
+        self.test_set = KvasirSegmentationDataset("Datasets/HyperKvasir", split="test", augment=False)
         self.train_loader = DataLoader(self.train_set, batch_size=self.batch_size, shuffle=True)
         self.val_loader = DataLoader(self.val_set)
         self.test_loader = DataLoader(self.test_set)

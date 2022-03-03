@@ -31,4 +31,14 @@ export NUMEXPR_NUM_THREADS=$omp_threads      # Python3 Multiproc
 # export VECLIB_MAXIMUM_THREADS=2    # Accelware Vector Lib
 
 export PYTHONPATH=$PWD
-srun python Experiments/train_augmented_pipeline.py 1
+MODEL="DeepLab"
+srun python Experiments/train_augmented_pipeline.py 1 $MODEL
+srun python Experiments/train_augmented_pipeline.py 2 $MODEL
+srun python Experiments/train_augmented_pipeline.py 3 $MODEL
+srun python Experiments/train_augmented_pipeline.py 4 $MODEL
+srun python Experiments/train_augmented_pipeline.py 5 $MODEL
+srun python Experiments/train_augmented_pipeline.py 6 $MODEL
+srun python Experiments/train_augmented_pipeline.py 7 $MODEL
+srun python Experiments/train_augmented_pipeline.py 8 $MODEL
+srun python Experiments/train_augmented_pipeline.py 9 $MODEL
+srun python Experiments/train_augmented_pipeline.py 10 $MODEL

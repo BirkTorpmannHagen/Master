@@ -18,6 +18,10 @@ def iou(outputs: torch.Tensor, labels: torch.Tensor):
     return iou  # Or thresholded.mean() if you are interested in average across the batch
 
 
+def sis_auc(model, severity_samples):
+    pass
+
+
 if __name__ == '__main__':
     test = torch.zeros(10, 10)
     test[:3, :3] = 1

@@ -1,24 +1,27 @@
 from training.consistency_trainers import *
-from training.inductivenet_trainer import InductiveNetTrainer
+from training.inductivenet_trainer import InductiveNetTrainer, InductiveNetEnsembleTrainer
 import sys
 
 if __name__ == '__main__':
-    config = {"model": "InductiveNet",
+    id = sys.argv[1]
+    model = sys.argv[2]
+    config = {"model": model,
               "device": "cuda",
               "lr": 0.00001,
               "batch_size": 4,
               "epochs": 250,
               "use_inpainter": False}
-    trainer = InductiveNetTrainer(id=f"{sys.argv[1]}", config=config)
+    trainer = ConsistencyTrainer(id, config)
     trainer.train()
-    config = {"model": "FPN",
-              "device": "cuda",
-              "lr": 0.00001,
-              "batch_size": 8,
-              "epochs": 250,
-              "use_inpainter": False}
-    trainer = ConsistencyTrainer(id=f"{sys.argv[1]}", config=config)
-    trainer.train()
+
+    # config = {"model": "FPN",
+    #           "device": "cuda",
+    #           "lr": 0.00001,
+    #           "batch_size": 8,
+    #           "epochs": 250,
+    #           "use_inpainter": False}
+    # trainer = ConsistencyTrainer(id=f"{sys.argv[1]}", config=config)
+    # trainer.train()
     # config = {"model": "Unet",
     #           "device": "cuda",
     #           "lr": 0.00001,

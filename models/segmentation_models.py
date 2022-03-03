@@ -61,8 +61,8 @@ class InductiveNet(smp.DeepLabV3Plus):
     Modified Deeplab with auxilliary task and extra decoder
     """
 
-    def __init__(self):
-        super(InductiveNet, self).__init__(in_channels=3, classes=1,
+    def __init__(self, in_channels=3):
+        super(InductiveNet, self).__init__(in_channels=in_channels, classes=1,
                                            activation="sigmoid")
         self.reconstruction_decoder = smp.deeplabv3.model.DeepLabV3PlusDecoder(self.encoder.out_channels)
         self.reconstruction_head = smp.base.SegmentationHead(self.reconstruction_decoder.out_channels, 3, kernel_size=1,

@@ -4,11 +4,12 @@ import torch.optim.optimizer
 from torch.utils.data import DataLoader
 
 from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
-from Tests.metrics import iou
+from evaluation.metrics import iou
 from losses.consistency_losses import *
 from model_of_natural_variation.model import ModelOfNaturalVariation
 from training.vanilla_trainer import VanillaTrainer
 from utils import logging
+from models.ensembles import TrainedEnsemble
 
 
 class ConsistencyTrainer(VanillaTrainer):
@@ -254,3 +255,11 @@ class ConsistencyTrainerUsingControlledAugmentation(ConsistencyTrainer):
             self.optimizer.step()
             losses.append(np.abs(loss.item()))
         return np.mean(losses)
+
+
+class EnsembleConsistencyTrainer(ConsistencyTrainer):
+    def __init__(self, id, config):
+        super(EnsembleConsistencyTrainer, self).__init__(id, config)
+        self.model = TrainedEnsemble("Singular")
+        self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
+        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optimizer, T_0=50, T_mult=2)
