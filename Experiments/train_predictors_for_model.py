@@ -10,7 +10,7 @@ if __name__ == '__main__':
               "device": "cuda",
               "lr": 0.00001,
               "batch_size": 8,
-              "epochs": 2,
+              "epochs": 500,
               "use_inpainter": False}
 
     if model == "InductiveNet":
