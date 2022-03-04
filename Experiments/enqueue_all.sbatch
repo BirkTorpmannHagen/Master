@@ -31,6 +31,5 @@ export NUMEXPR_NUM_THREADS=$omp_threads      # Python3 Multiproc
 # export VECLIB_MAXIMUM_THREADS=2    # Accelware Vector Lib
 
 export PYTHONPATH=$PWD
-MODEL="DeepLab"
 echo "Starting jobs"
-srun python Experiments/train_predictors_for_model.py $SLURM_ARRAY_TASK_ID $MODEL
+srun python Experiments/train_predictors_for_model.py "$SLURM_ARRAY_TASK_ID" "$EXPERIMENT_MODEL"

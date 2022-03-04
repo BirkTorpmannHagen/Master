@@ -44,7 +44,7 @@ class VanillaTrainer:
             self.model = segmentation_models.InductiveNet().to(self.device)
 
         else:
-            raise AttributeError("model_str not valid; choices are DeepLab, TriUnet, Polyp, FPN, Unet")
+            raise AttributeError("model_str not valid; choices are DeepLab, TriUnet, InductiveNet, FPN, Unet")
 
         self.optimizer = torch.optim.Adam(self.model.parameters(), self.lr)
         self.criterion = vanilla_losses.JaccardLoss()

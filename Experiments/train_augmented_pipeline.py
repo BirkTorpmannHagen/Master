@@ -1,5 +1,5 @@
 from training.consistency_trainers import *
-from training.inductivenet_trainer import InductiveNetTrainer, InductiveNetEnsembleTrainer
+from training.inductivenet_trainers import InductiveNetConsistencyTrainer, InductiveNetEnsembleTrainer
 import sys
 
 if __name__ == '__main__':

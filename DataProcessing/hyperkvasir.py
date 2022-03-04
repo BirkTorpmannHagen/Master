@@ -58,7 +58,7 @@ class KvasirSegmentationDataset(Dataset):
         Employs "vanilla" augmentations
     """
 
-    def __init__(self, path, split="train", augment=True):
+    def __init__(self, path, split="train", augment=False):
         super(KvasirSegmentationDataset, self).__init__()
         self.path = join(path, "segmented-images/")
         self.fnames = listdir(join(self.path, "images"))

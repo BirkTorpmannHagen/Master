@@ -151,7 +151,7 @@ class ConsistencyTrainerUsingAugmentation(ConsistencyTrainer):
         with torch.no_grad():
             output = self.model(image)
         self.model.train()
-        return torch.mean(iou(output, mask))
+        return torch.mean(self.nakedcloss(output, mask, augmented, augmask))
 
     def train_epoch(self):
         self.model.train()
@@ -160,11 +160,6 @@ class ConsistencyTrainerUsingAugmentation(ConsistencyTrainer):
         for x, y, fname, flag in self.train_loader:
             image = x.to("cuda")
             mask = y.to("cuda")
-            if not plotted:
-                plt.imshow(image.cpu().numpy()[0].T)
-                plt.title(f"Augmenting, p    < {self.dataset.p} = {flag[0]}")
-                plt.show()
-                plotted = True
             self.optimizer.zero_grad()
             output = self.model(image)
             loss = self.jaccard(output, mask)
