@@ -6,11 +6,26 @@ import numpy as np
 from torch.utils.data import DataLoader
 from utils.logging import log_full
 from DataProcessing.etis import EtisDataset
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset
+from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
 from DataProcessing.endocv import EndoCV2020
 from DataProcessing.cvc import CVC_ClinicDB
 from models.segmentation_models import *
 from evaluation.metrics import iou
+from torch.utils.data import DataLoader
+from losses.consistency_losses import NakedConsistencyLoss
+from model_of_natural_variation.model import ModelOfNaturalVariation
+
+
+def get_consistency_auc(model, t_range):
+    mnv = ModelOfNaturalVariation(0)
+    dataset = KvasirMNVset("Datasets/HyperKvasir", split="test")
+    consistency = NakedConsistencyLoss()
+    for temp in t_range:
+        for x, y, fname in DataLoader(dataset):
+            img, mask = x.to("cuda"), y.to("cuda")
+            dataset.mnv.temp = temp
+            output = model(img)
+            cons = consistency(img, mask)
 
 
 def eval(dataset, model):
