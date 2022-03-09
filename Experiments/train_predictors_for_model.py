@@ -27,8 +27,8 @@ if __name__ == '__main__':
         """
         Consistency Training
         """
-        trainer = ConsistencyTrainer(f"consistency_{id}", config.copy())
-        trainer.train()
+        # trainer = ConsistencyTrainer(f"consistency_{id}", config.copy())
+        # trainer.train()
         """
         Model-based augmentations
         """
