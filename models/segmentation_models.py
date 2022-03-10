@@ -16,6 +16,12 @@ class Unet(smp.Unet):
     def forward(self, x):
         return self.model.forward(x)
 
+    def predict(self, x):
+        self.eval()()
+        with torch.no_grad():
+            mask = self.forward(x)
+        return mask
+
 
 class FPN(smp.fpn.FPN):
     def __init__(self):
@@ -24,6 +30,12 @@ class FPN(smp.fpn.FPN):
 
     def forward(self, x):
         return self.model.forward(x)
+
+    def predict(self, x):
+        self.eval()
+        with torch.no_grad():
+            mask = self.forward(x)
+        return mask
 
 
 class DeepLab(smp.DeepLabV3Plus):
@@ -34,6 +46,12 @@ class DeepLab(smp.DeepLabV3Plus):
 
     def forward(self, x):
         return self.model.forward(x)
+
+    def predict(self, x):
+        self.eval()
+        with torch.no_grad():
+            mask = self.forward(x)
+        return mask
 
 
 """
@@ -76,3 +94,9 @@ class InductiveNet(smp.DeepLabV3Plus):
         masks = self.segmentation_head(decoder_output)
         reconstructed = self.reconstruction_head(reconstructor_output)
         return masks, reconstructed
+
+    def predict(self, x):
+        self.eval()()
+        with torch.no_grad():
+            mask, _ = self.forward(x)
+        return mask

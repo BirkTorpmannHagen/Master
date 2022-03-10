@@ -26,7 +26,7 @@ class EndoCV2020(Dataset):
 
 
 if __name__ == '__main__':
-    dataset = EndoCV2020("Datasets/EndoCV2020-Endoscopy-Disease-Detection-Segmentation-subChallenge_data")
+    dataset = EndoCV2020("Datasets/EndoCV2020")
     for img, mask, fname in dataset:
         plt.imshow(img.T)
         plt.imshow(mask.T, alpha=0.5)

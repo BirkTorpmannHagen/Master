@@ -1,5 +1,6 @@
 from os import listdir
-
+from os.path import join
+from tqdm import tqdm
 import pandas as pd
 import torch
 import numpy as np
@@ -16,80 +17,62 @@ from losses.consistency_losses import NakedConsistencyLoss
 from model_of_natural_variation.model import ModelOfNaturalVariation
 
 
-def get_consistency_auc(model, t_range):
-    mnv = ModelOfNaturalVariation(0)
-    dataset = KvasirMNVset("Datasets/HyperKvasir", split="test")
-    consistency = NakedConsistencyLoss()
-    for temp in t_range:
-        for x, y, fname in DataLoader(dataset):
-            img, mask = x.to("cuda"), y.to("cuda")
-            dataset.mnv.temp = temp
-            output = model(img)
-            cons = consistency(img, mask)
+class ModelEvaluator:
+    def __init__(self):
+        self.datasets = [
+            EtisDataset("Datasets/ETIS-LaribPolypDB"),
+            CVC_ClinicDB("Datasets/CVC-ClinicDB"),
+            EndoCV2020("Datasets/EndoCV2020"),
+        ]
+        self.dataloaders = [
+                               DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir", split="test"))] + \
+                           [DataLoader(dataset) for dataset in self.datasets]
+
+    def get_consistency_auc(self, model, t_range):
+        mnv = ModelOfNaturalVariation(0)
+        consistency = NakedConsistencyLoss()
+        cons_matrix = np.array((len(self.datasets), len(t_range)))
+        for dl_idx, dataloader in enumerate(self.dataloaders):
+            for tmp_idx, temp in enumerate(t_range):
+                consistencies = []
+                for x, y, _ in dataloader:
+                    img, mask = x, y
+                    mnv.temp = temp
+                    aug_img, aug_mask = mnv(img, mask)
+                    out = model.predict(img)
+                    aug_out = model.predict(aug_img)
+                    consistencies.append(consistency(mask, out, aug_mask, aug_out).item())
+                cons_matrix[dl_idx, tmp_idx] = np.mean(consistencies)
+        return cons_matrix
+
+    def get_ious(self, model):
+        all_ious = np.zeros(len(self.dataloaders))
+        print(all_ious.shape)
+        for idx, dataset in enumerate(self.dataloaders):
+            dataset_ious = torch.empty((len(self.dataloaders),))
+            for x, y, fname in tqdm(dataset):
+                image = x
+                mask = y
+                output = model.predict(image)
+                batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
+                dataset_ious = torch.cat((dataset_ious, batch_ious.flatten()))
+            all_ious[idx] = np.mean(dataset_ious.cpu().numpy())
+        return all_ious
 
 
-def eval(dataset, model):
-    model.eval()
-    ious = torch.empty((0,))
-    with torch.no_grad():
-        for x, y, fname in dataset:
-            image = x.to("cuda")
-            mask = y.to("cuda")
-            output, _ = model(image)
-            batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
-            ious = torch.cat((ious, batch_ious.flatten()))
-    return ious.numpy()
-
-
-def get_generalizability_gap(modelpath):
-    model = DeepLab().to("cuda")
-    model = InductiveNet().to("cuda")
-    model.load_state_dict(torch.load(modelpath))
-    # if modelpath.split("/")[1] == "DeepLab":
-    #     model = DeepLab("imagenet").to("cuda")
-    #     model.load_state_dict(torch.load(modelpath))
-    # else:
-    #     raise NotImplementedError(modelpath.split("/")[1])
-
-    kvasir = DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir", split="test"))
-    etis = DataLoader(EtisDataset("Datasets/ETIS-LaribPolypDB"))
-    EndoCV = DataLoader(EndoCV2020("Datasets/EndoCV2020-Endoscopy-Disease-Detection-Segmentation-subChallenge_data"))
-    CVC = DataLoader(CVC_ClinicDB("Datasets/CVC-ClinicDB"))
-    endocv_ious = eval(EndoCV, model)
-    kvasir_ious = eval(kvasir, model)
-    etis_ious = eval(etis, model)
-    cvc_ious = eval(CVC, model)
-    print(
-        f"{modelpath} \t \t {np.mean(kvasir_ious):.4f} \t {np.mean(etis_ious):.4f} \t {np.mean(endocv_ious):.4f} \t {np.mean(cvc_ious):.4f}")
-    return kvasir_ious, etis_ious
+def get_metrics(type, experiment):
+    models = [DeepLab, FPN, InductiveNet, TriUnet, Unet]
+    evaluator = ModelEvaluator()
+    for model in models:
+        path = join("Predictors", type, model.__name__)
+        for pred_fname in [i for i in listdir(path) if experiment in i]:
+            predictor = model()
+            predictor.load_state_dict(torch.load(join(path, pred_fname), map_location=torch.device('cpu')))
+            ious = evaluator.get_ious(predictor)
+            print(ious)
+            consistency_auc = evaluator.get_consistency_auc(predictor, np.linspace(0, 1, 10))
+            print(consistency_auc)
 
 
 if __name__ == '__main__':
-    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_0")
-    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_1")
-    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_2")
-    # get_generalizability_gap("Predictors/DeepLab/imagenet_pretrain/pretrainmode=imagenet_3")
-    # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-10")
-    # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_-9")
-    # get_generalizability_gap("Predictors/Augmented/DeepLab/pretrainmode=imagenet_0")
-    # get_generalizability_gap("Predictors/Augmented/DeepLab/pretrainmode=imagenet_1")
-    get_generalizability_gap("Predictors/Augmented/InductiveNet/inductive")
-    # get_generalizability_gap("Predictors/Augmented/DeepLab/resolution_test_last_epoch")
-    # get_generalizability_gap("Predictors/Augmented/DeepLab/1_last_epoch")
-
-    for fname in sorted(listdir("Predictors/Augmented/InductiveNet/")):
-        try:
-            get_generalizability_gap(f"Predictors/Augmented/InductiveNet/{fname}")
-        except Exception as e:
-            print(e)
-            continue
-    # print("vanilla")
-    # for fname in listdir("Predictors/Vanilla/DeepLab/"):
-    #     try:
-    #         get_generalizability_gap(f"Predictors/Vanilla/DeepLab/{fname}")
-    #     except:
-    #         continue
-    # get_generalizability_gap("Predictors/DeepLab/pretrainmode=imagenet_1000_epochs_2")
-    # get_generalizability_gap("Predictors/Augmented/DeepLab-pretrainmode=imagenet_test2")
-
-# %%
+    get_metrics("Augmented", "consistency")
