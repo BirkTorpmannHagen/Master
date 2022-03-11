@@ -85,36 +85,6 @@ class ConsistencyTrainer(VanillaTrainer):
         torch.save(self.model.state_dict(),
                    f"Predictors/Augmented/{self.model_str}/{self.id}_last_epoch")
 
-    def validate(self, epoch=None, plot=False):
-        self.model.eval()
-        losses = []
-        closses = []
-        ious = torch.empty((0,))
-        with torch.no_grad():
-            for x, y, fname in self.val_loader:
-                image = x.to("cuda")
-                mask = y.to("cuda")
-                aug_img, aug_mask = self.mnv(image, mask)
-                output = self.model(image)
-                aug_output = self.model(aug_img)  # todo consider train on augmented vs non-augmented?
-
-                batch_ious = torch.Tensor([iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
-                loss = self.criterion(aug_mask, mask, aug_output, output, torch.mean(batch_ious))
-                losses.append(np.abs(loss.item()))
-                closses.append(self.nakedcloss(aug_mask, mask, aug_output, output).item())
-                ious = torch.cat((ious, batch_ious.cpu().flatten()))
-                if plot:
-                    plt.imshow(y[0, 0].cpu().numpy(), alpha=0.5)
-                    plt.imshow(image[0].permute(1, 2, 0).cpu().numpy())
-                    plt.imshow((output[0, 0].cpu().numpy() > 0.5).astype(int), alpha=0.5)
-                    plt.imshow(y[0, 0].cpu().numpy().astype(int), alpha=0.5)
-                    plt.title("IoU {} at epoch {}".format(iou(output[0, 0], mask[0, 0]), epoch))
-                    plt.show()
-                    plot = False  # plot one example per epoch
-        avg_val_loss = np.mean(losses)
-        avg_closs = np.mean(closses)
-        return avg_val_loss, ious, closses
-
     def test(self):
         self.model.eval()
         ious = torch.empty((0,))

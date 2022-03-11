@@ -73,6 +73,8 @@ class VanillaTrainer:
     def train(self):
         best_val_loss = 10
         print("Starting Segmentation training")
+        best_closs = 100
+
         for i in range(self.epochs):
             training_loss = np.abs(self.train_epoch())
             val_loss, ious, closs = self.validate(epoch=i, plot=False)
@@ -81,7 +83,6 @@ class VanillaTrainer:
             gen_iou = float(torch.mean(gen_ious))
             consistency = 1 - np.mean(closs)
             test_ious = np.mean(self.test().numpy())
-
             self.config["lr"] = [group['lr'] for group in self.optimizer.param_groups]
             logging.log_full(epoch=i, id=self.id, config=self.config, result_dict=
             {"train_loss": training_loss, "val_loss": val_loss,
@@ -108,6 +109,10 @@ class VanillaTrainer:
                 torch.save(self.model.state_dict(),
                            f"Predictors/Vanilla/{self.model_str}/{self.id}")
                 print("saved in: ", f"Predictors/Vanilla/{self.model_str}/{self.id}")
+            if closs < best_closs:
+                best_closs = closs
+                torch.save(self.model.state_dict(),
+                           f"Predictors/Vanilla/{self.model_str}/{self.id}-maximum-consistency")
         torch.save(self.model.state_dict(),
                    f"Predictors/Vanilla/{self.model_str}/{self.id}_last_epoch")
 
@@ -151,7 +156,7 @@ class VanillaTrainer:
                     plot = False  # plot one example per epoch
         avg_val_loss = np.mean(losses)
         avg_closs = np.mean(closses)
-        return avg_val_loss, ious, closses
+        return avg_val_loss, ious, avg_closs
 
     def validate_generalizability(self, epoch, plot=False):
         self.model.eval()

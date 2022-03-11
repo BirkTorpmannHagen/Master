@@ -10,7 +10,7 @@ if __name__ == '__main__':
               "device": "cuda",
               "lr": 0.00001,
               "batch_size": 8,
-              "epochs": 500,
+              "epochs": 300,
               "use_inpainter": False}
 
     if model == "InductiveNet":
@@ -27,8 +27,8 @@ if __name__ == '__main__':
         """
         Consistency Training
         """
-        # trainer = ConsistencyTrainer(f"consistency_{id}", config.copy())
-        # trainer.train()
+        trainer = ConsistencyTrainer(f"consistency_{id}", config.copy())
+        trainer.train()
         """
         Model-based augmentations
         """
