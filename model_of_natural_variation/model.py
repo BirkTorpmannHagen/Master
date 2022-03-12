@@ -6,7 +6,7 @@ import torch.nn as nn
 
 class ModelOfNaturalVariationInpainter(nn.Module):
     def __init__(self, T0=0, use_inpainter=False):
-        super(ModelOfNaturalVariation, self).__init__()
+        super(ModelOfNaturalVariationInpainter, self).__init__()
         self.temp = T0
         self.linstep = 0.1
         # self.use_inpainter = use_inpainter
@@ -95,7 +95,7 @@ class ModelOfNaturalVariation(nn.Module):
         ]
         )
         geometric = alb.Compose([alb.RandomRotate90(p=self.temp),
-                                 alb.Flip(p=0.5),
+                                 alb.Flip(p=self.temp),
                                  alb.OpticalDistortion(distort_limit=self.temp, p=self.temp)])
         return pixelwise, geometric
 
@@ -111,6 +111,10 @@ class ModelOfNaturalVariation(nn.Module):
             augmented_imgs[batch_idx] = torch.Tensor(geoms["image"].T)
             augmented_masks[batch_idx] = torch.Tensor(geoms["mask"].T)
         return augmented_imgs, augmented_masks
+
+    def set_temp(self, temp):
+        self.temp = temp
+        self.pixelwise_augments, self.geometric_augments = self.get_encoded_transforms()
 
     def step(self):
         self.temp = np.clip(self.temp + self.linstep, 0, 1)

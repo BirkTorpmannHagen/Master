@@ -73,6 +73,12 @@ class TriUnet(nn.Module):
         mask3 = self.Unet3(torch.cat((mask1, mask2), 1))
         return mask3
 
+    def predict(self, x):
+        self.eval()
+        with torch.no_grad():
+            mask = self.forward(x)
+        return mask
+
 
 class InductiveNet(smp.DeepLabV3Plus):
     """
@@ -96,7 +102,7 @@ class InductiveNet(smp.DeepLabV3Plus):
         return masks, reconstructed
 
     def predict(self, x):
-        self.eval()()
+        self.eval()
         with torch.no_grad():
             mask, _ = self.forward(x)
         return mask
