@@ -9,15 +9,15 @@ import numpy as np
 from torch.utils.data import DataLoader
 from utils.logging import log_full
 from evaluation.metrics import SegmentationInconsistencyScore
-from DataProcessing.etis import EtisDataset
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
-from DataProcessing.endocv import EndoCV2020
-from DataProcessing.cvc import CVC_ClinicDB
+from data.etis import EtisDataset
+from data.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
+from data.endocv import EndoCV2020
+from data.cvc import CVC_ClinicDB
 from models.segmentation_models import *
 from evaluation.metrics import iou
 from torch.utils.data import DataLoader
 from losses.consistency_losses import NakedConsistencyLoss
-from model_of_natural_variation.model import ModelOfNaturalVariation
+from perturbation.model import ModelOfNaturalVariation
 
 
 class ModelEvaluator:

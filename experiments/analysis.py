@@ -39,4 +39,4 @@ if __name__ == '__main__':
     plot_training_progression("logs/consistency/DeepLab/0.csv")
     plot_training_progression("logs/consistency/DeepLab/1.csv")
     # df_iid = df["Augmented" not in df["name"]]
-    # get_predictorwise_distribution("Experiments/Data/Normal-Pipelines/DeepLab")
+    # get_predictorwise_distribution("experiments/Data/Normal-Pipelines/DeepLab")

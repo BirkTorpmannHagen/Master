@@ -8,9 +8,9 @@ from torch.autograd import Variable
 from torch.optim.lr_scheduler import CosineAnnealingWarmRestarts
 from torch.utils.data import DataLoader
 
-from DataProcessing.hyperkvasir import KvasirInpaintingDataset
+from data.hyperkvasir import KvasirInpaintingDataset
 from models.inpainters import SegGenerator, SegDiscriminator
-from model_of_natural_variation.polyp_inpainter import Inpainter
+from perturbation.polyp_inpainter import Inpainter
 
 
 # TODO refactor

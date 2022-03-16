@@ -9,8 +9,8 @@ from PIL.Image import open
 from torch.nn.functional import one_hot
 from torch.utils.data import Dataset
 from torchvision import transforms
-from model_of_natural_variation.model import ModelOfNaturalVariation
-import DataProcessing.augmentation as aug
+from perturbation.model import ModelOfNaturalVariation
+import data.augmentation as aug
 from utils.mask_generator import generate_a_mask
 
 

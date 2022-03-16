@@ -9,8 +9,8 @@ import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from DataProcessing.etis import EtisDataset
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset
+from data.etis import EtisDataset
+from data.hyperkvasir import KvasirSegmentationDataset
 from models.segmentation_models import DeepLab
 from evaluation.metrics import iou
 from utils.logging import log_iou

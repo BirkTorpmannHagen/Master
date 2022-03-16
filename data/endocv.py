@@ -3,18 +3,16 @@ from os.path import join
 import matplotlib.pyplot as plt
 from PIL.Image import open
 from torch.utils.data import Dataset
-import DataProcessing.augmentation as aug
-
-from PIL import Image
+import data.augmentation as aug
 
 
-class CVC_ClinicDB(Dataset):
+class EndoCV2020(Dataset):
     def __init__(self, root_directory):
-        super(CVC_ClinicDB, self).__init__()
+        super(EndoCV2020, self).__init__()
         self.root = root_directory
-        self.mask_fnames = listdir(join(self.root, "Ground Truth"))
-        self.mask_locs = [join(self.root, "Ground Truth", i) for i in self.mask_fnames]
-        self.img_locs = [join(self.root, "Original", i) for i in
+        self.mask_fnames = listdir(join(self.root, "masksPerClass", "polyp"))
+        self.mask_locs = [join(self.root, "masksPerClass", "polyp", i) for i in self.mask_fnames]
+        self.img_locs = [join(self.root, "originalImages", i.replace("_polyp", "").replace(".tif", ".jpg")) for i in
                          self.mask_fnames]
         self.common_transforms = aug.pipeline_tranforms()
 
@@ -28,7 +26,7 @@ class CVC_ClinicDB(Dataset):
 
 
 if __name__ == '__main__':
-    dataset = CVC_ClinicDB("Datasets/CVC-ClinicDB")
+    dataset = EndoCV2020("Datasets/EndoCV2020")
     for img, mask, fname in dataset:
         plt.imshow(img.T)
         plt.imshow(mask.T, alpha=0.5)

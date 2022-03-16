@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from PIL.Image import open
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
-import DataProcessing.augmentation as aug
+import data.augmentation as aug
 
 
 class EtisDataset(Dataset):

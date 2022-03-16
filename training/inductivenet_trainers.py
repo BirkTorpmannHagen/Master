@@ -4,22 +4,22 @@ import matplotlib.pyplot as plt
 import torch.optim.optimizer
 from torch.utils.data import DataLoader
 
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
+from data.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
 from evaluation.metrics import iou
 from losses.consistency_losses import *
-from model_of_natural_variation.model import ModelOfNaturalVariation
+from perturbation.model import ModelOfNaturalVariation
 from training.vanilla_trainer import VanillaTrainer
 from utils import logging
 from training.consistency_trainers import ConsistencyTrainer
 from models.segmentation_models import InductiveNet
 from models.ensembles import TrainedEnsemble
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
+from data.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
 from evaluation.metrics import iou
 from losses.consistency_losses import *
-from model_of_natural_variation.model import ModelOfNaturalVariation
+from perturbation.model import ModelOfNaturalVariation
 from training.vanilla_trainer import VanillaTrainer
 from utils import logging
-from DataProcessing.etis import EtisDataset
+from data.etis import EtisDataset
 
 
 class InductiveNetConsistencyTrainer:

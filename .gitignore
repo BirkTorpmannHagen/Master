@@ -1,5 +1,5 @@
 Datasets/
-model_of_natural_variation/inpaint_examples/
+perturbation/inpaint_examples/
 __pycache__/
 *.pyc
 .idea/

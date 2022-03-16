@@ -5,7 +5,7 @@ import numpy as np
 import scipy.ndimage as filt
 import torch.nn as nn
 
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset
+from data.hyperkvasir import KvasirSegmentationDataset
 from utils import mask_generator
 
 

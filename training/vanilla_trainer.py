@@ -4,12 +4,12 @@ import segmentation_models_pytorch.utils.losses as vanilla_losses
 import torch.optim.optimizer
 from torch.utils.data import DataLoader
 
-from DataProcessing.etis import EtisDataset
-from DataProcessing.hyperkvasir import KvasirSegmentationDataset
+from data.etis import EtisDataset
+from data.hyperkvasir import KvasirSegmentationDataset
 from models import segmentation_models
 from evaluation.metrics import iou
 from losses.consistency_losses import NakedConsistencyLoss, ConsistencyLoss
-from model_of_natural_variation.model import ModelOfNaturalVariation
+from perturbation.model import ModelOfNaturalVariation
 from utils import logging
 
 

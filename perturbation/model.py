@@ -122,7 +122,7 @@ class ModelOfNaturalVariation(nn.Module):
 
 
 if __name__ == '__main__':
-    from DataProcessing.hyperkvasir import KvasirSegmentationDataset
+    from data.hyperkvasir import KvasirSegmentationDataset
     from torch.utils.data import DataLoader
 
     mnv = ModelOfNaturalVariation(1)
