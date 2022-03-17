@@ -99,7 +99,7 @@ class ModelEvaluator:
                     recall = metrics.recall(out, mask, thresh)
                     ap_matrix[dl_idx, 0, idx]+=precision/len(sample_range)
                     ap_matrix[dl_idx, 1, idx]+=recall/len(sample_range)
-        with open(f"{model.__name__}_results.pkl", "wb") as file:
+        with open(f"{model.__name__}_{predictor_name}_results.pkl", "wb") as file:
             pkl.dump({"sis_matrix":sis_matrix, "ap_matrix":ap_matrix, "ious":ious}, file)
         return {"sis_matrix":sis_matrix, "ap_matrix":ap_matrix, "ious":ious}
 
