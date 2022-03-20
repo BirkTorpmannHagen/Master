@@ -30,55 +30,13 @@ class ModelEvaluator:
                                DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir", split="test"))] + \
                            [DataLoader(dataset) for dataset in self.datasets]
         self.dataset_names = ["HyperKvasir", "Etis-LaribDB", "CVC-ClinicDB", "EndoCV2020"]
-
-    def get_consistency_auc(self, model, t_range, model_name):
-        mnv = ModelOfNaturalVariation(0).to("cuda")
-        cons_matrix = np.zeros((len(self.dataloaders), len(t_range)))
-        for dl_idx, dataloader in enumerate(self.dataloaders):
-            for tmp_idx, temp in enumerate(t_range):
-                consistencies = []
-                mnv.set_temp(temp)
-                for x, y, _ in dataloader:
-                    img, mask = x.to("cuda"), y.to("cuda")
-                    mnv.temp = temp
-                    aug_img, aug_mask = mnv(img, mask)
-                    out = model.predict(img)
-                    aug_out = model.predict(aug_img)
-                    consistencies.append(metrics.sis(mask, aug_mask, out, aug_out).item())
-                cons_matrix[dl_idx, tmp_idx] = np.mean(consistencies)
-            plt.plot(t_range, cons_matrix[dl_idx], label=self.dataset_names[dl_idx])
-            print(cons_matrix[dl_idx])
-        plt.legend()
-        plt.title(model_name)
-        plt.xlim((0, 1))
-        plt.ylim((0, 1))
-        plt.show()
-        return cons_matrix, t_range
-
-    def get_ious(self, model):
-        all_ious = np.zeros(len(self.dataloaders))
-        print(all_ious.shape)
-        for idx, dataset in enumerate(self.dataloaders):
-            dataset_ious = torch.zeros((len(self.dataloaders),))
-            for x, y, fname in dataset:
-                image = x.to("cuda")
-                mask = y.to("cuda")
-                output = model.predict(image)
-                batch_ious = torch.Tensor([metrics.iou(output_i, mask_j) for output_i, mask_j in zip(output, mask)])
-                dataset_ious = torch.cat((dataset_ious, batch_ious.flatten()))
-            all_ious[idx] = np.mean(dataset_ious.cpu().numpy())
-            # print(np.mean(dataset_ious.cpu().numpy()))
-        return all_ious
-
-    def get_pr_curve_stats(self):
-        for idx, dataset in enumerate(self.dataloaders):
-            for x, y, fname in tqdm(dataset):
-                pass
+        self.models = [DeepLab, FPN, InductiveNet, TriUnet, Unet]
+        self.model_names = ["DeepLab", "FPN", "InductiveNet", "TriUnet", "Unet"]
 
     def collect_stats(self, model, predictor_name, sample_range):
         mnv = ModelOfNaturalVariation(0)
-        sis_matrix = np.array((len(self.datasets), len(sample_range)))
-        ap_matrix = np.array((len(self.datasets),2, len(sample_range)))
+        sis_matrix = np.zeros((len(self.dataloaders), len(sample_range)))
+        ap_matrix = np.zeros((len(self.dataloaders), 2, len(sample_range)))
         ious = np.zeros(len(self.dataloaders))
 
         for dl_idx, dataloader in enumerate(self.dataloaders):
@@ -86,22 +44,70 @@ class ModelEvaluator:
                 img, mask = x.to("cuda"), y.to("cuda")
                 out = model.predict(img)
 
-                #sis_auc metric
+                # sis_auc metric
                 for idx, temp in enumerate(sample_range):
                     mnv.set_temp(temp)
                     aug_img, aug_mask = mnv(img, mask)
                     aug_out = model.predict(aug_img)
-                    sis_matrix[dl_idx, temp] += np.mean(metrics.sis(mask, out, aug_mask, aug_out).item())/len(sample_range) #running mean
+                    sis_matrix[dl_idx, idx] += np.mean(metrics.sis(mask, out, aug_mask, aug_out).item()) / len(
+                        sample_range)  # running mean
 
-                #PR-curve
+                # PR-curve
                 for idx, thresh in enumerate(sample_range):
                     precision = metrics.precision(out, mask, thresh)
                     recall = metrics.recall(out, mask, thresh)
-                    ap_matrix[dl_idx, 0, idx]+=precision/len(sample_range)
-                    ap_matrix[dl_idx, 1, idx]+=recall/len(sample_range)
+                    ap_matrix[dl_idx, 0, idx] += precision / len(sample_range)
+                    ap_matrix[dl_idx, 1, idx] += recall / len(sample_range)
         with open(f"{model.__name__}_{predictor_name}_results.pkl", "wb") as file:
-            pkl.dump({"sis_matrix":sis_matrix, "ap_matrix":ap_matrix, "ious":ious}, file)
-        return {"sis_matrix":sis_matrix, "ap_matrix":ap_matrix, "ious":ious}
+            pkl.dump({"sis_matrix": sis_matrix, "ap_matrix": ap_matrix, "ious": ious}, file)
+        return {"sis_matrix": sis_matrix, "ap_matrix": ap_matrix, "ious": ious}
+
+    def parse_experiment_details(self, model_name, eval_method, loss_fn, aug, id, last_epoch=False):
+        """
+            Note: Supremely messy code, since training was started prior to getting a proper structure
+        """
+        path = "Predictors"
+        if aug != "0":
+            path = join(path, "Augmented")
+            path = join(path, model_name)
+            path = join(path, eval_method)
+            if loss_fn == "sil":
+                path += "consistency"
+            else:
+                path += "augmentation"
+            path += f"_{id}"
+
+        else:
+            path = join(path, "Vanilla")
+            path = join(path, model_name)
+            path = join(path, "vanilla")
+            path += f"_{id}"
+            if eval_method == "maximum_consistency":
+                path += "-maximum-consistency"
+            elif last_epoch:
+                path += "_last_epoch"
+
+        print(path)
+        return torch.load(path)
+
+    def get_table_data(self, sample_range):
+        mnv = ModelOfNaturalVariation(0)
+        sis_matrix = np.zeros((len(self.dataloaders), len(sample_range)))
+        ap_matrix = np.zeros((len(self.dataloaders), 2, len(sample_range)))
+        ious = np.zeros(len(self.dataloaders))
+
+        for dl_idx, dataloader in enumerate(self.dataloaders):
+            for model_constructor, model_name in zip(self.models, self.model_names):
+                for eval_method in ["", "maximum_consistency"]:
+                    for loss_fn in ["j", "sil"]:
+                        for aug in ["0", "V", "G"]:
+                            for id in range(1, 2):
+                                state_dict = self.parse_experiment_details(model_name, eval_method, loss_fn, aug, id)
+                            # model = model_constructor().load_state_dict(state_dict)
+
+                            # for x, y, _ in dataloader:
+                            #     img, mask = x.to("cuda"), y.to("cuda")
+                            #     out = model.predict(img)
 
 
 def get_metrics_for_experiment(type, experiment):
@@ -114,14 +120,21 @@ def get_metrics_for_experiment(type, experiment):
         for pred_fname in tqdm([i for i in listdir(path) if experiment in i]):
             print(f"Evaluating {path}/{pred_fname}")
             predictor.load_state_dict(torch.load(join(path, pred_fname)))
-            stats=evaluator.collect_stats(predictor, pred_fname, np.linspace(0,1,11))
+            stats = evaluator.collect_stats(predictor, pred_fname, np.linspace(0.1, 0.9, 9))
             model_wise_results[model.__name__].append(stats)
     with open(f"{experiment}-results.pkl", "wb") as file:
         pkl.dump(model_wise_results, file)
     return model_wise_results
 
 
+def write_to_latex_table(pkl_file):
+    table_template = open("table_template").read()
+
+
 if __name__ == '__main__':
     np.set_printoptions(precision=3, suppress=True)
+    write_to_latex_table(0)
+    evaluator = ModelEvaluator()
+    evaluator.get_table_data(np.linspace(0.1, 0.9, 9))
 
-    get_metrics_for_experiment("Augmented", "consistency_")
+    # get_metrics_for_experiment("Augmented", "consistency_1")

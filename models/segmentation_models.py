@@ -32,7 +32,7 @@ class FPN(smp.fpn.FPN):
         return self.model.forward(x)
 
     def predict(self, x):
-        self.eval()|
+        self.eval()
         with torch.no_grad():
             mask = self.forward(x)
         return mask

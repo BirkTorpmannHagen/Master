@@ -1,0 +1,68 @@
+\begin{table}[h]
+    \centering
+    \noindent
+    \scriptsize
+        \begin{tabularx}{\linewidth}{lXXXXXXXXXXXX}
+            \toprule
+            \multicolumn{13}{c}{\textbf{Ablation Study MAP}}\\
+            \toprule
+            \multicolumn{13}{c}{HyperKvasir}\\
+            \midrule
+            Validation&\multicolumn{6}{c}{SIS} & \multicolumn{6}{c}{Loss} \\
+            \cmidrule(lr){2-7} \cmidrule(lr){8-13}
+           Loss &\multicolumn{3}{c}{\(\mathcal{J}\)} & \multicolumn{3}{c}{SIL}&\multicolumn{3}{c}{\(\mathcal{J}\)} & \multicolumn{3}{c}{SIL}\\
+            \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+            Augmentation & 0 & V & G & 0 & V & G & 0 & V & G& 0 & V & G\\
+            \midrule
+            DeepLab & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            FPN & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            Unet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            TriUnet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            InductiveNet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            \midrule
+            \multicolumn{13}{c}{Etis-LaribDB}\\
+            \midrule
+            Validation&\multicolumn{6}{c}{SIS} & \multicolumn{6}{c}{Loss} \\
+            \cmidrule(lr){2-7} \cmidrule(lr){8-13}
+           Loss &\multicolumn{3}{c}{\(\mathcal{J}\)} & \multicolumn{3}{c}{SIL}&\multicolumn{3}{c}{\(\mathcal{J}\)} & \multicolumn{3}{c}{SIL}\\
+            \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+            Augmentation & 0 & V & G & 0 & V & G & 0 & V & G& 0 & V & G\\
+            \midrule
+            DeepLab & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            FPN & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            Unet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            TriUnet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            InductiveNet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+               \midrule
+            \multicolumn{13}{c}{Clinic-CVC}\\
+            \midrule
+            Validation&\multicolumn{6}{c}{SIS} & \multicolumn{6}{c}{Loss} \\
+            \cmidrule(lr){2-7} \cmidrule(lr){8-13}
+           Loss &\multicolumn{3}{c}{\(\mathcal{J}\)} & \multicolumn{3}{c}{SIL}&\multicolumn{3}{c}{\(\mathcal{J}\)} & \multicolumn{3}{c}{SIL}\\
+            \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+            Augmentation & 0 & V & G & 0 & V & G & 0 & V & G& 0 & V & G\\
+            \midrule
+            DeepLab & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            FPN & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            Unet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            TriUnet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            InductiveNet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+               \midrule
+            \multicolumn{13}{c}{EndoCV2020}\\
+            \midrule
+            Validation&\multicolumn{6}{c}{SIS} & \multicolumn{6}{c}{Loss} \\
+            \cmidrule(lr){2-7} \cmidrule(lr){8-13}
+           Loss &\multicolumn{3}{c}{\(\mathcal{J}\)} & \multicolumn{3}{c}{SIL}&\multicolumn{3}{c}{\(\mathcal{J}\)} & \multicolumn{3}{c}{SIL}\\
+            \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} \cmidrule(lr){11-13}
+            Augmentation & 0 & V & G & 0 & V & G & 0 & V & G& 0 & V & G\\
+            \midrule
+            DeepLab & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            FPN & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            Unet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            TriUnet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            InductiveNet & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {} & {}\\
+            \bottomrule
+        \end{tabularx}
+    \caption{Caption}
+    \label{tab:ablation_map}
+\end{table}
