@@ -29,8 +29,10 @@ class ModelEvaluator:
                                DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir", split="test"))] + \
                            [DataLoader(dataset) for dataset in self.datasets]
         self.dataset_names = ["HyperKvasir", "Etis-LaribDB", "CVC-ClinicDB", "EndoCV2020"]
-        self.models = [FPN, InductiveNet, TriUnet, Unet]
-        self.model_names = ["FPN", "InductiveNet", "TriUnet", "Unet"]
+        # self.models = [FPN, InductiveNet, TriUnet, Unet]
+        # self.model_names = ["FPN", "InductiveNet", "TriUnet", "Unet"]
+        self.models = [DeepLab]
+            self.model_names = ["DeepLab"]
 
     def collect_stats(self, model, predictor_name, sample_range):
         mnv = ModelOfNaturalVariation(0)
@@ -93,7 +95,7 @@ class ModelEvaluator:
     def get_table_data(self, sample_range, id_range):
         mnv = ModelOfNaturalVariation(0)
         for model_constructor, model_name in zip(self.models, self.model_names):
-            for eval_method in ["", "maximum_consistency"]:
+            for eval_method in [""]:
                 for loss_fn in ["j", "sil"]:
                     for aug in ["0", "V", "G"]:
                         sis_matrix = np.zeros((len(self.dataloaders), len(id_range), len(sample_range)))
