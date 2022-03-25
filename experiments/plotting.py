@@ -1,6 +1,11 @@
+import os
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
+import torch
+import pickle
 
 
 def training_plot(log_csv):
@@ -43,8 +48,28 @@ def ood_v_epoch(log_csv):
     plt.show()
 
 
+def modelwise_boxplot():
+    results = torch.load("experiments/Data/pickles/ious_CVC-ClinicDB_DeepLab__j_0")  # vanilla
+
+
+def get_boxplots_for_models():
+    """
+    box plot for comparing model performance. Considers d% reduced along datasets, split according to experiments
+    and models
+    :return:
+    """
+    datadict = {}
+    for fname in os.listdir("experiments/Data/pickles"):
+        with open(os.path.join("experiments/Data/pickles", fname), "rb") as file:
+            data = pickle.load(file)
+            datadict = {**datadict, **{"Model": fname.split("_")[0]}}
+            print(fname, ": ", data["ious"])
+    sns.boxplot(x="Model", y="IoUs", hue="dataset", data=)
+
+
 if __name__ == '__main__':
-    ood_v_epoch("logs/consistency/DeepLab/consistency_4.csv")
-    # training_plot("logs/consistency/DeepLab/consistency_4.csv")
-    # training_plot("logs/consistency/DeepLab/augmentation_4.csv")
-    # ood_correlations("logs/consistency/DeepLab/consistency_4.csv")
+    for fname in os.listdir("experiments/Data/pickles"):
+        with open(os.path.join("experiments/Data/pickles", fname), "rb") as file:
+            data = pickle.load(file)
+
+            print(fname, ": ", data["ious"])

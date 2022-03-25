@@ -28,18 +28,32 @@ def sis(new_mask, old_mask, new_seg, old_seg):
     return sis
 
 
-def precision(output, labels, threshold=.5):
+def precision(output, labels, threshold):
     t = (output > threshold).float()
     tp = torch.sum(t * labels)
     fp = torch.sum(t * (1 - labels))
     return tp / (tp + fp + 1e-5)
 
 
-def recall(output, labels, threshold=.5):
-    t = (output > threshold).int()
+def recall(output, labels, threshold):
+    t = (output > threshold).float()
     tp = torch.sum(t * labels)
     fn = torch.sum((1 - t) * labels)
     return tp / (tp + fn + 1e-5)
+
+
+def tp_rate(output, labels, threshold):
+    t = (output > threshold).float()
+    tp = torch.sum(t * labels)
+    fn = torch.sum((1 - t) * labels)
+    return tp / (tp + fn + 1e-5)
+
+
+def fp_rate(output, labels, threshold):
+    t = (output > threshold).float()
+    fp = torch.sum(t * (1 - labels))
+    tn = torch.sum((1 - t) * (1 - labels))
+    return fp / (fp + tn + 1e-5)
 
 
 if __name__ == '__main__':
