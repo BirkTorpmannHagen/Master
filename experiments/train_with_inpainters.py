@@ -17,15 +17,8 @@ if __name__ == '__main__':
         trainer = InductiveNetAugmentationTrainer(f"inpainter_zaugmentation_{id}", config.copy())
         trainer.train()
 
-        # trainer = InductiveNetConsistencyTrainer(f"inpainter_consistency_{id}", config.copy())
-        # trainer.train()
-
     else:
-        """
-        Consistency Training
-        """
-        # trainer = ConsistencyTrainer(f"inpainter_consistency_{id}", config.copy())
-        # trainer.train()
+
         """
         Model-based augmentations
         """
