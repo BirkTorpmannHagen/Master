@@ -5,7 +5,6 @@ import numpy as np
 import scipy.ndimage as filt
 import torch.nn as nn
 
-from data.hyperkvasir import KvasirSegmentationDataset
 from utils import mask_generator
 
 
@@ -99,19 +98,3 @@ class RandomDraw(nn.Module):
 
     def forward(self, rad):
         return mask_generator.generate_a_mask(rad=rad)
-
-
-if __name__ == '__main__':
-    data = KvasirSegmentationDataset("Datasets/HyperKvasir")
-    mask = data[6][1]
-    print(mask.shape)
-    # pe = BezierPolypExtender(5, 3)
-    # pe(mask[0])
-    print("drawing")
-    print(mask[0].shape)
-    rd = RandomDraw()(mask[0], 0.5)
-    print("drawn")
-    # print(rd)
-    plt.imshow(rd)
-    plt.show()
-    print("???)")

@@ -96,7 +96,7 @@ def get_random_points(n=5, scale=0.8, mindst=None, rec=0):
 # developer: Vajria
 # =======================================
 
-def generate_a_mask(rad=0.25, edgy=0.05, imsize=400, location=None, scale=None):
+def generate_a_mask(rad=0.25, edgy=0.05, imsize=512, location=None, scale=None):
     # for c in np.array([[0,0], [0,1], [1,0], [1,1]]):
     if location is None:
         location = [randint(0, np.floor(imsize / 1.5)),

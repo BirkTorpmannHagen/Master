@@ -2,6 +2,8 @@ import albumentations as alb
 import numpy as np
 import torch
 import torch.nn as nn
+from perturbation.polyp_inpainter import *
+from perturbation.perturbator import RandomDraw
 
 
 class ModelOfNaturalVariationInpainter(nn.Module):
@@ -9,11 +11,8 @@ class ModelOfNaturalVariationInpainter(nn.Module):
         super(ModelOfNaturalVariationInpainter, self).__init__()
         self.temp = T0
         self.linstep = 0.1
-        # self.use_inpainter = use_inpainter
-        # if self.use_inpainter:
-        #     self.inpainter = Inpainter("Predictors/Inpainters/no-pretrain-deeplab-generator-4990")
-        #     self.inpainter.eval()
-        #     self.perturbator = RandomDraw()
+        self.use_inpainter = use_inpainter
+
         self.pixelwise_augments, self.geometric_augments = self.get_encoded_transforms()
 
     def _map_to_range(self, max, min=0):
@@ -74,6 +73,9 @@ class ModelOfNaturalVariation(nn.Module):
         self.temp = T0
         self.linstep = 0.1
         self.pixelwise_augments, self.geometric_augments = self.get_encoded_transforms()
+        self.use_inpainter = use_inpainter
+        if use_inpainter:
+            self.inpainter = Inpainter("Predictors/Inpainters/no-pretrain-deeplab-generator-4990")
 
     def _map_to_range(self, max, min=0):
         # The temperature varies between 0 and 1, where 0 represents no augmentation and 1 represents the maximum augmentation
@@ -106,6 +108,9 @@ class ModelOfNaturalVariation(nn.Module):
         for batch_idx in range(image.shape[0]):  # random transforms to every image in the batch
             aug_img = image[batch_idx].squeeze().cpu().numpy().T
             aug_mask = mask[batch_idx].squeeze().cpu().numpy().T
+            if self.use_inpainter and np.random.rand(1) < 0.5:
+                aug_img, aug_mask = self.inpainter.add_polyp(aug_img, aug_mask)
+
             pixelwise = self.pixelwise_augments(image=aug_img)["image"]
             geoms = self.geometric_augments(image=pixelwise, mask=aug_mask)
             augmented_imgs[batch_idx] = torch.Tensor(geoms["image"].T)
@@ -131,4 +136,3 @@ if __name__ == '__main__':
         mask = y
 
         mnv(img, mask)
-        input()

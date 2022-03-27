@@ -102,7 +102,7 @@ class InductiveNetConsistencyTrainer:
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
                 np.save(
-                    f"Experiments/Data/Augmented-Pipelines/{self.model_str}/{self.id}",
+                    f"experiments/Data/Augmented-Pipelines/{self.model_str}/{self.id}",
                     test_iou)
                 print(f"Saving new best model. IID test-set mean iou: {test_iou}")
                 torch.save(self.model.state_dict(),
@@ -216,7 +216,7 @@ class InductiveNetVanillaTrainer(InductiveNetConsistencyTrainer):
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
                 np.save(
-                    f"Experiments/Data/Normal-Pipelines/{self.model_str}/{self.id}",
+                    f"experiments/Data/Normal-Pipelines/{self.model_str}/{self.id}",
                     test_iou)
                 print(f"Saving new best model. IID test-set mean iou: {test_iou}")
                 torch.save(self.model.state_dict(),
@@ -319,7 +319,7 @@ class InductiveNetAugmentationTrainer(InductiveNetConsistencyTrainer):
         self.jaccard = vanilla_losses.JaccardLoss()
         self.mse = vanilla_losses.MSELoss()
         self.prob = 0
-        self.dataset = KvasirMNVset("Datasets/HyperKvasir", "train")
+        self.dataset = KvasirMNVset("Datasets/HyperKvasir", "train", inpaint=config["use_inpainter"])
         self.train_loader = DataLoader(self.dataset, batch_size=config["batch_size"], shuffle=True)
 
     def get_iou_weights(self, image, mask):

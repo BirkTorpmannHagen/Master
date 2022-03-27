@@ -103,7 +103,7 @@ class VanillaTrainer:
                 test_ious = self.test()
                 best_val_loss = val_loss
                 np.save(
-                    f"Experiments/Data/Normal-Pipelines/{self.model_str}/{self.id}",
+                    f"experiments/Data/Normal-Pipelines/{self.model_str}/{self.id}",
                     test_ious)
                 print(f"Saving new best model. IID test-set mean iou: {float(np.mean(test_ious.numpy()))}")
                 torch.save(self.model.state_dict(),

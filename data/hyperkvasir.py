@@ -106,9 +106,9 @@ class KvasirSegmentationDataset(Dataset):
 
 
 class KvasirMNVset(KvasirSegmentationDataset):
-    def __init__(self, path, split):
+    def __init__(self, path, split, inpaint=False):
         super(KvasirMNVset, self).__init__(path, split, augment=False)
-        self.mnv = ModelOfNaturalVariation(1)
+        self.mnv = ModelOfNaturalVariation(1, use_inpainter=True)
         self.p = 0.5
 
     def __getitem__(self, index):
@@ -123,6 +123,8 @@ class KvasirMNVset(KvasirSegmentationDataset):
             image, mask = self.mnv(image.unsqueeze(0), mask.unsqueeze(0))
             image = image.squeeze()
             mask = mask.squeeze(0)  # todo make this less ugly
+            # plt.imshow(image.T.cpu().numpy())
+            # plt.show()
         return image, mask, self.split_fnames[index], flag
 
     def set_prob(self, prob):
@@ -178,9 +180,7 @@ class KvasirSyntheticDataset(Dataset):
         super(KvasirSyntheticDataset, self).__init__()
         self.path = join(path, "unlabeled-images")
         self.fnames = listdir(join(self.path, "images"))
-        self.common_transforms = transforms.Compose([transforms.Resize((400, 400)),
-                                                     transforms.ToTensor()
-                                                     ])
+        self.common_transforms = aug.pipeline_tranforms()
         self.split = split
         train_size = int(len(self.fnames) * 0.8)
         val_size = (len(self.fnames) - train_size) // 2
@@ -208,7 +208,7 @@ class KvasirSyntheticDataset(Dataset):
         image = self.common_transforms(
             open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
         image = image
-        mask = generate_a_mask(imsize=400).T
+        mask = generate_a_mask(imsize=512).T
         mask = torch.tensor(mask > 0.5).float()
         part = mask * image
         masked_image = image - part

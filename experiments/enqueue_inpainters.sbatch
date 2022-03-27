@@ -32,4 +32,4 @@ export NUMEXPR_NUM_THREADS=$omp_threads      # Python3 Multiproc
 
 export PYTHONPATH=$PWD
 echo "Starting jobs"
-srun python experiments/train_predictors_for_model.py "$SLURM_ARRAY_TASK_ID" "$EXPERIMENT_MODEL"
+srun python experiments/train_with_inpainters.py "$SLURM_ARRAY_TASK_ID" "$EXPERIMENT_MODEL"

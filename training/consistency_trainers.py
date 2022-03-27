@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch.optim.optimizer
 from torch.utils.data import DataLoader
-
+from tqdm import tqdm
 from data.hyperkvasir import KvasirSegmentationDataset, KvasirMNVset
 from evaluation.metrics import iou
 from losses.consistency_losses import *
@@ -71,7 +71,7 @@ class ConsistencyTrainer(VanillaTrainer):
             if val_loss < best_val_loss:
                 best_val_loss = val_loss
                 np.save(
-                    f"Experiments/Data/Augmented-Pipelines/{self.model_str}/{self.id}",
+                    f"experiments/Data/Augmented-Pipelines/{self.model_str}/{self.id}",
                     test_iou)
                 print(f"Saving new best model. IID test-set mean iou: {test_iou}")
                 torch.save(self.model.state_dict(),
@@ -107,7 +107,7 @@ class ConsistencyTrainerUsingAugmentation(ConsistencyTrainer):
         super(ConsistencyTrainerUsingAugmentation, self).__init__(id, config)
         self.jaccard = vanilla_losses.JaccardLoss()
         self.prob = 0
-        self.dataset = KvasirMNVset("Datasets/HyperKvasir", "train")
+        self.dataset = KvasirMNVset("Datasets/HyperKvasir", "train", inpaint=config["use_inpainter"])
         self.train_loader = DataLoader(self.dataset, batch_size=config["batch_size"], shuffle=True)
 
     def get_iou_weights(self, image, mask):
