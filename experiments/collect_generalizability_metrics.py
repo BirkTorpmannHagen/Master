@@ -32,7 +32,7 @@ class ModelEvaluator:
         # self.models = [FPN, InductiveNet, TriUnet, Unet]
         # self.model_names = ["FPN", "InductiveNet", "TriUnet", "Unet"]
         self.models = [DeepLab]
-            self.model_names = ["DeepLab"]
+        self.model_names = ["DeepLab"]
 
     def collect_stats(self, model, predictor_name, sample_range):
         mnv = ModelOfNaturalVariation(0)
