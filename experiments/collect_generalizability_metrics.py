@@ -29,10 +29,10 @@ class ModelEvaluator:
                                DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir", split="test"))] + \
                            [DataLoader(dataset) for dataset in self.datasets]
         self.dataset_names = ["HyperKvasir", "Etis-LaribDB", "CVC-ClinicDB", "EndoCV2020"]
-        # self.models = [FPN, InductiveNet, TriUnet, Unet]
-        # self.model_names = ["FPN", "InductiveNet", "TriUnet", "Unet"]
-        self.models = [DeepLab]
-        self.model_names = ["DeepLab"]
+        self.models = [FPN, InductiveNet, TriUnet, Unet]
+        self.model_names = ["FPN", "InductiveNet", "TriUnet", "Unet"]
+        # self.models = [DeepLab]
+        # self.model_names = ["DeepLab"]
 
     def collect_stats(self, model, predictor_name, sample_range):
         mnv = ModelOfNaturalVariation(0)
@@ -111,7 +111,7 @@ class ModelEvaluator:
                                 model = model_constructor().to("cuda")
                                 model.load_state_dict(state_dict)
                             except FileNotFoundError:
-                                print("File not found, continuing...")
+                                print(f"{model_name}-{eval_method}-{loss_fn}-{aug}-{id} not found, continuing...")
                                 continue
                             for dl_idx, dataloader in enumerate(self.dataloaders):
                                 # seeding ensures SIS metrics are non-stochastic
@@ -125,16 +125,16 @@ class ModelEvaluator:
                                     # dataset_ious[sample_idx] = iou
                                     mean_ious[dl_idx, id - id_range[0]] += iou / len(dataloader)
                                     # sis_auc metric
-                                    for idx, temp in enumerate(sample_range):
-                                        mnv.set_temp(temp)
-                                        aug_img, aug_mask = mnv(img, mask)
-                                        # if temp == 1:
-                                        #     plt.imshow(aug_img[0].cpu().numpy().T)
-                                        #     plt.show()
-                                        aug_out = model.predict(aug_img)
-                                        sis_matrix[dl_idx, id - id_range[0], idx] += np.mean(
-                                            metrics.sis(mask, out, aug_mask, aug_out).item()) / len(
-                                            dataloader)  # running mean
+                                    # for idx, temp in enumerate(sample_range):
+                                    #     mnv.set_temp(temp)
+                                    #     aug_img, aug_mask = mnv(img, mask)
+                                    #     # if temp == 1:
+                                    #     #     plt.imshow(aug_img[0].cpu().numpy().T)
+                                    #     #     plt.show()
+                                    #     aug_out = model.predict(aug_img)
+                                    #     sis_matrix[dl_idx, id - id_range[0], idx] += np.mean(
+                                    #         metrics.sis(mask, out, aug_mask, aug_out).item()) / len(
+                                    #         dataloader)  # running mean
                                     # break
                         with open(f"experiments/Data/pickles/{model_name}_{eval_method}_{loss_fn}_{aug}.pkl",
                                   "wb") as file:
@@ -182,6 +182,6 @@ if __name__ == '__main__':
     np.set_printoptions(precision=3, suppress=True)
     write_to_latex_table(0)
     evaluator = ModelEvaluator()
-    evaluator.get_table_data(np.linspace(0, 1, 11), range(2, 7))
+    evaluator.get_table_data(np.linspace(0, 1, 11), range(1, 11))
 
     # get_metrics_for_experiment("Augmented", "consistency_1")
