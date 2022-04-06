@@ -1,0 +1,42 @@
+begin{tabularx}{linewidth}{lllr}
+
+\toprule
+\multicolumn{4}{c}{\textbf{Kvasir-SEG}}\\
+\toprule
+No Augmentation & Conventional Augmentation & Consistency Training\\
+\midrule
+            DeepLab & 0.819& 0.853& 0.853 \\
+            FPN & 0.823& 0.852& 0.851 \\
+            InductiveNet & 0.832& 0.847& 0.853 \\
+            TriUnet & 0.822& 0.844& 0.845 \\
+            Unet & 0.828& 0.851& 0.851 \\
+\toprule
+\multicolumn{4}{c}{\textbf{Etis-LaribDB}}\\
+\toprule
+No Augmentation & Conventional Augmentation & Consistency Training\\
+\midrule
+            DeepLab & 0.412& 0.468& 0.504 \\
+            FPN & 0.404& 0.440& 0.471 \\
+            InductiveNet & 0.406& 0.469& 0.478 \\
+            TriUnet & 0.305& 0.419& 0.439 \\
+            Unet & 0.403& 0.454& 0.482 \\
+\toprule
+\multicolumn{4}{c}{\textbf{CVC-ClinicDB}}\\
+\toprule
+No Augmentation & Conventional Augmentation & Consistency Training\\
+\midrule
+            DeepLab & 0.678& 0.736& 0.740 \\
+            FPN & 0.678& 0.717& 0.726 \\
+            InductiveNet & 0.683& 0.733& 0.737 \\
+            TriUnet & 0.633& 0.695& 0.699 \\
+            Unet & 0.679& 0.720& 0.729 \\
+\multicolumn{4}{c}{\textbf{EndoCV2020}}\\
+No Augmentation & Conventional Augmentation & Consistency Training\\
+\midrule
+            DeepLab & 0.604& 0.677& 0.678 \\
+            FPN & 0.605& 0.663& 0.674 \\
+            InductiveNet & 0.595& 0.667& 0.672 \\
+            TriUnet & 0.581& 0.673& 0.686 \\
+            Unet & 0.599& 0.660& 0.677 \\
+\bottomrule
+end{tabularx}

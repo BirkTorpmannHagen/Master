@@ -1,3 +1,5 @@
+import random
+
 import torch
 import torch.nn as nn
 import numpy as np
@@ -5,24 +7,25 @@ from models import segmentation_models
 import segmentation_models_pytorch as smp
 from os import listdir
 from os.path import join
+import re
 
 
-class SingularEnsemble(nn.Module):
-    def __init__(self, model_str, model_count, state_dir, predictor_type=None):
-        super(SingularEnsemble, self).__init__()
-
+class SingularEnsemble:
+    def __init__(self, model_str, state_dir, predictor_type, model_count=4, random_choice=True):
+        # Ensemble consisting of only one type of Predictor
         state_fnames = listdir(state_dir)
         assert len(
             state_fnames) > model_count, f"Not enough trained instances of {model_str} for ensemble of size {model_count}"
-        if predictor_type is None:
-            state_fnames = [join(state_dir, str(i)) for i in range(1, model_count + 1)]
+        state_fnames = [join(state_dir, i) for i in
+                        list(filter(re.compile(f"^{predictor_type}_\d$").search, state_fnames))]
+        if random_choice:
+            random.shuffle(state_fnames)
         else:
-            state_fnames = [i for i in state_fnames if predictor_type in i][
-                           :model_count]  # filters according to predictor type, i.e maximum_consistency
+            state_fnames.sort()
+        state_fnames = state_fnames[:model_count]
         self.device = "cuda"
         self.model_str = model_str
         self.model_count = model_count
-
         if self.model_str == "DeepLab":
             self.models = [segmentation_models.DeepLab().to(self.device).eval() for _ in range(model_count)]
         elif self.model_str == "TriUnet":
@@ -38,27 +41,16 @@ class SingularEnsemble(nn.Module):
         for model, fname in zip(self.models, state_fnames):
             model.load_state_dict(torch.load(fname))
 
-    def forward(self, x, threshold=True):
+    def predict(self, x, threshold=True):
         out = torch.zeros((self.model_count, x.shape[-4], 1, x.shape[-2], x.shape[-1])).to(self.device)
         for i in range(len(self.models)):
-            if self.model_str == "InductiveNet":
-                out[i], _ = self.models[i](x)
-            else:
-                out[i] = self.models[i](x)
+            out[i] = self.models[i].predict(x)
         if threshold:
-            return (torch.mean(out, 0) / self.model_count > 0.5).float()
-        return torch.mean(out, 0) / self.model_count
+            return (torch.mean(out, 0) > 0.5).float()
+        return torch.mean(out, 0)
 
-
-class DiverseEnsemble(nn.Module):
-    def __init__(self):
-        super(DiverseEnsemble, self).__init__()
-        vanilla_models = [segmentation_models.FPN(), segmentation_models.Unet(), segmentation_models.TriUnet(),
-                          segmentation_models.DeepLab()]
-        inductiveNet_ensemble = segmentation_models.InductiveNet()
-
-    def forward(self, x):
-        pass
+    def __call__(self, x, threshold=True):
+        return self.predict(x, threshold)
 
 
 class TrainedEnsemble(nn.Module):
@@ -79,8 +71,28 @@ class TrainedEnsemble(nn.Module):
         return img
 
 
+class DiverseEnsemble:
+    def __init__(self, id, state_dir, type):
+        self.device = "cuda"
+        self.model_names = ["DeepLab", "Unet", "TriUnet", "FPN", "InductiveNet"]
+        self.model_constructors = [segmentation_models.DeepLab, segmentation_models.Unet, segmentation_models.TriUnet,
+                                   segmentation_models.FPN, segmentation_models.InductiveNet]
+        self.models = [i().to(self.device).eval() for i in self.model_constructors]
+        for model_name, model in zip(self.model_names, self.models):
+            model.load_state_dict(torch.load(f"{join(state_dir, model_name, type)}_{id}"))
+
+    def predict(self, x, threshold=True):
+        out = torch.zeros((len(self.models), x.shape[-4], 1, x.shape[-2], x.shape[-1])).to(self.device)
+        for i in range(len(self.models)):
+            out[i] = self.models[i].predict(x)
+        if threshold:
+            return (torch.mean(out, 0) > 0.5).float()
+        return torch.mean(out, 0)
+
+
 if __name__ == '__main__':
     # ens = SingularEnsemble("InductiveNet", 10, "Predictors/Augmented/InductiveNet")
-    ens = TrainedEnsemble("Singular")
-    ens(torch.zeros(8, 3, 512, 512).to("cuda"))
+    # ens = SingularEnsemble("DeepLab", "Predictors/Augmented/DeepLab", predictor_type="consistency")
+    ens = DiverseEnsemble(1, state_dir="Predictors/Augmented", type="consistency")
+    ens.predict(torch.zeros(8, 3, 512, 512).to("cuda"))
     print("Done!")
