@@ -30,10 +30,10 @@ class ModelEvaluator:
                                DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir", split="test"))] + \
                            [DataLoader(dataset) for dataset in self.datasets]
         self.dataset_names = ["HyperKvasir", "Etis-LaribDB", "CVC-ClinicDB", "EndoCV2020"]
-        self.models = [DeepLab, FPN, InductiveNet, TriUnet, Unet]
-        self.model_names = ["DeepLab", "FPN", "InductiveNet", "TriUnet", "Unet"]
-        # self.models = [DeepLab]
-        # self.model_names = ["DeepLab"]
+        # self.models = [DeepLab, FPN, InductiveNet, TriUnet, Unet]
+        # self.model_names = ["DeepLab", "FPN", "InductiveNet", "TriUnet", "Unet"]
+        self.models = [InductiveNet]
+        self.model_names = ["InductiveNet"]
 
     def parse_experiment_details(self, model_name, eval_method, loss_fn, aug, id, last_epoch=False):
         """
@@ -67,7 +67,7 @@ class ModelEvaluator:
                 path += "_last_epoch"
         return torch.load(path), path
 
-    def get_table_data(self, sample_range, id_range):
+    def get_table_data(self, sample_range, id_range, show_reconstruction=False):
         mnv = ModelOfNaturalVariation(0)
         for model_constructor, model_name in zip(self.models, self.model_names):
             for eval_method in [""]:
@@ -92,6 +92,9 @@ class ModelEvaluator:
                             except FileNotFoundError:
                                 print(f"{model_name}-{eval_method}-{loss_fn}-{aug}-{id} not found, continuing...")
                                 continue
+                            # fig, ax = plt.subplots(ncols=3, nrows=4, sharey=True, figsize=(4, 4), dpi=1000)
+                            # fig.subplots_adjust(wspace=0, hspace=0)
+                            all_l1s = [[], [], [], []]
                             for dl_idx, dataloader in enumerate(self.dataloaders):
                                 print(dl_idx)
                                 # if dl_idx != 0:
@@ -103,6 +106,29 @@ class ModelEvaluator:
                                 for x, y, _ in dataloader:
                                     img, mask = x.to("cuda"), y.to("cuda")
                                     out = model.predict(img)
+
+                                    with torch.no_grad():
+                                        out, reconstruction = model(img)
+                                        all_l1s[dl_idx].append(np.mean(np.mean(
+                                            np.abs(reconstruction[0].cpu().numpy().T - x[0].cpu().numpy().T))))
+                                        #             axis=-1)))
+                                        # ax[dl_idx, 0].axis("off")
+                                        # ax[dl_idx, 1].axis("off")
+                                        # ax[dl_idx, 2].axis("off")
+                                        # if dl_idx == 0:
+                                        #     ax[dl_idx, 0].title.set_text("Original")
+                                        #     ax[dl_idx, 1].title.set_text("Rec.")
+                                        #     ax[dl_idx, 2].title.set_text("Difference")
+                                        #
+                                        # ax[dl_idx, 0].imshow(x[0].cpu().numpy().T)
+                                        # ax[dl_idx, 1].imshow(reconstruction[0].cpu().numpy().T)
+                                        # ax[dl_idx, 2].imshow(
+                                        #     np.mean(np.abs(reconstruction[0].cpu().numpy().T - x[0].cpu().numpy().T),
+                                        #             axis=-1))
+                                        # all_l1s[dl_idx].append(np.mean(np.mean(np.abs(reconstruction[0].cpu().numpy().T - x[0].cpu().numpy().T),
+                                        #             axis=-1)))
+                                        # show_reconstruction = False
+
                                     iou = metrics.iou(out, mask)
                                     # dataset_ious[sample_idx] = iou
                                     mean_ious[dl_idx, id - id_range[0]] += iou / len(dataloader)
@@ -118,13 +144,23 @@ class ModelEvaluator:
                                     #         metrics.sis(mask, out, aug_mask, aug_out).item()) / len(
                                     #         dataloader)  # running mean
                                     # break
+                            fig, ax = plt.subplots(4, 1, sharex=True)
+                            colours = ["b", "r", "g", "c"]
+                            for index, dataset in enumerate(all_l1s):
+                                ax[index].hist(dataset, alpha=0.5, label=self.dataset_names[index],
+                                               color=colours[index])
+                                ax[index].legend()
+                            plt.show()
                             print(f"{full_name} has iou {mean_ious[0, id - 1]} ")
+                            # plt.subplots_adjust(wspace=0, hspace=0.01)
+                            # plt.show()
+                            input()
 
                             # if mean_ious[0, id - 1] < 0.8:
                             #     print(f"{full_name} has iou {mean_ious[0, id - 1]} ")
-                        with open(f"experiments/Data/pickles/{model_name}_{eval_method}_{loss_fn}_{aug}.pkl",
-                                  "wb") as file:
-                            pickle.dump({"ious": mean_ious, "sis": sis_matrix}, file)
+                        # with open(f"experiments/Data/pickles/{model_name}_{eval_method}_{loss_fn}_{aug}.pkl",
+                        #           "wb") as file:
+                        #     pickle.dump({"ious": mean_ious, "sis": sis_matrix}, file)
 
                         # print(f"IOUS for {full_name}: {mean_ious}")
                         # for i, name in enumerate(self.dataset_names):
@@ -196,26 +232,27 @@ class DiverseEnsembleEvaluator:
 
     def get_table_data(self):
         mnv = ModelOfNaturalVariation(0)
-        mean_ious = np.zeros((len(self.dataloaders), self.samples))
-        for i in range(1, self.samples + 1):
-            model = DiverseEnsemble(i, "Predictors/Augmented/", "consistency")
-            for dl_idx, dataloader in enumerate(self.dataloaders):
-                # seeding ensures SIS metrics are non-stochastic
-                # np.random.seed(0)
-                # torch.manual_seed(0)
-                # random.seed(0)
-                # todo: filter bad predictors
-                for x, y, _ in tqdm(dataloader):
-                    img, mask = x.to("cuda"), y.to("cuda")
-                    out = model.predict(img)
-                    iou = metrics.iou(out, mask)
-                    mean_ious[dl_idx, i - 1] += iou / len(dataloader)
-            if mean_ious[0, i - 1] < 0.80:
-                print(f"{i} has iou {mean_ious[0, i - 1]}")
-            print(mean_ious)
-        with open(f"experiments/Data/pickles/diverse-ensemble.pkl",
-                  "wb") as file:
-            pickle.dump({"ious": mean_ious}, file)
+        for type in ["augmentation", "consistency"]:
+            mean_ious = np.zeros((len(self.dataloaders), self.samples))
+            for i in range(1, self.samples + 1):
+                model = DiverseEnsemble(i, "Predictors/Augmented/", type)
+                for dl_idx, dataloader in enumerate(self.dataloaders):
+                    # seeding ensures SIS metrics are non-stochastic
+                    # np.random.seed(0)
+                    # torch.manual_seed(0)
+                    # random.seed(0)
+                    # todo: filter bad predictors
+                    for x, y, _ in tqdm(dataloader):
+                        img, mask = x.to("cuda"), y.to("cuda")
+                        out = model.predict(img)
+                        iou = metrics.iou(out, mask)
+                        mean_ious[dl_idx, i - 1] += iou / len(dataloader)
+                if mean_ious[0, i - 1] < 0.80:
+                    print(f"{i} has iou {mean_ious[0, i - 1]}")
+                print(mean_ious)
+            with open(f"experiments/Data/pickles/diverse-ensemble-{type}.pkl",
+                      "wb") as file:
+                pickle.dump({"ious": mean_ious}, file)
 
 
 def write_to_latex_table(pkl_file):
@@ -224,11 +261,11 @@ def write_to_latex_table(pkl_file):
 
 if __name__ == '__main__':
     np.set_printoptions(precision=3, suppress=True)
-    # evaluator = ModelEvaluator()
-    # evaluator.get_table_data(np.arange(0, 6), np.arange(1, 6))
-    # evaluator = DiverseEnsembleEvaluator()
+    evaluator = ModelEvaluator()
+    evaluator.get_table_data(np.arange(0, 6), np.arange(1, 6))
+    # evaluator = DiverseEnsembleEvaluator(samples=6)
     # evaluator.get_table_data()
-    evaluator = SingularEnsembleEvaluator()
-    evaluator.get_table_data(5)
+    # evaluator = SingularEnsembleEvaluator()
+    # evaluator.get_table_data(5)
 
     # get_metrics_for_experiment("Augmented", "consistency_1")
