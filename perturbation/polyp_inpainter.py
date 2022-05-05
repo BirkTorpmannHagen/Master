@@ -39,7 +39,7 @@ class Inpainter:
         for i, (image, mask, masked_image, part, fname) in enumerate(
                 DataLoader(KvasirSyntheticDataset("Datasets/HyperKvasir", split="test"),
                            batch_size=4)):
-            merged, mask = self.add_polyp(image.double())
+            merged, mask = self.add_polyp(image, mask)
             plt.title("Inpainted image")
             plt.imshow(merged[0].T)
             plt.show()

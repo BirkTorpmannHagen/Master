@@ -13,16 +13,17 @@ import re
 class SingularEnsemble:
     def __init__(self, model_str, state_dir, predictor_type, model_count=4, random_choice=True):
         # Ensemble consisting of only one type of Predictor
-        state_fnames = listdir(state_dir)
+        self.state_fnames = listdir(state_dir)
         assert len(
-            state_fnames) > model_count, f"Not enough trained instances of {model_str} for ensemble of size {model_count}"
-        state_fnames = [join(state_dir, i) for i in
-                        list(filter(re.compile(f"^{predictor_type}_\d$").search, state_fnames))]
+            self.state_fnames) > model_count, f"Not enough trained instances of {model_str} for ensemble of size {model_count}"
+        self.state_fnames = [join(state_dir, i) for i in
+                             list(filter(re.compile(f"^{predictor_type}_\d$").search, self.state_fnames))]
         if random_choice:
-            random.shuffle(state_fnames)
+            random.shuffle(self.state_fnames)
         else:
-            state_fnames.sort()
-        state_fnames = state_fnames[:model_count]
+            self.state_fnames.sort()
+        self.state_fnames = self.state_fnames[:model_count]
+
         self.device = "cuda"
         self.model_str = model_str
         self.model_count = model_count
@@ -38,7 +39,7 @@ class SingularEnsemble:
             self.models = [segmentation_models.InductiveNet().to(self.device).eval() for _ in range(model_count)]
         else:
             raise AttributeError("model_str not valid; choices are DeepLab, TriUnet, FPN, Unet, InductiveNet")
-        for model, fname in zip(self.models, state_fnames):
+        for model, fname in zip(self.models, self.state_fnames):
             model.load_state_dict(torch.load(fname))
 
     def predict(self, x, threshold=True):
@@ -48,6 +49,9 @@ class SingularEnsemble:
         if threshold:
             return (torch.mean(out, 0) > 0.5).float()
         return torch.mean(out, 0)
+
+    def get_constituents(self):
+        return self.state_fnames
 
     def __call__(self, x, threshold=True):
         return self.predict(x, threshold)
@@ -80,6 +84,10 @@ class DiverseEnsemble:
         self.models = [i().to(self.device).eval() for i in self.model_constructors]
         for model_name, model in zip(self.model_names, self.models):
             model.load_state_dict(torch.load(f"{join(state_dir, model_name, type)}_{id}"))
+        self.id = id
+
+    def get_constituents(self):
+        return self.id
 
     def predict(self, x, threshold=True):
         out = torch.zeros((len(self.models), x.shape[-4], 1, x.shape[-2], x.shape[-1])).to(self.device)

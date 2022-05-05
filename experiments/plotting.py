@@ -8,7 +8,7 @@ import torch
 import pickle
 from utils.formatting import SafeDict
 from scipy.stats import wasserstein_distance
-from scipy.stats import ttest_ind
+from scipy.stats import ttest_ind, pearsonr, ttest_rel
 from models.segmentation_models import *
 
 
@@ -75,6 +75,7 @@ def get_boxplots_for_models():
                 data = pickle.load(file)
                 datasets, samples = data["ious"].shape
                 kvasir_ious = data["ious"][0]
+                print(kvasir_ious)
                 # print(kvasir_ious)
                 mean_iid_iou = np.median(kvasir_ious)
                 print(mean_iid_iou)
@@ -85,11 +86,12 @@ def get_boxplots_for_models():
                     #     continue
                     for j in range(samples):
                         if data["ious"][i, j] < 0.25 or data["ious"][0][j] < 0.75:
-                            print(fname, "-", 2 + j)
+                            print(f"{fname} with id {j} has iou {data['ious'][i, j]} and {data['ious'][0][j]} ")
                             continue
                         dataset.append([dataset_names[i], model, data["ious"][i, j]])
 
-                        # dataset.append([dataset_names[i], model, 100*(data["ious"][i, j]-mean_iid_iou)/mean_iid_iou])
+                        # dataset.append(
+                        #     [dataset_names[i], model, 100 * (data["ious"][i, j] - mean_iid_iou) / mean_iid_iou])
 
     dataset = pd.DataFrame(data=dataset, columns=["Dataset", "Model", "\u0394%IoU"])
     sns.barplot(x="Dataset", y="\u0394%IoU", hue="Model", data=dataset)
@@ -145,6 +147,7 @@ def plot_parameters_sizes():
         model = model_c()
         print(f"{model_name}: {sum(p.numel() for p in model.parameters(recurse=True))}")
 
+
 def collate_ensemble_results_into_df():
     dataset_names = ["Kvasir-SEG", "Etis-LaribDB", "CVC-ClinicDB", "EndoCV2020"]
     model_names = ["DeepLab", "FPN", "Unet", "InductiveNet", "TriUnet"]
@@ -158,7 +161,9 @@ def collate_ensemble_results_into_df():
         with open(os.path.join("experiments/Data/pickles", fname), "rb") as file:
             model = fname.split("-")[0]
             experiment = fname.split("-")[-1]
+            # todo fnames with consistency and augmentation
             data = pickle.load(file)
+            # print(file, data.keys())
             datasets, samples = data["ious"].shape
             if model == "InductiveNet":
                 model = "DD-DeepLabV3+"
@@ -166,12 +171,18 @@ def collate_ensemble_results_into_df():
                 for j in range(samples):
                     if data["ious"][0, j] < 0.75:
                         continue
-                    dataset.append([dataset_names[i], model, j, experiment, data["ious"][i, j]])
 
-    iou_dataset = pd.DataFrame(data=dataset, columns=["Dataset", "Model", "ID", "Experiment", "IoU"])
+                    try:
+                        dataset.append(
+                            [dataset_names[i], model, j, experiment, data["ious"][i, j], data["constituents"][j]])
+                    except KeyError:
+                        continue
+
+    iou_dataset = pd.DataFrame(data=dataset, columns=["Dataset", "Model", "ID", "Experiment", "IoU", "constituents"])
     # print(iou_dataset)
     iou_dataset.to_csv("base_data.csv")
     return iou_dataset
+
 
 def collate_base_results_into_df():
     dataset_names = ["Kvasir-SEG", "Etis-LaribDB", "CVC-ClinicDB", "EndoCV2020"]
@@ -179,10 +190,10 @@ def collate_base_results_into_df():
     dataset = []
     for fname in sorted(os.listdir("experiments/Data/pickles")):
         if "ensemble" in fname:
-            print(fname)
+            # print(fname)
             continue
         if "maximum_consistency" in fname or "last_epoch" in fname:
-            print(fname)
+            # print(fname)
             continue
 
         with open(os.path.join("experiments/Data/pickles", fname), "rb") as file:
@@ -193,7 +204,7 @@ def collate_base_results_into_df():
                 model = "DD-DeepLabV3+"
             experiment = "No Augmentation"
             if "sil" in fname and "_G" not in fname:
-                experiment = "consistency training"
+                experiment = "Consistency Training"
             elif "_V" in fname:
                 experiment = "Vanilla Augmentation"
             elif "_G" in fname:
@@ -203,10 +214,9 @@ def collate_base_results_into_df():
                 for j in range(samples):
                     if data["ious"][0, j] < 0.75:
                         continue
-                    dataset.append([dataset_names[i], model, j, experiment, data["ious"][i, j]])
+                    dataset.append([dataset_names[i], model, j, experiment, data["ious"][i, j], data["sis"][i, j]])
 
-    iou_dataset = pd.DataFrame(data=dataset, columns=["Dataset", "Model", "ID", "Experiment", "IoU"])
-    # print(iou_dataset)
+    iou_dataset = pd.DataFrame(data=dataset, columns=["Dataset", "Model", "ID", "Experiment", "IoU", "SIS"])
     iou_dataset.to_csv("base_data.csv")
     return iou_dataset
 
@@ -220,60 +230,66 @@ def plot_ensemble_performance():
     order = df.groupby(["Dataset", "Model"])["IoU"].mean().sort_values().index
     sns.barplot(data=df, x="Dataset", y="IoU", hue="Model")
     plt.show()
-    grouped_mean = df.groupby(["Dataset", "Model"])["IoU"].mean()
+    grouped_mean = df.groupby(["Dataset", "Model", "ID"])["IoU"].mean()
     # print(grouped_mean)
-    grouped_iid = np.abs(grouped_mean - grouped_mean["Kvasir-SEG"])/grouped_mean["Kvasir-SEG"]
+    grouped_iid = np.abs(grouped_mean - grouped_mean["Kvasir-SEG"]) / grouped_mean["Kvasir-SEG"]
     # print(grouped_iid)
 
     nedf = collate_base_results_into_df()
     ne_grouped_mean = nedf.groupby(["Dataset", "Model"])["IoU"].mean()
     # print(ne_grouped_mean)
-    ne_grouped_iid = np.abs(ne_grouped_mean["Kvasir-SEG"]-ne_grouped_mean) / ne_grouped_mean["Kvasir-SEG"]
+    ne_grouped_iid = np.abs(ne_grouped_mean["Kvasir-SEG"] - ne_grouped_mean) / ne_grouped_mean["Kvasir-SEG"]
     # print(ne_grouped_iid)
 
-    comparison = ne_grouped_iid-grouped_iid
+    comparison = ne_grouped_iid - grouped_iid
     comparison = comparison.reset_index()
 
     sns.barplot(data=comparison, x="Dataset", y="IoU", hue="Model")
     plt.show()
 
-    #plot delta vs variance
-    ne_grouped_coeff_std = nedf.groupby(["Dataset", "Model"])["IoU"].std()/ne_grouped_mean
+    # plot delta vs variance
+    ne_grouped_coeff_std = nedf.groupby(["Dataset", "Model"])["IoU"].std() / ne_grouped_mean
     ne_grouped_coeff_std = ne_grouped_coeff_std.reset_index()
-    ne_grouped_coeff_std = ne_grouped_coeff_std.rename(columns={"IoU":"Coeff. StD of IoUs"})
+    ne_grouped_coeff_std = ne_grouped_coeff_std.rename(columns={"IoU": "Coeff. StD of IoUs"})
     # print(ne_grouped_coeff_std.head(10))
     sns.barplot(data=ne_grouped_coeff_std, x="Dataset", y="Coeff. StD of IoUs", hue="Model")
     plt.show()
     test = pd.merge(ne_grouped_coeff_std, comparison)
-    test=test.rename(columns={"IoU":"Change in Generalizability Gap"})
+    test = test.rename(columns={"IoU": "Change in Generalizability Gap (\u0394%IoU)"})
+    test["Change in Generalizability Gap (\u0394%IoU)"] *= 100
+    test = test.groupby(["Model", "ID"]).mean()
+    test = test.reset_index()
+
+    print("mean", np.mean(test))
+    print("max", np.max(test))
     # print(test)
 
-    sns.scatterplot(test["Coeff. StD of IoUs"], test["Change in Generalizability Gap"], hue=test["Model"])
+    sns.lineplot(data=test, x="Coeff. StD of IoUs", y="Change in Generalizability Gap (\u0394%IoU)", err_style="bars",
+                 color="gray", linestyle='--')
+    test = test.groupby("Model").mean().reset_index()
+    sns.scatterplot(test["Coeff. StD of IoUs"], test["Change in Generalizability Gap (\u0394%IoU)"], hue=test["Model"],
+                    s=100)
     plt.show()
 
-    reduced_dataset = ne_grouped_coeff_std.groupby("Model")["Coeff. StD of IoUs"].mean()
-    reduced_dataset = reduced_dataset.reset_index()
-    comparison = 100*comparison.groupby("Model")["IoU"].mean()
-    comparison = comparison.reset_index()
-    dataset = pd.merge(reduced_dataset, comparison)
-    dataset=dataset.rename(columns={"IoU":"\u0394%IoU"})
-
-    sns.lineplot(data=dataset, x="Coeff. StD of IoUs", y="\u0394%IoU", color="gray", linestyle='--')
-    sns.scatterplot(data=dataset, x="Coeff. StD of IoUs", y="\u0394%IoU", hue=reduced_dataset["Model"], s=100)
-
-    plt.show()
 
 def plot_inpainter_vs_conventional_performance():
     df = collate_base_results_into_df()
-    df = df[df["Experiment"] != "consistency training"]
-    filt = df.groupby(["Dataset", "ID", "IoU", "Experiment"]).mean()
-    filt = filt.reset_index()
+    df = df[df["Experiment"] != "Consistency Training"]
+
     hue_order = df.groupby(["Experiment"])["IoU"].mean().sort_values().index
     order = df.groupby(["Dataset"])["IoU"].mean().sort_values().index
     table = df.groupby(["Dataset", "Model", "Experiment"])["IoU"].mean()
-    test = table.to_latex()
-    print(test)
-    sns.barplot(data=filt, x="Dataset", y="IoU", hue="Experiment", hue_order=hue_order, order=order)
+    no_augmentation = df[df["Experiment"] == "No Augmentation"].groupby(["Dataset", "Model"])[
+        "IoU"].mean()
+    # print(no_augmentation)
+    improvements = 100 * (table - no_augmentation) / no_augmentation
+    improvements = improvements.reset_index()
+    improvements = improvements[improvements["Experiment"] != "No Augmentation"]
+    improvements.rename(columns={"IoU": "% Change in mean IoU with respect to No Augmentation"}, inplace=True)
+
+    test = table.to_latex(float_format="%.3f")
+    sns.boxplot(data=improvements, x="Dataset", y="% Change in mean IoU with respect to No Augmentation",
+                hue="Experiment")
     plt.show()
     return table
 
@@ -281,43 +297,231 @@ def plot_inpainter_vs_conventional_performance():
 def plot_training_procedure_performance():
     df = collate_base_results_into_df()
     df = df[df["Experiment"] != "Inpainter Augmentation"]
+    index = df.index[df["Experiment"] == "No Augmentation"].tolist() + df.index[
+        df["Experiment"] == "Vanilla Augmentation"].tolist() + df.index[
+                df["Experiment"] == "Consistency Training"].tolist()
+    df = df.reindex(index)
+    # print(df)
     filt = df.groupby(["Dataset", "ID", "IoU", "Experiment"]).mean()
     filt = filt.reset_index()
     hue_order = df.groupby(["Experiment"])["IoU"].mean().sort_values().index
     order = df.groupby(["Dataset"])["IoU"].mean().sort_values().index
     table = df.groupby(["Dataset", "Model", "Experiment"])["IoU"].mean()
+
+    w_p_values = table.reset_index()
+    for i, row in w_p_values.iterrows():
+        experiment = row["Experiment"]
+        model = row["Model"]
+        dataset = row["Dataset"]
+        ious = df[(df["Dataset"] == dataset) & (df["Model"] == model) & (df["Experiment"] == experiment)]["IoU"]
+        augmentation_ious = \
+            df[(df["Dataset"] == dataset) & (df["Model"] == model) & (df["Experiment"] == "Vanilla Augmentation")][
+                "IoU"]
+
+        w_p_values.at[i, "p-value"] = round(1 - ttest_ind(ious, augmentation_ious, equal_var=False)[-1], 3)
+
+    for dset in np.unique(df["Dataset"]):
+        overall_ttest = ttest_ind(df[(df["Experiment"] == "Consistency Training") & (df["Dataset"] == dset)]["IoU"],
+                                  df[(df["Experiment"] == "Vanilla Augmentation") & (df["Dataset"] == dset)]["IoU"],
+                                  equal_var=False)
+        print(f"{dset}: {overall_ttest[0]}, p={1 - round(overall_ttest[1], 5)} ")
+
     test = table.to_latex(float_format="%.3f")
-    print(test)
-    sns.barplot(data=filt, x="Dataset", y="IoU", hue="Experiment", hue_order=hue_order, order=order)
+    no_augmentation_performance = filt[filt["Experiment"] == "No Augmentation"].groupby(["Dataset"])["IoU"].mean()
+
+    # C.StD analysis
+    cstd = filt.groupby(["Dataset", "Experiment"])["IoU"].std() / filt.groupby(["Dataset", "Experiment"])[
+        "IoU"].mean()
+    cstd = cstd.reset_index()
+    cstd.rename(columns={"IoU": "Coefficient of Standard Deviation of IoUs"}, inplace=True)
+    sns.barplot(data=cstd, x="Dataset", y="Coefficient of Standard Deviation of IoUs", hue="Experiment",
+                hue_order=["No Augmentation", "Vanilla Augmentation", "Consistency Training"])
     plt.show()
+
+    improvement_pct = 100 * (filt.groupby(["Dataset", "Experiment", "ID"])[
+                                 "IoU"].mean() - no_augmentation_performance) / no_augmentation_performance
+    improvement_pct = improvement_pct.reset_index()
+    improvement_pct = improvement_pct[improvement_pct["Experiment"] != "No Augmentation"]
+
+    improvement_pct.rename(columns={"IoU": "% Change in mean IoU with respect to No Augmentation"}, inplace=True)
+    sns.boxplot(data=improvement_pct, x="Dataset", y="% Change in mean IoU with respect to No Augmentation",
+                hue="Experiment")
+
+    plt.show()
+
+    # scatter = sns.barplot(data=filt, x="Dataset", y="IoU", hue="Experiment", hue_order=hue_order, order=order)
+    # scatter.legend(loc='lower right')
+    # plt.show()
     return table
+
 
 def plot_baseline_performance():
     df = collate_base_results_into_df()
-    df = df[df["Experiment"]=="No Augmentation"]
-    df_van =df.groupby(["Dataset", "Model"])["IoU"].mean()
+    df = df[df["Experiment"] == "No Augmentation"]
+    df_van = df.groupby(["Dataset", "Model"])["IoU"].mean()
     df_van = df_van.reset_index()
     # hue_order = df_van.groupby(["Model"])["IoU"].mean().sort_values().index
     order = df_van.groupby(["Dataset"])["IoU"].mean().sort_values().index
     print(df_van)
-    #t tests here
-    plt.hist(df[df["Dataset"]=="Kvasir-SEG"]["IoU"])
+    # t tests here
+    plt.hist(df[df["Dataset"] == "Kvasir-SEG"]["IoU"])
     plt.show()
     sns.barplot(data=df, x="Dataset", y="IoU", hue="Model", order=order)
     plt.show()
 
 
+def plot_consistencies():
+    df = collate_base_results_into_df()
+    df.groupby(["Experiment", "Dataset", "Model", "ID"]).mean().reset_index().to_csv("test.csv")
+    grouped = df.groupby(["Experiment", "Dataset", "Model", "ID"])["SIS"].mean().reset_index()
+    grouped = grouped[grouped["Experiment"] != "Inpainter Augmentation"]
+    grouped = grouped[grouped["Dataset"] == "Kvasir-SEG"]
+    # grouped.to_csv("test.csv")
+    sns.barplot(data=grouped, x="Model", y="SIS", hue="Experiment")
+    plt.show()
+
+    grouped = df.groupby(["Experiment", "Dataset", "Model", "ID"])["IoU"].mean().reset_index()
+    grouped = grouped[grouped["Experiment"] != "Inpainter Augmentation"]
+    grouped = grouped[grouped["Dataset"] == "Kvasir-SEG"]
+    # grouped.to_csv("test.csv")
+    sns.barplot(data=grouped, x="Model", y="IoU", hue="Experiment")
+    plt.tight_layout()
+    plt.show()
+
+    # aug_consistencies = []
+    # aug_oods = []
+    # cons_consistencies = []
+    # cons_oods
+    cons_df = pd.DataFrame()
+    aug_df = pd.DataFrame()
+    for file in os.listdir("logs/consistency/FPN"):
+        if "augmentation" in file:
+            aug_df = aug_df.append(pd.read_csv(os.path.join("logs/consistency/FPN", file)), ignore_index=True)
+        if "consistency" in file:
+            cons_df = aug_df.append(pd.read_csv(os.path.join("logs/consistency/FPN", file)), ignore_index=True)
+        else:
+            continue
+    cons_df = cons_df[cons_df["epoch"] < 300]
+    aug_df = aug_df[aug_df["epoch"] < 300]
+    sns.lineplot(data=cons_df, x="epoch", y="consistency", color="orange")
+    sns.lineplot(data=aug_df, x="epoch", y="consistency", color="blue")
+    sns.lineplot(data=cons_df, x="epoch", y="ood_iou", color="orange")
+    sns.lineplot(data=aug_df, x="epoch", y="ood_iou", color="blue")
+    plt.show()
+
+
+def plot_ensemble_variance_relationship():
+    df = collate_ensemble_results_into_df()
+    df_constituents = collate_base_results_into_df()
+    df["constituents"] = df["constituents"].apply(
+        lambda x: [int(i.split("_")[-1]) for i in x] if type(x) == type([]) else int(x))
+    df_constituents = df_constituents[df_constituents["Experiment"] == "Consistency Training"]
+
+    colors = ["tab:blue", "tab:orange", "tab:green", "tab:red"]
+    # colors = ["b", "g", "r", "c", "m", "y"]
+    colormap = dict(zip(np.unique(df["Dataset"]), colors))
+    print(colormap)
+    var_dataset = pd.DataFrame()
+    for i, row in df.iterrows():
+        model = df.at[i, "Model"]
+        id = df.at[i, "ID"]
+        experiment = df.at[i, "Experiment"].split(".")[0]
+        if model == "diverse" and experiment != "consistency":
+            continue
+
+        if model == "diverse":
+            # get non-ensemble stats
+            # continue
+            filtered = df_constituents[
+                (df_constituents["ID"] == id) &
+                (df_constituents["Experiment"] == "Consistency Training")]  # todo take augmentation into account
+            cstd = (filtered.groupby(["Dataset"]).std() / filtered.groupby(["Dataset"]).mean())["IoU"]
+
+            improvements = df[
+                (df["Model"] == model) & (df["Experiment"] == f"{experiment}.pkl") & (df["ID"] == id)]
+
+            improvements = 100 * (improvements.groupby(["Dataset"])["IoU"].mean() - filtered.groupby(["Dataset"])[
+                "IoU"].mean()) / filtered.groupby(["Dataset"])["IoU"].mean()
+            cstd = cstd.reset_index()
+            improvements = improvements.reset_index()
+            cstd.rename(columns={"IoU": "C.StD"}, inplace=True)
+            improvements.rename(columns={"IoU": "% Increase in Generalizability wrt Constituents Mean"}, inplace=True)
+            merged = pd.merge(improvements, cstd)
+            merged["Model"] = [model] * 4
+            merged["ID"] = [id] * 4
+            var_dataset = var_dataset.append(merged)
+        else:
+
+            constituents = df.at[i, "constituents"]
+            filtered = df_constituents[
+                (df_constituents["Model"] == model) & (df_constituents["ID"].isin(constituents))]
+            cstd = (filtered.groupby(["Dataset"]).std() / filtered.groupby(["Dataset"]).mean())["IoU"]
+            improvements = df[
+                (df["Model"] == model) & (df["Experiment"] == f"{experiment}.pkl") & (df["ID"] == id)]
+
+            improvements = 100 * (improvements.groupby(["Dataset"])["IoU"].mean() - filtered.groupby(["Dataset"])[
+                "IoU"].mean()) / filtered.groupby(["Dataset"])["IoU"].mean()
+            cstd = cstd.reset_index()
+            improvements = improvements.reset_index()
+            cstd.rename(columns={"IoU": "C.StD"}, inplace=True)
+            improvements.rename(columns={"IoU": "% Increase in Generalizability wrt Constituents Mean"}, inplace=True)
+            merged = pd.merge(improvements, cstd)
+            merged["Model"] = [model] * 4
+            merged["ID"] = [id] * 4
+            var_dataset = var_dataset.append(merged)
+            # improvements = filtered.groupby
+            # cstd = filtered
+        # df.at[i, "cstd"] =
+        # cstds.append(0)
+    fig, ax = plt.subplots(2, 2, figsize=(12, 6))
+    for i, dataset_name in enumerate(np.unique(var_dataset["Dataset"])):
+        dataset_filtered = var_dataset[var_dataset["Dataset"] == dataset_name]
+        sns.regplot(ax=ax.flatten()[i], data=dataset_filtered, x="C.StD",
+                    y="% Increase in Generalizability wrt Constituents Mean",
+                    ci=99,
+                    color=colormap[dataset_name], label=dataset_name)
+        correlation = pearsonr(dataset_filtered["C.StD"],
+                               dataset_filtered["% Increase in Generalizability wrt Constituents Mean"])
+        ax.flatten()[i].set_title(f"{dataset_name}: PCC={correlation[0]:.3f}, p={1 - correlation[1] - 0.000001:.6f}")
+        print(dataset_name)
+        print(correlation)
+    for a in ax.flatten():
+        a.set(xlabel=None)
+        a.set(ylabel=None)
+    fig.add_subplot(111, frameon=False)
+    plt.tick_params(labelcolor='none', which='both', top=False, bottom=False, left=False, right=False)
+
+    plt.ylabel("% Increase in Generalizability wrt Constituents Mean")
+    plt.xlabel("Coefficient of Standard Deviation")
+    plt.legend(labels=np.unique(var_dataset["Dataset"]))
+    # plt.title()
+    fig.tight_layout(pad=3)
+    plt.show()
+    # hue_order = var_dataset.groupby(["Model"])[
+    #     "% Increase in Generalizability wrt Constituents Mean"].mean().sort_values().index
+    var_dataset = var_dataset.replace("diverse", "MultiModel")
+    sns.boxplot(data=var_dataset, x="Dataset", y="% Increase in Generalizability wrt Constituents Mean", hue="Model",
+                order=["Kvasir-SEG", "CVC-ClinicDB", "EndoCV2020", "Etis-LaribDB"])
+    plt.axhline(0, linestyle="--")
+    plt.show()
+    # sns.scatterplot(data=var_dataset, x="C.StD", y="% Increase in Generalizability wrt Constituents Mean",
+    #                 hue="Dataset")
+    # print(df)
+
+
 if __name__ == '__main__':
+    # plot_consistencies()
     # def test(a):
     #     return np.mean()
-    get_boxplots_for_models()
-    # collate_results_into_df()
+    # get_boxplots_for_models()
+    # # collate_results_into_df()
     # get_variances_for_models()
     # plot_ensemble_performance()
     # collate_base_results_into_df()
-    # plot_parameters_sizes()
-    # training_plot("logs/vanilla/DeepLab/vanilla_1.csv")
-    # plot_inpainter_vs_conventional_performance()
+    # # plot_parameters_sizes()
+    # # training_plot("logs/vanilla/DeepLab/vanilla_1.csv")
+    plot_inpainter_vs_conventional_performance()
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
     # plot_baseline_performance()
+    # plot_ensemble_variance_relationship()

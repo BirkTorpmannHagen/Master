@@ -1,0 +1,37 @@
+\toprule
+Model & No Augmentation & Vanilla Augmentation & Consistency Training\\
+\toprule
+\multicolumn{4}{c}{\textbf{Kvasir-SEG }}\\
+\midrule
+
+        DD-DeepLabV3+& 0.829 & 0.848 & 0.852 \\
+        DeepLab& 0.822 & 0.850 & 0.852 \\
+        FPN& 0.822 & 0.853 & 0.852 \\
+        TriUnet& 0.817 & 0.841 & 0.845 \\
+        Unet& 0.828 & 0.851 & 0.851 \\
+\midrule
+\multicolumn{4}{c}{\textbf{Etis-LaribDB}}
+\midrule
+        DD-DeepLabV3+& 0.408 & 0.460 & 0.482 \\
+        DeepLab& 0.417 & 0.472 & 0.505 \\
+        FPN& 0.404 & 0.440 & 0.475 \\
+        TriUnet& 0.309 & 0.410 & 0.434 \\
+        Unet& 0.403 & 0.447 & 0.481 \\
+\midrule
+\multicolumn{4}{c}{\textbf{CVC-ClinicDB}}
+\midrule
+        DD-DeepLabV3+ & 0.681 & 0.728 0.736 \\
+        DeepLab & 0.684 & 0.733 0.740 \\
+        FPN& 0.675 & 0.715  0.727 \\
+        TriUnet& 0.623 & 0.684 0.696 \\
+        Unet& 0.679 & 0.717 & 0.730 \\
+\midrule
+\multicolumn{4}{c}{\textbf{EndoCV2020}}\\
+\midrule
+
+        DD-DeepLabV3+& 0.596 & 0.668 & 0.668 \\
+        DeepLab& 0.608 & 0.676 & 0.676 \\
+        FPN& 0.600 & 0.662 & 0.673 \\
+        TriUnet& 0.577 & 0.667 & 0.684 \\
+        Unet& 0.598 & 0.660 & 0.676 \\
+\bottomrule

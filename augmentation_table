@@ -1,0 +1,84 @@
+\begin{tabularx}{\linewidth}{LXXX}
+\toprule
+Model & No Augmentation & Vanilla Augmentation & Inpainter+Vanilla Augmentation\\
+\midrule
+\multicolumn{4}{c}{\textbf{Kvasir-SEG }}\\
+\midrule
+           DD-DeepLabV3+     & 0.829 & 0.848 & 0.844\\
+           DeepLab           & 0.822 & 0.850 & 0.846\\
+           FPN               & 0.822 & 0.853 & 0.848\\
+           TriUnet           & 0.817 & 0.841 & 0.842\\
+           Unet              & 0.828 & 0.851 & 0.846\\
+\midrule
+\multicolumn{4}{c}{\textbf{Etis-LaribDB}}\\
+\midrule
+           DD-DeepLabV3+     & 0.408 & 0.460 & 0.435\\
+           DeepLab           & 0.417 & 0.472 & 0.451\\
+           FPN               & 0.404 & 0.440 & 0.422\\
+           TriUnet           & 0.309 & 0.410 & 0.382\\
+           Unet              & 0.403 & 0.447 & 0.414\\
+\midrule
+\multicolumn{4}{c}{\textbf{CVC-ClinicDB}}\\
+\midrule
+
+           DD-DeepLabV3+     & 0.681 & 0.728 & 0.713\\
+           DeepLab           & 0.684 & 0.733 & 0.718\\
+           FPN               & 0.675 & 0.715 & 0.705\\
+           TriUnet           & 0.623 & 0.684 & 0.659\\
+           Unet              & 0.679 & 0.717 & 0.703\\
+\midrule
+\multicolumn{4}{c}{\textbf{EndoCV2020}}\\
+\midrule
+           DD-DeepLabV3+     & 0.596 & 0.668 & 0.668\\
+           DeepLab           & 0.608 & 0.676 & 0.670\\
+           FPN               & 0.600 & 0.662 & 0.661\\
+           TriUnet           & 0.577 & 0.667 & 0.656\\
+           Unet              & 0.598 & 0.660 & 0.665\\
+\bottomrule
+\end{tabularx}
+
+
+   \begin{tabularx}{\linewidth}{llXr}
+\toprule
+        \multicolumn{4}{c}{\textbf{Kvasir-SEG}}\\
+\toprule
+Model & Inpainter + Conventional & None & Conventional\\
+\midrule
+            DeepLab &  0.846 &  0.818 &  0.852 \\
+            FPN &  0.847 &  0.823 &  0.851 \\
+           DD-DeepLabV3+ &  0.846 &  0.831 &  0.847 \\
+           TriUnet &  0.849 &  0.822 &  0.844 \\
+           Unet &  0.842 &  0.828 &  0.850 \\
+
+\toprule
+        \multicolumn{4}{c}{\textbf{Etis-LaribDB}}\\
+\toprule
+Model & Inpainter + Conventional & None & Conventional\\
+\midrule
+           DeepLab &  0.452 &  0.412 &  0.467 \\
+           FPN &  0.427 &  0.403 &  0.439 \\
+           DD-DeepLabV3+ &  0.427 &  0.405 &  0.468 \\
+           TriUnet &  0.389 &  0.305 &  0.418 \\
+           Unet &  0.403 &  0.403 &  0.453 \\
+\toprule
+        \multicolumn{4}{c}{\textbf{CVC-ClinicDB}}\\
+\toprule
+Model & Inpainter + Conventional & None & Conventional\\
+\midrule
+           DeepLab & 0.719 & 0.677 & 0.735 \\
+           FPN &  0.703 &  0.677 &  0.716 \\
+           DD-DeepLabV3+ &  0.714 &  0.683 &  0.733 \\
+           TriUnet &  0.669 &  0.633 &  0.694 \\
+           Unet &  0.699 &  0.679 &  0.719 \\
+\toprule
+        \multicolumn{4}{c}{\textbf{EndoCV2020}}\\
+\toprule
+Model & Inpainter + Conventional & None & Conventional\\
+\midrule
+           DeepLab &  0.668 &  0.603 &  0.677 \\
+           FPN &  0.665 &  0.604 &  0.662 \\
+           DD-DeepLabV3+ &  0.666 &  0.595 &  0.666 \\
+           TriUnet &  0.663 &  0.581 &  0.672 \\
+           Unet &  0.663 &  0.598 &  0.660 \\
+\bottomrule
+\end{tabularx}

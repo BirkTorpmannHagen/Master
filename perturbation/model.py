@@ -1,4 +1,5 @@
 import albumentations as alb
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn as nn
@@ -134,5 +135,10 @@ if __name__ == '__main__':
     for x, y, fname in DataLoader(KvasirSegmentationDataset("Datasets/HyperKvasir", augment=False)):
         img = x
         mask = y
-
-        mnv(img, mask)
+        aug_img, aug_mask = mnv(img, mask)
+        plt.imshow(x[0].T)
+        plt.axis("off")
+        plt.savefig(f"experiments/Data/augmentation_samples/unaugmented_{fname}.png", bbox_inches='tight')
+        plt.imshow(aug_img[0].T)
+        plt.axis("off")
+        plt.savefig(f"experiments/Data/augmentation_samples/augmented_{fname}.png", bbox_inches='tight')

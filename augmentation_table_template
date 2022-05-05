@@ -1,0 +1,50 @@
+\begin{table}[h!]
+    \centering
+   \begin{tabularx}{\linewidth}{llXr}
+\toprule
+        \multicolumn{4}{c}{\textbf{Kvasir-SEG}}\\
+\toprule
+Model & Inpainter + Conventional & None & Conventional\\
+\midrule
+            DeepLab &  0.846 &  0.818 &  0.852 \\
+            FPN &  0.847 &  0.823 &  0.851 \\
+           InductiveNet &  0.846 &  0.831 &  0.847 \\
+           TriUnet &  0.849 &  0.822 &  0.844 \\
+           Unet &  0.842 &  0.828 &  0.850 \\
+
+\toprule
+        \multicolumn{4}{c}{\textbf{Etis-LaribDB}}\\
+\toprule
+Model & Inpainter + Conventional & None & Conventional\\
+\midrule
+           DeepLab &  0.452 &  0.412 &  0.467 \\
+           FPN &  0.427 &  0.403 &  0.439 \\
+           InductiveNet &  0.427 &  0.405 &  0.468 \\
+           TriUnet &  0.389 &  0.305 &  0.418 \\
+           Unet &  0.403 &  0.403 &  0.453 \\
+\toprule
+        \multicolumn{4}{c}{\textbf{CVC-ClinicDB}}\\
+\toprule
+Model & Inpainter + Conventional & None & Conventional\\
+\midrule
+           DeepLab & 0.719 & 0.677 & 0.735 \\
+           FPN &  0.703 &  0.677 &  0.716 \\
+           InductiveNet &  0.714 &  0.683 &  0.733 \\
+           TriUnet &  0.669 &  0.633 &  0.694 \\
+           Unet &  0.699 &  0.679 &  0.719 \\
+\toprule
+        \multicolumn{4}{c}{\textbf{EndoCV2020}}\\
+\toprule
+Model & Inpainter + Conventional & None & Conventional\\
+\midrule
+           DeepLab &  0.668 &  0.603 &  0.677 \\
+           FPN &  0.665 &  0.604 &  0.662 \\
+           InductiveNet &  0.666 &  0.595 &  0.666 \\
+           TriUnet &  0.663 &  0.581 &  0.672 \\
+           Unet &  0.663 &  0.598 &  0.660 \\
+\bottomrule
+\end{tabularx}
+
+    \caption{Mean IoUs across augmentation strategies}
+    \label{tab:aug_ious}
+\end{table}
