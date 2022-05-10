@@ -148,11 +148,16 @@ def plot_parameters_sizes():
         print(f"{model_name}: {sum(p.numel() for p in model.parameters(recurse=True))}")
 
 
-def collate_ensemble_results_into_df():
+def collate_ensemble_results_into_df(type="consistency"):
     dataset_names = ["Kvasir-SEG", "Etis-LaribDB", "CVC-ClinicDB", "EndoCV2020"]
     model_names = ["DeepLab", "FPN", "Unet", "InductiveNet", "TriUnet"]
     dataset = []
     for fname in sorted(os.listdir("experiments/Data/pickles")):
+        if type == "consistency" and "augmentation" in fname:
+            continue
+        if type == "augmentation" and "augmentation" not in fname:
+            continue
+
         if "ensemble" not in fname:
             continue
         if "maximum_consistency" in fname or "last_epoch" in fname:
@@ -255,8 +260,8 @@ def plot_ensemble_performance():
     sns.barplot(data=ne_grouped_coeff_std, x="Dataset", y="Coeff. StD of IoUs", hue="Model")
     plt.show()
     test = pd.merge(ne_grouped_coeff_std, comparison)
-    test = test.rename(columns={"IoU": "Change in Generalizability Gap (\u0394%IoU)"})
-    test["Change in Generalizability Gap (\u0394%IoU)"] *= 100
+    test = test.rename(columns={"IoU": "% Improvement over mean constituent IoU"})
+    test["% Improvement over mean constituent IoU"] *= 100
     test = test.groupby(["Model", "ID"]).mean()
     test = test.reset_index()
 
@@ -264,12 +269,25 @@ def plot_ensemble_performance():
     print("max", np.max(test))
     # print(test)
 
-    sns.lineplot(data=test, x="Coeff. StD of IoUs", y="Change in Generalizability Gap (\u0394%IoU)", err_style="bars",
+    sns.lineplot(data=test, x="Coeff. StD of IoUs", y="% Improvement over mean constituent IoU", err_style="bars",
                  color="gray", linestyle='--')
     test = test.groupby("Model").mean().reset_index()
-    sns.scatterplot(test["Coeff. StD of IoUs"], test["Change in Generalizability Gap (\u0394%IoU)"], hue=test["Model"],
-                    s=100)
+    sns.scatterplot(test["Coeff. StD of IoUs"], test["% Improvement over mean constituent IoU"], hue=test["Model"],
+                    s=100, ci=99)
     plt.show()
+
+
+def plot_overall_ensemble_performance():
+    df = collate_ensemble_results_into_df("both")
+    grouped_mean = df.groupby(["Dataset", "Model", "ID"])["IoU"].mean()
+
+    nedf = collate_base_results_into_df()
+    ne_grouped_mean = nedf.groupby(["Dataset", "Model"])["IoU"].mean()
+
+    # plot delta vs variance
+    ne_grouped_coeff_std = nedf.groupby(["Dataset", "Model"])["IoU"].std() / ne_grouped_mean
+    ne_grouped_coeff_std = ne_grouped_coeff_std.reset_index()
+    ne_grouped_coeff_std = ne_grouped_coeff_std.rename(columns={"IoU": "Coeff. StD of IoUs"})
 
 
 def plot_inpainter_vs_conventional_performance():
@@ -500,12 +518,15 @@ def plot_ensemble_variance_relationship():
     # hue_order = var_dataset.groupby(["Model"])[
     #     "% Increase in Generalizability wrt Constituents Mean"].mean().sort_values().index
     var_dataset = var_dataset.replace("diverse", "MultiModel")
+    print(var_dataset.groupby(["Dataset"]).mean())
     sns.boxplot(data=var_dataset, x="Dataset", y="% Increase in Generalizability wrt Constituents Mean", hue="Model",
                 order=["Kvasir-SEG", "CVC-ClinicDB", "EndoCV2020", "Etis-LaribDB"])
     plt.axhline(0, linestyle="--")
     plt.show()
-    # sns.scatterplot(data=var_dataset, x="C.StD", y="% Increase in Generalizability wrt Constituents Mean",
-    #                 hue="Dataset")
+    var_dataset = var_dataset
+    sns.scatterplot(data=var_dataset, x="C.StD", y="% Increase in Generalizability wrt Constituents Mean",
+                    hue="Model")
+    plt.show()
     # print(df)
 
 
@@ -520,8 +541,8 @@ if __name__ == '__main__':
     # collate_base_results_into_df()
     # # plot_parameters_sizes()
     # # training_plot("logs/vanilla/DeepLab/vanilla_1.csv")
-    plot_inpainter_vs_conventional_performance()
+    # plot_inpainter_vs_conventional_performance()
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
-    # plot_baseline_performance()
+    plot_baseline_performance()
     # plot_ensemble_variance_relationship()
