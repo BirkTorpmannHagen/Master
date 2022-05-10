@@ -227,7 +227,7 @@ def collate_base_results_into_df():
 
 
 def plot_ensemble_performance():
-    df = collate_ensemble_results_into_df()
+    df = collate_ensemble_results_into_df("augmentation")
     print(df)
     latex = df.groupby(["Model", "Dataset"])["IoU"].mean()
     print(latex.reset_index())
@@ -241,6 +241,7 @@ def plot_ensemble_performance():
     # print(grouped_iid)
 
     nedf = collate_base_results_into_df()
+    nedf = nedf[nedf["Experiment"]=="Vanilla Augmentation"]
     ne_grouped_mean = nedf.groupby(["Dataset", "Model"])["IoU"].mean()
     # print(ne_grouped_mean)
     ne_grouped_iid = np.abs(ne_grouped_mean["Kvasir-SEG"] - ne_grouped_mean) / ne_grouped_mean["Kvasir-SEG"]
@@ -289,26 +290,41 @@ def plot_overall_ensemble_performance():
     ne_grouped_coeff_std = ne_grouped_coeff_std.reset_index()
     ne_grouped_coeff_std = ne_grouped_coeff_std.rename(columns={"IoU": "Coeff. StD of IoUs"})
 
+def plot_cons_vs_aug_ensembles():
+    df = collate_ensemble_results_into_df("consistency")
+    df2 = collate_ensemble_results_into_df("augmentation")
+    grouped = df2.groupby(["Model", "Dataset"])["IoU"].mean()
+    grouped2 = df2.groupby([ "Dataset"])["IoU"].mean()
+    grouped3 = df.groupby([ "Dataset"])["IoU"].mean()
+
+    print(grouped2)
+    print(grouped3)
+    latex = grouped.to_latex(float_format="%.3f")
+    for dset in np.unique(df2["Dataset"]):
+        print(dset)
+        ttest = ttest_ind(df[df["Dataset"]==dset]["IoU"],df2[df2["Dataset"]==dset]["IoU"], equal_var=False)
+        print(ttest)
+
 
 def plot_inpainter_vs_conventional_performance():
     df = collate_base_results_into_df()
     df = df[df["Experiment"] != "Consistency Training"]
 
-    hue_order = df.groupby(["Experiment"])["IoU"].mean().sort_values().index
-    order = df.groupby(["Dataset"])["IoU"].mean().sort_values().index
     table = df.groupby(["Dataset", "Model", "Experiment"])["IoU"].mean()
-    no_augmentation = df[df["Experiment"] == "No Augmentation"].groupby(["Dataset", "Model"])[
+    no_augmentation = df[df["Experiment"] == "No Augmentation"].groupby(["Dataset"])[
         "IoU"].mean()
-    # print(no_augmentation)
+
     improvements = 100 * (table - no_augmentation) / no_augmentation
     improvements = improvements.reset_index()
     improvements = improvements[improvements["Experiment"] != "No Augmentation"]
     improvements.rename(columns={"IoU": "% Change in mean IoU with respect to No Augmentation"}, inplace=True)
 
     test = table.to_latex(float_format="%.3f")
+    print(np.max(improvements))
+    print(np.mean(improvements))
     sns.boxplot(data=improvements, x="Dataset", y="% Change in mean IoU with respect to No Augmentation",
                 hue="Experiment")
-    plt.show()
+    plt.savefig("augmentation_plot.eps")
     return table
 
 
@@ -336,7 +352,7 @@ def plot_training_procedure_performance():
             df[(df["Dataset"] == dataset) & (df["Model"] == model) & (df["Experiment"] == "Vanilla Augmentation")][
                 "IoU"]
 
-        w_p_values.at[i, "p-value"] = round(1 - ttest_ind(ious, augmentation_ious, equal_var=False)[-1], 3)
+        w_p_values.at[i, "p-value"] = round(ttest_ind(ious, augmentation_ious, equal_var=False)[-1], 3)
 
     for dset in np.unique(df["Dataset"]):
         overall_ttest = ttest_ind(df[(df["Experiment"] == "Consistency Training") & (df["Dataset"] == dset)]["IoU"],
@@ -354,19 +370,25 @@ def plot_training_procedure_performance():
     cstd.rename(columns={"IoU": "Coefficient of Standard Deviation of IoUs"}, inplace=True)
     sns.barplot(data=cstd, x="Dataset", y="Coefficient of Standard Deviation of IoUs", hue="Experiment",
                 hue_order=["No Augmentation", "Vanilla Augmentation", "Consistency Training"])
+    plt.savefig("consistency_training_cstd.eps")
     plt.show()
-
     improvement_pct = 100 * (filt.groupby(["Dataset", "Experiment", "ID"])[
                                  "IoU"].mean() - no_augmentation_performance) / no_augmentation_performance
     improvement_pct = improvement_pct.reset_index()
+    print(improvement_pct[improvement_pct["Experiment"] == "No Augmentation"])
     improvement_pct = improvement_pct[improvement_pct["Experiment"] != "No Augmentation"]
 
+    # print(np.max(improvement_pct[improvement_pct["Experiment"] == "Consistency Training"]))
+    # print(np.mean(improvement_pct[improvement_pct["Experiment"] == "Consistency Training"]))
+    print(np.max(improvement_pct[improvement_pct["Experiment"] == "Vanilla Augmentation"]))
+    print(np.mean(improvement_pct[improvement_pct["Experiment"] == "Vanilla Augmentation"]))
     improvement_pct.rename(columns={"IoU": "% Change in mean IoU with respect to No Augmentation"}, inplace=True)
     sns.boxplot(data=improvement_pct, x="Dataset", y="% Change in mean IoU with respect to No Augmentation",
                 hue="Experiment")
 
+    plt.savefig("consistency_training_percent.eps")
     plt.show()
-
+    # print(w_p_values)
     # scatter = sns.barplot(data=filt, x="Dataset", y="IoU", hue="Experiment", hue_order=hue_order, order=order)
     # scatter.legend(loc='lower right')
     # plt.show()
@@ -500,7 +522,7 @@ def plot_ensemble_variance_relationship():
                     color=colormap[dataset_name], label=dataset_name)
         correlation = pearsonr(dataset_filtered["C.StD"],
                                dataset_filtered["% Increase in Generalizability wrt Constituents Mean"])
-        ax.flatten()[i].set_title(f"{dataset_name}: PCC={correlation[0]:.3f}, p={1 - correlation[1] - 0.000001:.6f}")
+        ax.flatten()[i].set_title(f"{dataset_name}: PCC={correlation[0]:.3f}, p={correlation[1]:.6f}")
         print(dataset_name)
         print(correlation)
     for a in ax.flatten():
@@ -514,6 +536,7 @@ def plot_ensemble_variance_relationship():
     plt.legend(labels=np.unique(var_dataset["Dataset"]))
     # plt.title()
     fig.tight_layout(pad=3)
+    plt.savefig("ensemble_variance_relationship_statistical.eps")
     plt.show()
     # hue_order = var_dataset.groupby(["Model"])[
     #     "% Increase in Generalizability wrt Constituents Mean"].mean().sort_values().index
@@ -544,5 +567,6 @@ if __name__ == '__main__':
     # plot_inpainter_vs_conventional_performance()
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
-    plot_baseline_performance()
+    # plot_baseline_performance()
     # plot_ensemble_variance_relationship()
+    plot_cons_vs_aug_ensembles()
