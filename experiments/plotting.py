@@ -336,13 +336,13 @@ def plot_training_procedure_performance():
             df[(df["Dataset"] == dataset) & (df["Model"] == model) & (df["Experiment"] == "Vanilla Augmentation")][
                 "IoU"]
 
-        w_p_values.at[i, "p-value"] = round(1 - ttest_ind(ious, augmentation_ious, equal_var=False)[-1], 3)
-
+        w_p_values.at[i, "p-value"] = round(ttest_ind(ious, augmentation_ious, equal_var=False)[-1], 3)
+    print(w_p_values.groupby(["Experiment", "Model", "Dataset"])["p-value"].mean())
     for dset in np.unique(df["Dataset"]):
         overall_ttest = ttest_ind(df[(df["Experiment"] == "Consistency Training") & (df["Dataset"] == dset)]["IoU"],
                                   df[(df["Experiment"] == "Vanilla Augmentation") & (df["Dataset"] == dset)]["IoU"],
                                   equal_var=False)
-        print(f"{dset}: {overall_ttest[0]}, p={1 - round(overall_ttest[1], 5)} ")
+        print(f"{dset}: {overall_ttest[0]}, p={round(overall_ttest[1], 5)} ")
 
     test = table.to_latex(float_format="%.3f")
     no_augmentation_performance = filt[filt["Experiment"] == "No Augmentation"].groupby(["Dataset"])["IoU"].mean()
@@ -376,11 +376,30 @@ def plot_training_procedure_performance():
 def plot_baseline_performance():
     df = collate_base_results_into_df()
     df = df[df["Experiment"] == "No Augmentation"]
+    p_value_matrix = np.zeros((len(np.unique(df["Model"])), len(np.unique(df["Model"]))))
+    models = np.unique(df["Model"])
+    print()
+    np.set_printoptions(precision=5, suppress=True)
+    fig, ax = plt.subplots(2, 2, sharey=True, sharex=True, figsize=(8, 8))
+    for didx, dataset in enumerate(np.unique(df["Dataset"])):
+        for i, model in enumerate(models):
+            for j, compare_model in enumerate(models):
+                p_value_matrix[i, j] = round(ttest_ind(df[(df["Model"] == model) & (df["Dataset"] == dataset)]["IoU"],
+                                                       df[(df["Model"] == compare_model) & (df["Dataset"] == dataset)][
+                                                           "IoU"],
+                                                       equal_var=False)[1], 5)
+
+        sns.heatmap(p_value_matrix, ax=ax.flatten()[didx], annot=True, xticklabels=models, yticklabels=models,
+                    cbar=False)
+        ax.flatten()[didx].set_title(dataset)
+    plt.tight_layout()
+    plt.savefig("model_pvals.eps")
+    plt.show()
+
     df_van = df.groupby(["Dataset", "Model"])["IoU"].mean()
     df_van = df_van.reset_index()
-    # hue_order = df_van.groupby(["Model"])["IoU"].mean().sort_values().index
     order = df_van.groupby(["Dataset"])["IoU"].mean().sort_values().index
-    print(df_van)
+
     # t tests here
     plt.hist(df[df["Dataset"] == "Kvasir-SEG"]["IoU"])
     plt.show()
@@ -539,10 +558,10 @@ if __name__ == '__main__':
     # get_variances_for_models()
     # plot_ensemble_performance()
     # collate_base_results_into_df()
-    # # plot_parameters_sizes()
+    # plot_parameters_sizes()
     # # training_plot("logs/vanilla/DeepLab/vanilla_1.csv")
-    # plot_inpainter_vs_conventional_performance()
+    plot_inpainter_vs_conventional_performance()
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
-    plot_baseline_performance()
+    # plot_baseline_performance()
     # plot_ensemble_variance_relationship()
