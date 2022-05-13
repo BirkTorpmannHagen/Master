@@ -183,9 +183,8 @@ def collate_ensemble_results_into_df(type="consistency"):
                 model = "DD-DeepLabV3+"
             for i in range(datasets):
                 for j in range(samples):
-                    if data["ious"][0, j] < 0.75:
+                    if data["ious"][0, j] < 0.75: #if bugged out; rare
                         continue
-
                     try:
                         dataset.append(
                             [dataset_names[i], model, j, experiment, data["ious"][i, j], data["constituents"][j]])
@@ -236,7 +235,7 @@ def collate_base_results_into_df():
 
 
 def plot_ensemble_performance():
-    df = collate_ensemble_results_into_df("all")
+    df = collate_ensemble_results_into_df("augmentation")
     print(df)
     latex = df.groupby(["Model", "Dataset"])["IoU"].mean()
     print(latex.reset_index())
@@ -567,7 +566,8 @@ def plot_ensemble_variance_relationship(training_method):
     print(var_dataset.columns)
     datasets=np.unique(var_dataset["Dataset"])
     training_methods = ["No Augmentation", "Vanilla Augmentation", "Consistency Training"]
-    fig, ax = plt.subplots(len(datasets), len(training_methods), figsize=(9, 11))
+    fig, ax = plt.subplots(len(datasets), len(training_methods), figsize=(11, 12))
+    var_dataset = var_dataset.replace("diverse", "MultiModel")
 
     for i, dataset_name in enumerate(datasets):
         for j, training_method in enumerate(training_methods):
@@ -583,6 +583,7 @@ def plot_ensemble_variance_relationship(training_method):
                             y="% Increase in Generalizability wrt Constituents Mean",
                             ci=99, legend=False, color=colormap[dataset_name], label=dataset_name)
                 ax[i,j].set_title(training_method)
+
             else:
                 scatter = sns.scatterplot(ax=ax[i, j], data=dataset_filtered, x="C.StD",
                                           y="% Increase in Generalizability wrt Constituents Mean",
@@ -595,18 +596,17 @@ def plot_ensemble_variance_relationship(training_method):
     for axis, col in zip(ax[0], training_methods):
         axis.annotate(col, xy=(0.5, 1.5), xytext=(0, 5),
                     xycoords='axes fraction', textcoords='offset points',
-                    size='x-large', ha='center', va='baseline')
+                    size='xx-large', ha='center', va='baseline')
     fig.add_subplot(111, frameon=False)
-    fig.legend()
-    handles, labels = ax[0,0].get_legend_handles_labels()
-    fig.legend(handles, labels)
+    # fig.legend(loc='lower center', bbox_to_anchor=(0.5, 0.5), ncol=2, labels=np.unique(var_dataset["Dataset"]))
+    fig.legend(loc='lower center', bbox_to_anchor=(0.5, 0), ncol=4)
     plt.tick_params(labelcolor='none', which='both', top=False, bottom=False, left=False, right=False)
 
     plt.ylabel("% Increase in Generalizability wrt Constituents Mean")
     plt.xlabel("Coefficient of Standard Deviation")
-    plt.legend(labels=np.unique(var_dataset["Dataset"]))
     # plt.title()
-    fig.tight_layout(pad=3)
+    fig.tight_layout()
+    # fig.subplots_adjust(bottom=0.2)
     plt.savefig("ensemble_variance_relationship_statistical.eps")
     plt.show()
     # hue_order = var_dataset.groupby(["Model"])[
@@ -618,6 +618,7 @@ def plot_ensemble_variance_relationship(training_method):
                 order=["Kvasir-SEG", "CVC-ClinicDB", "EndoCV2020", "Etis-LaribDB"])
 
     plt.axhline(0, linestyle="--")
+    plt.savefig("improvements_due_to_ensembles.eps")
     plt.show()
 
 
@@ -635,7 +636,7 @@ def get_ensemble_p_vals():
             ttest = ttest_ind(
                 single["IoU"], ensemble["IoU"], equal_var=False
             )
-            print(round(ttest[1], 3), end=" & ")
+            print(round(ttest[1], 5), end=" & ")
         print("\\\ ")
     print("Augmentation")
     for mix, model in enumerate(np.unique(singular["Model"])):
@@ -648,7 +649,7 @@ def get_ensemble_p_vals():
             ttest = ttest_ind(
                 single["IoU"], ensemble["IoU"], equal_var=False
             )
-            print(round(ttest[1], 3), end=" & ")
+            print(round(ttest[1], 5), end=" & ")
         print("\\\ ")
     print("Consistency Training")
     for mix, model in enumerate(np.unique(singular["Model"])):
@@ -661,11 +662,13 @@ def get_ensemble_p_vals():
             ttest = ttest_ind(
                 single["IoU"], ensemble["IoU"], equal_var=False
             )
-            print(round(ttest[1], 3), end=" & ")
+            print(round(ttest[1], 5), end=" & ")
         print("\\\ ")
 
     # model-averaged
+    print("When averaged across models:")
     print("No augmentation")
+    experiments_long=["No Augmentation", "Conventional Augmentation", "Consistency Training"]
     for dix, dataset in enumerate(np.unique(singular["Dataset"])):
         single = singular[singular["Experiment"] == "No Augmentation"]
         ensemble = collate_ensemble_results_into_df(type="vanilla")
@@ -688,7 +691,6 @@ def get_ensemble_p_vals():
         print(round(ttest[1], 3), end=" & ")
     print("\nConsistency Training")
     for dix, dataset in enumerate(np.unique(singular["Dataset"])):
-        print(dataset)
         single = singular[singular["Experiment"] == "Consistency Training"]
         ensemble = collate_ensemble_results_into_df(type="consistency")
         single = single[(single["Dataset"] == dataset)]
@@ -706,12 +708,11 @@ def get_ensemble_p_vals():
             for j, exp2 in enumerate(experiments):
                 df1 = collate_ensemble_results_into_df(exp1)
                 df2 = collate_ensemble_results_into_df(exp2)
-                print(f"{exp1} v {exp2}")
                 test = mannwhitneyu(df1[df1["Dataset"] == dataset]["IoU"],
                                     df2[(df2["Dataset"] == dataset)]["IoU"])
                 p_values[i, j] = round(test[1], 5)
-        sns.heatmap(p_values, ax=axes.flatten()[dix], annot=True, xticklabels=experiments,
-                    yticklabels=experiments,
+        sns.heatmap(p_values, ax=axes.flatten()[dix], annot=True, xticklabels=experiments_long,
+                    yticklabels=experiments_long,
                     cbar=False)
         ax = axes.flatten()[dix].set_title(dataset)
     plt.tight_layout()
@@ -745,7 +746,6 @@ def compare_ensembles():
                                                    index=augment_improvements.index)
     ct_improvements["Experiment"] = pd.Series(["Consistency Training"] * len(ct_improvements),
                                               index=ct_improvements.index)
-    pd.set_option("precision", 3)
     # print("No augmentation")
     # print(no_augment_improvements)
     # print("Augmentation")
@@ -806,9 +806,15 @@ def test():
     ensemble_improvements = 100 * (ensemble_means - singular_grouped.mean()) / singular_grouped.mean()
     singular_cstds = singular_grouped.std() / singular_grouped.mean()
     merged = pd.merge(ensemble_improvements, singular_cstds, how='inner', on=["Experiment", "Dataset", "Model"])
-    merged = merged.groupby(["Experiment", "Model"]).mean()
-    sns.scatterplot(data=merged, x="IoU_y", y="IoU_x", hue="Experiment")
+    # merged = merged.groupby(["Experiment", "Model"]).mean()
+    fig=sns.scatterplot(data=merged, x="IoU_y", y="IoU_x", hue="Experiment")
+    test = spearmanr(merged["IoU_y"], merged["IoU_x"])
+    plt.title(f"R_s = {round(test[0],5)}, p={round(test[1],5)}")
+    fig.set_ylabel("Change in IoU (%)")
+    fig.set_xlabel("IoU C.StD.")
     # print(spearmanr(merged["IoU_y"], merged["IoU_x"]))
+
+    plt.savefig("ensembles_underspecification.eps")
     plt.show()
 
 
@@ -827,8 +833,8 @@ if __name__ == '__main__':
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
     # plot_baseline_performance()
-    plot_ensemble_variance_relationship("all")
+    # plot_ensemble_variance_relationship("all")
     # plot_cons_vs_aug_ensembles()
     # compare_ensembles()
-    # get_ensemble_p_vals()
+    get_ensemble_p_vals()
     # test()
