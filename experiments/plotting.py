@@ -8,7 +8,7 @@ import torch
 import pickle
 from utils.formatting import SafeDict
 from scipy.stats import wasserstein_distance
-from scipy.stats import ttest_ind, pearsonr, ttest_rel
+from scipy.stats import ttest_ind, pearsonr, ttest_rel, spearmanr
 from models.segmentation_models import *
 
 
@@ -513,16 +513,21 @@ def plot_ensemble_variance_relationship():
             # cstd = filtered
         # df.at[i, "cstd"] =
         # cstds.append(0)
-    fig, ax = plt.subplots(2, 2, figsize=(12, 6))
+    fig, ax = plt.subplots(2, 2, figsize=(10, 5))
     for i, dataset_name in enumerate(np.unique(var_dataset["Dataset"])):
         dataset_filtered = var_dataset[var_dataset["Dataset"] == dataset_name]
-        sns.regplot(ax=ax.flatten()[i], data=dataset_filtered, x="C.StD",
+        # sns.regplot(ax=ax.flatten()[i], data=dataset_filtered, x="C.StD",
+        #             y="% Increase in Generalizability wrt Constituents Mean",
+        #             ci=99,
+        #             color=colormap[dataset_name], label=dataset_name)
+        # correlation = pearsonr(dataset_filtered["C.StD"],
+        #                        dataset_filtered["% Increase in Generalizability wrt Constituents Mean"])
+        sns.scatterplot(ax=ax.flatten()[i], data=dataset_filtered, x="C.StD",
                     y="% Increase in Generalizability wrt Constituents Mean",
                     ci=99,
                     color=colormap[dataset_name], label=dataset_name)
-        correlation = pearsonr(dataset_filtered["C.StD"],
-                               dataset_filtered["% Increase in Generalizability wrt Constituents Mean"])
-        ax.flatten()[i].set_title(f"{dataset_name}: PCC={correlation[0]:.3f}, p={correlation[1]:.6f}")
+        correlation = spearmanr(dataset_filtered["C.StD"], dataset_filtered["% Increase in Generalizability wrt Constituents Mean"])
+        ax.flatten()[i].set_title(f"{dataset_name}: Rs={correlation[0]:.3f}, p={correlation[1]:.6f}")
         print(dataset_name)
         print(correlation)
     for a in ax.flatten():
@@ -568,5 +573,5 @@ if __name__ == '__main__':
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
     # plot_baseline_performance()
-    # plot_ensemble_variance_relationship()
-    plot_cons_vs_aug_ensembles()
+    plot_ensemble_variance_relationship()
+    # plot_cons_vs_aug_ensembles()
