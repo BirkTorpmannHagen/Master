@@ -8,7 +8,7 @@ import torch
 import pickle
 from utils.formatting import SafeDict
 from scipy.stats import wasserstein_distance
-from scipy.stats import ttest_ind, pearsonr, ttest_rel
+from scipy.stats import ttest_ind, pearsonr, mannwhitneyu, spearmanr
 from models.segmentation_models import *
 
 
@@ -153,20 +153,28 @@ def collate_ensemble_results_into_df(type="consistency"):
     model_names = ["DeepLab", "FPN", "Unet", "InductiveNet", "TriUnet"]
     dataset = []
     for fname in sorted(os.listdir("experiments/Data/pickles")):
-        if type == "consistency" and "augmentation" in fname:
-            continue
-        if type == "augmentation" and "augmentation" not in fname:
-            continue
-
         if "ensemble" not in fname:
             continue
         if "maximum_consistency" in fname or "last_epoch" in fname:
             continue
+        if type != "all":
+            if type == "consistency" and ("augmentation" in fname or "vanilla" in fname):
+                continue
+            if type == "augmentation" and "augmentation" not in fname:
+                continue
+            if type == "vanilla" and "vanilla" not in fname:
+                continue
 
         with open(os.path.join("experiments/Data/pickles", fname), "rb") as file:
             model = fname.split("-")[0]
-            experiment = fname.split("-")[-1]
-            # todo fnames with consistency and augmentation
+            # experiment = fname.split("-")[-1]
+
+            if "vanilla" in fname:
+                experiment = "vanilla"
+            elif "augmentation" in fname:
+                experiment = "augmentation"
+            else:
+                experiment = "consistency"
             data = pickle.load(file)
             # print(file, data.keys())
             datasets, samples = data["ious"].shape
@@ -185,7 +193,7 @@ def collate_ensemble_results_into_df(type="consistency"):
 
     iou_dataset = pd.DataFrame(data=dataset, columns=["Dataset", "Model", "ID", "Experiment", "IoU", "constituents"])
     # print(iou_dataset)
-    iou_dataset.to_csv("base_data.csv")
+    iou_dataset.to_csv("ensemble_data.csv")
     return iou_dataset
 
 
@@ -227,7 +235,7 @@ def collate_base_results_into_df():
 
 
 def plot_ensemble_performance():
-    df = collate_ensemble_results_into_df()
+    df = collate_ensemble_results_into_df("all")
     print(df)
     latex = df.groupby(["Model", "Dataset"])["IoU"].mean()
     print(latex.reset_index())
@@ -290,24 +298,62 @@ def plot_overall_ensemble_performance():
     ne_grouped_coeff_std = ne_grouped_coeff_std.rename(columns={"IoU": "Coeff. StD of IoUs"})
 
 
+def plot_cons_vs_aug_ensembles():
+    df = collate_ensemble_results_into_df("consistency")
+    df2 = collate_ensemble_results_into_df("augmentation")
+    grouped = df2.groupby(["Model", "Dataset"])["IoU"].mean()
+    grouped2 = df2.groupby(["Dataset"])["IoU"].mean()
+    grouped3 = df.groupby(["Dataset"])["IoU"].mean()
+
+    print(grouped2)
+    print(grouped3)
+    latex = grouped.to_latex(float_format="%.3f")
+    for dset in np.unique(df2["Dataset"])[::-1]:
+        utest = mannwhitneyu(df[df["Dataset"] == dset]["IoU"], df2[df2["Dataset"] == dset]["IoU"])
+        print(f"{dset} & {round(utest[0], 5)} & {round(utest[1], 5)} \\\ ")
+
+
 def plot_inpainter_vs_conventional_performance():
     df = collate_base_results_into_df()
     df = df[df["Experiment"] != "Consistency Training"]
+    models = np.unique(df["Model"])
+    for dset in np.unique(df["Dataset"])[::-1]:
+        overall_utest = mannwhitneyu(df[(df["Experiment"] == "Vanilla Augmentation") & (df["Dataset"] == dset)]["IoU"],
+                                     df[(df["Experiment"] == "Inpainter Augmentation") & (df["Dataset"] == dset)][
+                                         "IoU"])
+        print(f"{dset} & {overall_utest[0]}, p={round(overall_utest[1], 5)} \\\ ")
 
-    hue_order = df.groupby(["Experiment"])["IoU"].mean().sort_values().index
-    order = df.groupby(["Dataset"])["IoU"].mean().sort_values().index
+    for model in models:
+        print(f"{model}", end="")
+        for dset in np.unique(df["Dataset"]):
+            ttest = ttest_ind(
+                df[(df["Experiment"] == "Inpainter Augmentation") & (df["Dataset"] == dset) & (df["Model"] == model)][
+                    "IoU"],
+                df[(df["Experiment"] == "Vanilla Augmentation") & (df["Dataset"] == dset) & (df["Model"] == model)][
+                    "IoU"],
+                equal_var=False)
+            print(f" & {round(ttest[1], 5)}", end="")
+        print("\\\ ")
     table = df.groupby(["Dataset", "Model", "Experiment"])["IoU"].mean()
-    no_augmentation = df[df["Experiment"] == "No Augmentation"].groupby(["Dataset", "Model"])[
+    no_augmentation = df[df["Experiment"] == "No Augmentation"].groupby(["Dataset"])[
         "IoU"].mean()
-    # print(no_augmentation)
+
     improvements = 100 * (table - no_augmentation) / no_augmentation
     improvements = improvements.reset_index()
     improvements = improvements[improvements["Experiment"] != "No Augmentation"]
     improvements.rename(columns={"IoU": "% Change in mean IoU with respect to No Augmentation"}, inplace=True)
 
     test = table.to_latex(float_format="%.3f")
+    # improvements = improvements[improvements["Dataset"] == "CVC-ClinicDB"]
+    print(np.max(improvements[improvements["Expe riment"] == "Vanilla Augmentation"]))
+    print(np.mean(improvements[improvements["Experiment"] == "Vanilla Augmentation"]))
+
+    print(np.max(improvements[improvements["Experiment"] == "Inpainter Augmentation"]))
+    print(np.mean(improvements[improvements["Experiment"] == "Inpainter Augmentation"]))
     sns.boxplot(data=improvements, x="Dataset", y="% Change in mean IoU with respect to No Augmentation",
                 hue="Experiment")
+
+    plt.savefig("augmentation_plot.eps")
     plt.show()
     return table
 
@@ -337,11 +383,9 @@ def plot_training_procedure_performance():
                 "IoU"]
 
         w_p_values.at[i, "p-value"] = round(ttest_ind(ious, augmentation_ious, equal_var=False)[-1], 3)
-    print(w_p_values.groupby(["Experiment", "Model", "Dataset"])["p-value"].mean())
     for dset in np.unique(df["Dataset"]):
-        overall_ttest = ttest_ind(df[(df["Experiment"] == "Consistency Training") & (df["Dataset"] == dset)]["IoU"],
-                                  df[(df["Experiment"] == "Vanilla Augmentation") & (df["Dataset"] == dset)]["IoU"],
-                                  equal_var=False)
+        overall_ttest = mannwhitneyu(df[(df["Experiment"] == "Consistency Training") & (df["Dataset"] == dset)]["IoU"],
+                                     df[(df["Experiment"] == "Vanilla Augmentation") & (df["Dataset"] == dset)]["IoU"])
         print(f"{dset}: {overall_ttest[0]}, p={round(overall_ttest[1], 5)} ")
 
     test = table.to_latex(float_format="%.3f")
@@ -354,19 +398,25 @@ def plot_training_procedure_performance():
     cstd.rename(columns={"IoU": "Coefficient of Standard Deviation of IoUs"}, inplace=True)
     sns.barplot(data=cstd, x="Dataset", y="Coefficient of Standard Deviation of IoUs", hue="Experiment",
                 hue_order=["No Augmentation", "Vanilla Augmentation", "Consistency Training"])
+    plt.savefig("consistency_training_cstd.eps")
     plt.show()
-
     improvement_pct = 100 * (filt.groupby(["Dataset", "Experiment", "ID"])[
                                  "IoU"].mean() - no_augmentation_performance) / no_augmentation_performance
     improvement_pct = improvement_pct.reset_index()
+    print(improvement_pct[improvement_pct["Experiment"] == "No Augmentation"])
     improvement_pct = improvement_pct[improvement_pct["Experiment"] != "No Augmentation"]
 
+    # print(np.max(improvement_pct[improvement_pct["Experiment"] == "Consistency Training"]))
+    # print(np.mean(improvement_pct[improvement_pct["Experiment"] == "Consistency Training"]))
+    print(np.max(improvement_pct[improvement_pct["Experiment"] == "Vanilla Augmentation"]))
+    print(np.mean(improvement_pct[improvement_pct["Experiment"] == "Vanilla Augmentation"]))
     improvement_pct.rename(columns={"IoU": "% Change in mean IoU with respect to No Augmentation"}, inplace=True)
     sns.boxplot(data=improvement_pct, x="Dataset", y="% Change in mean IoU with respect to No Augmentation",
                 hue="Experiment")
 
+    plt.savefig("consistency_training_percent.eps")
     plt.show()
-
+    # print(w_p_values)
     # scatter = sns.barplot(data=filt, x="Dataset", y="IoU", hue="Experiment", hue_order=hue_order, order=order)
     # scatter.legend(loc='lower right')
     # plt.show()
@@ -533,6 +583,7 @@ def plot_ensemble_variance_relationship():
     plt.legend(labels=np.unique(var_dataset["Dataset"]))
     # plt.title()
     fig.tight_layout(pad=3)
+    plt.savefig("ensemble_variance_relationship_statistical.eps")
     plt.show()
     # hue_order = var_dataset.groupby(["Model"])[
     #     "% Increase in Generalizability wrt Constituents Mean"].mean().sort_values().index
@@ -549,6 +600,197 @@ def plot_ensemble_variance_relationship():
     # print(df)
 
 
+def get_ensemble_p_vals():
+    singular = collate_base_results_into_df()
+    # cross-model t-test (not used in thesis)
+    print("No augmentation")
+    for mix, model in enumerate(np.unique(singular["Model"])):
+        print(model, end="&")
+        for dix, dataset in enumerate(np.unique(singular["Dataset"])):
+            single = singular[singular["Experiment"] == "No Augmentation"]
+            ensemble = collate_ensemble_results_into_df(type="vanilla")
+            single = single[(single["Dataset"] == dataset) & (single["Model"] == model)]
+            ensemble = ensemble[(ensemble["Dataset"] == dataset) & (ensemble["Model"] == model)]
+            ttest = ttest_ind(
+                single["IoU"], ensemble["IoU"], equal_var=False
+            )
+            print(round(ttest[1], 3), end=" & ")
+        print("\\\ ")
+    print("Augmentation")
+    for mix, model in enumerate(np.unique(singular["Model"])):
+        print(model, end="&")
+        for dix, dataset in enumerate(np.unique(singular["Dataset"])):
+            single = singular[singular["Experiment"] == "Vanilla Augmentation"]
+            ensemble = collate_ensemble_results_into_df(type="augmentation")
+            single = single[(single["Dataset"] == dataset) & (single["Model"] == model)]
+            ensemble = ensemble[(ensemble["Dataset"] == dataset) & (ensemble["Model"] == model)]
+            ttest = ttest_ind(
+                single["IoU"], ensemble["IoU"], equal_var=False
+            )
+            print(round(ttest[1], 3), end=" & ")
+        print("\\\ ")
+    print("Consistency Training")
+    for mix, model in enumerate(np.unique(singular["Model"])):
+        print(model, end="&")
+        for dix, dataset in enumerate(np.unique(singular["Dataset"])):
+            single = singular[singular["Experiment"] == "Consistency Training"]
+            ensemble = collate_ensemble_results_into_df(type="consistency")
+            single = single[(single["Dataset"] == dataset) & (single["Model"] == model)]
+            ensemble = ensemble[(ensemble["Dataset"] == dataset) & (ensemble["Model"] == model)]
+            ttest = ttest_ind(
+                single["IoU"], ensemble["IoU"], equal_var=False
+            )
+            print(round(ttest[1], 3), end=" & ")
+        print("\\\ ")
+
+    # model-averaged
+    print("No augmentation")
+    for dix, dataset in enumerate(np.unique(singular["Dataset"])):
+        single = singular[singular["Experiment"] == "No Augmentation"]
+        ensemble = collate_ensemble_results_into_df(type="vanilla")
+        single = single[(single["Dataset"] == dataset)]
+        ensemble = ensemble[(ensemble["Dataset"] == dataset)]
+        ttest = mannwhitneyu(
+            single["IoU"], ensemble["IoU"]
+        )
+        print(round(ttest[1], 3), end=" & ")
+    print("\nAugmentation")
+
+    for dix, dataset in enumerate(np.unique(singular["Dataset"])):
+        single = singular[singular["Experiment"] == "Vanilla Augmentation"]
+        ensemble = collate_ensemble_results_into_df(type="augmentation")
+        single = single[(single["Dataset"] == dataset)]
+        ensemble = ensemble[(ensemble["Dataset"] == dataset)]
+        ttest = mannwhitneyu(
+            single["IoU"], ensemble["IoU"]
+        )
+        print(round(ttest[1], 3), end=" & ")
+    print("\nConsistency Training")
+    for dix, dataset in enumerate(np.unique(singular["Dataset"])):
+        print(dataset)
+        single = singular[singular["Experiment"] == "Consistency Training"]
+        ensemble = collate_ensemble_results_into_df(type="consistency")
+        single = single[(single["Dataset"] == dataset)]
+        ensemble = ensemble[(ensemble["Dataset"] == dataset)]
+        ttest = mannwhitneyu(
+            single["IoU"], ensemble["IoU"]
+        )
+        print(round(ttest[1], 3), end=" & ")
+
+    experiments = ["vanilla", "augmentation", "consistency"]
+    fig, axes = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8, 8))
+    for dix, dataset in enumerate(np.unique(singular["Dataset"])):
+        p_values = np.zeros((len(experiments), len(experiments)))
+        for i, exp1 in enumerate(experiments):
+            for j, exp2 in enumerate(experiments):
+                df1 = collate_ensemble_results_into_df(exp1)
+                df2 = collate_ensemble_results_into_df(exp2)
+                print(f"{exp1} v {exp2}")
+                test = mannwhitneyu(df1[df1["Dataset"] == dataset]["IoU"],
+                                    df2[(df2["Dataset"] == dataset)]["IoU"])
+                p_values[i, j] = round(test[1], 5)
+        sns.heatmap(p_values, ax=axes.flatten()[dix], annot=True, xticklabels=experiments,
+                    yticklabels=experiments,
+                    cbar=False)
+        ax = axes.flatten()[dix].set_title(dataset)
+    plt.tight_layout()
+    plt.savefig("ensemble_relative_pvals.eps")
+    plt.show()
+
+
+def compare_ensembles():
+    singular = collate_base_results_into_df()
+    singular_no_augment = singular[singular["Experiment"] == "No Augmentation"].groupby(["Dataset", "ID"])[
+        "IoU"].mean()
+    singular_augment = singular[singular["Experiment"] == "Vanilla Augmentation"].groupby(["Dataset", "ID"])[
+        "IoU"].mean()
+    singular_ct = singular[singular["Experiment"] == "Consistency Training"].groupby(["Dataset", "ID"])[
+        "IoU"].mean()
+
+    no_augment = collate_ensemble_results_into_df(type="vanilla").groupby(["Dataset", "ID"])[
+        "IoU"].mean()
+    augment = collate_ensemble_results_into_df(type="augmentation").groupby(["Dataset", "ID"])[
+        "IoU"].mean()
+    consistency = collate_ensemble_results_into_df(type="consistency").groupby(["Dataset", "ID"])[
+        "IoU"].mean()
+
+    no_augment_improvements = (100 * (no_augment - singular_no_augment) / singular_no_augment).reset_index()
+    augment_improvements = (100 * (augment - singular_augment) / singular_augment).reset_index()
+    ct_improvements = (100 * (consistency - singular_ct) / singular_ct).reset_index()
+
+    no_augment_improvements["Experiment"] = pd.Series(["No Augmentation"] * len(no_augment_improvements),
+                                                      index=no_augment_improvements.index)
+    augment_improvements["Experiment"] = pd.Series(["Conventional Augmentation"] * len(augment_improvements),
+                                                   index=augment_improvements.index)
+    ct_improvements["Experiment"] = pd.Series(["Consistency Training"] * len(ct_improvements),
+                                              index=ct_improvements.index)
+    pd.set_option("precision", 3)
+    # print("No augmentation")
+    # print(no_augment_improvements)
+    # print("Augmentation")
+    # print(augment_improvements)
+    # print("Consistency Training")
+    # print(ct_improvements)
+    # print(augment_improvements)
+    overall_improvements = pd.concat([no_augment_improvements, augment_improvements, ct_improvements],
+                                     ignore_index=True)
+
+    experiments = np.unique(overall_improvements["Experiment"])
+    fig, axes = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(8, 8))
+    for dix, dataset in enumerate(np.unique(overall_improvements["Dataset"])):
+        p_values = np.zeros((len(experiments), len(experiments)))
+        for i, exp1 in enumerate(experiments):
+            for j, exp2 in enumerate(experiments):
+                test = ttest_ind(overall_improvements[(overall_improvements["Dataset"] == dataset) & (
+                        overall_improvements["Experiment"] == exp1)]["IoU"],
+                                 overall_improvements[(overall_improvements["Dataset"] == dataset) & (
+                                         overall_improvements["Experiment"] == exp2)]["IoU"], equal_var=True)
+                p_values[i, j] = test[1]
+        sns.heatmap(p_values, ax=axes.flatten()[dix], annot=True, xticklabels=experiments, yticklabels=experiments,
+                    cbar=False)
+        ax = axes.flatten()[dix].set_title(dataset)
+    plt.tight_layout()
+    plt.savefig("ensemble_improvement_pvals.eps")
+    plt.show()
+
+    box = sns.boxplot(data=overall_improvements, x="Experiment", y="IoU", hue="Dataset",
+                      hue_order=["Kvasir-SEG", "EndoCV2020", "CVC-ClinicDB", "Etis-LaribDB"])
+    box.legend(loc="upper left")
+    box.set(ylabel="Improvement in IoU (%)")
+    box.set(xlabel="Training Method")
+    box.axhline(0, linestyle="--")
+    plt.savefig("ensemble_improvements.eps")
+    print(overall_improvements.groupby(["Experiment"])["IoU"].mean())
+    plt.show()
+
+    grouped = singular[singular["Experiment"] != "Inpainter Augmentation"].groupby(["Model", "Dataset", "Experiment"])[
+        "IoU"]
+    constituent_cstd = grouped.std() / grouped.mean()
+    print(constituent_cstd)
+
+
+def test():
+    ensemble = collate_ensemble_results_into_df("all")
+    ensemble = ensemble.replace("augmentation", "Vanilla Augmentation")
+    ensemble = ensemble.replace("vanilla", "No Augmentation")
+    ensemble = ensemble.replace("consistency", "Consistency Training")
+
+    ensemble = ensemble[ensemble["Model"] != "diverse"]
+    ensemble_means = ensemble.groupby(["Experiment", "Dataset", "Model", "ID"])["IoU"].mean()
+    singular = collate_base_results_into_df()
+    singular = singular[singular["Experiment"] != "Inpainter Augmentation"]
+    singular_grouped = singular.groupby(["Experiment", "Dataset", "Model"])["IoU"]
+    # input()
+
+    ensemble_improvements = 100 * (ensemble_means - singular_grouped.mean()) / singular_grouped.mean()
+    singular_cstds = singular_grouped.std() / singular_grouped.mean()
+    merged = pd.merge(ensemble_improvements, singular_cstds, how='inner', on=["Experiment", "Dataset", "Model"])
+    merged = merged.groupby(["Experiment", "Model"]).mean()
+    sns.scatterplot(data=merged, x="IoU_y", y="IoU_x", hue="Experiment")
+    # print(spearmanr(merged["IoU_y"], merged["IoU_x"]))
+    plt.show()
+
+
 if __name__ == '__main__':
     # plot_consistencies()
     # def test(a):
@@ -560,8 +802,12 @@ if __name__ == '__main__':
     # collate_base_results_into_df()
     # plot_parameters_sizes()
     # # training_plot("logs/vanilla/DeepLab/vanilla_1.csv")
-    plot_inpainter_vs_conventional_performance()
+    # plot_inpainter_vs_conventional_performance()
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
     # plot_baseline_performance()
     # plot_ensemble_variance_relationship()
+    # plot_cons_vs_aug_ensembles()
+    # compare_ensembles()
+    # get_ensemble_p_vals()
+    test()

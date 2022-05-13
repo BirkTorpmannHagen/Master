@@ -8,7 +8,7 @@ if __name__ == '__main__':
     config = {"model": model,
               "device": "cuda",
               "lr": 0.00001,
-              "batch_size": 4,
+              "batch_size": 8,
               "epochs": 250,
               "use_inpainter": False}
     trainer = ConsistencyTrainer(id, config)

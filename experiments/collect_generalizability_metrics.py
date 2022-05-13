@@ -252,37 +252,33 @@ class SingularEnsembleEvaluator:
 
     def get_table_data(self, model_count):
         mnv = ModelOfNaturalVariation(0)
-        for model_name in self.model_names:
-            # if model_name != "TriUnet":
-            #     continue
-            print(model_name)
-            mean_ious = np.zeros((len(self.dataloaders), self.samples))
-            constituents = {}
-            for i in range(self.samples):
-                model = SingularEnsemble(model_name, f"Predictors/Augmented/{model_name}", "consistency", model_count)
-                constituents[i] = model.get_constituents()
-                for dl_idx, dataloader in enumerate(self.dataloaders):
-                    # seeding ensures SIS metrics are non-stochastic
-                    # np.random.seed(0)
-                    # torch.manual_seed(0)
-                    # random.seed(0)
-                    # todo: filter bad predictors
-                    for x, y, _ in tqdm(dataloader):
-                        img, mask = x.to("cuda"), y.to("cuda")
-                        out = model.predict(img, threshold=True)
-                        # plt.imshow(img[0].cpu().numpy().T)
-                        # plt.imshow(out[0].cpu().numpy().T)
-                        # plt.show()
-                        # input()
-                        iou = metrics.iou(out, mask)
-                        # if np.mean(iou) < 0.80 and dl_idx == 0:
-                        #     print("")
-                        mean_ious[dl_idx, i] += iou / len(dataloader)
-                del model  # avoid memory issues
-            print(mean_ious)
-            with open(f"experiments/Data/pickles/{model_name}-ensemble-{model_count}.pkl",
-                      "wb") as file:
-                pickle.dump({"ious": mean_ious, "constituents": constituents}, file)
+        for type in ["vanilla"]:
+            for model_name in self.model_names:
+                # if model_name != "TriUnet":
+                #     continue
+                print(model_name)
+                mean_ious = np.zeros((len(self.dataloaders), self.samples))
+                constituents = {}
+                for i in range(self.samples):
+                    model = SingularEnsemble(model_name, type, model_count)
+                    constituents[i] = model.get_constituents()
+                    for dl_idx, dataloader in enumerate(self.dataloaders):
+                        for x, y, _ in tqdm(dataloader):
+                            img, mask = x.to("cuda"), y.to("cuda")
+                            out = model.predict(img, threshold=True)
+
+                            iou = metrics.iou(out, mask)
+                            mean_ious[dl_idx, i] += iou / len(dataloader)
+                    del model  # avoid memory issues
+                print(mean_ious)
+                if type == "consistency":
+                    with open(f"experiments/Data/pickles/{model_name}-ensemble-{model_count}.pkl",
+                              "wb") as file:
+                        pickle.dump({"ious": mean_ious, "constituents": constituents}, file)
+                else:
+                    with open(f"experiments/Data/pickles/{model_name}-ensemble-{model_count}-{type}.pkl",
+                              "wb") as file:
+                        pickle.dump({"ious": mean_ious, "constituents": constituents}, file)
 
 
 class DiverseEnsembleEvaluator:
@@ -302,11 +298,11 @@ class DiverseEnsembleEvaluator:
 
     def get_table_data(self):
         mnv = ModelOfNaturalVariation(0)
-        for type in ["augmentation", "consistency"]:
+        for type in ["vanilla"]:
             mean_ious = np.zeros((len(self.dataloaders), self.samples))
             constituents = {}
             for i in range(1, self.samples + 1):
-                model = DiverseEnsemble(i, "Predictors/Augmented/", type)
+                model = DiverseEnsemble(i, type)
                 constituents[i] = model.get_constituents()
                 for dl_idx, dataloader in enumerate(self.dataloaders):
                     # seeding ensures SIS metrics are non-stochastic
