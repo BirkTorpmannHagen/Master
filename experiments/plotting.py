@@ -170,11 +170,11 @@ def collate_ensemble_results_into_df(type="consistency"):
             # experiment = fname.split("-")[-1]
 
             if "vanilla" in fname:
-                experiment = "vanilla"
+                experiment = "No Augmentation"
             elif "augmentation" in fname:
-                experiment = "augmentation"
+                experiment = "Vanilla Augmentation"
             else:
-                experiment = "consistency"
+                experiment = "Consistency Training"
             data = pickle.load(file)
             # print(file, data.keys())
             datasets, samples = data["ious"].shape
@@ -497,12 +497,16 @@ def plot_consistencies():
     plt.show()
 
 
-def plot_ensemble_variance_relationship():
-    df = collate_ensemble_results_into_df()
+def plot_ensemble_variance_relationship(experiment):
+    df = collate_ensemble_results_into_df(experiment)
+    print(df.groupby(["Experiment", "Dataset", "Model"])["IoU"].mean())
     df_constituents = collate_base_results_into_df()
+    df_constituents = df_constituents[df_constituents["Experiment"] != "Inpainter Augmentation"]
+    print(df_constituents.groupby(["Experiment", "Dataset", "Model"])["IoU"].mean())
     df["constituents"] = df["constituents"].apply(
         lambda x: [int(i.split("_")[-1]) for i in x] if type(x) == type([]) else int(x))
-    df_constituents = df_constituents[df_constituents["Experiment"] == "Consistency Training"]
+    if type != all:
+        df_constituents = df_constituents[df_constituents["Experiment"] == experiment]
 
     colors = ["tab:blue", "tab:orange", "tab:green", "tab:red"]
     # colors = ["b", "g", "r", "c", "m", "y"]
@@ -512,20 +516,17 @@ def plot_ensemble_variance_relationship():
     for i, row in df.iterrows():
         model = df.at[i, "Model"]
         id = df.at[i, "ID"]
-        experiment = df.at[i, "Experiment"].split(".")[0]
-        if model == "diverse" and experiment != "consistency":
-            continue
 
         if model == "diverse":
             # get non-ensemble stats
             # continue
             filtered = df_constituents[
                 (df_constituents["ID"] == id) &
-                (df_constituents["Experiment"] == "Consistency Training")]  # todo take augmentation into account
+                (df_constituents["Experiment"] == experiment)]  # todo take augmentation into account
             cstd = (filtered.groupby(["Dataset"]).std() / filtered.groupby(["Dataset"]).mean())["IoU"]
 
             improvements = df[
-                (df["Model"] == model) & (df["Experiment"] == f"{experiment}.pkl") & (df["ID"] == id)]
+                (df["Model"] == model) & (df["Experiment"] == experiment) & (df["ID"] == id)]
 
             improvements = 100 * (improvements.groupby(["Dataset"])["IoU"].mean() - filtered.groupby(["Dataset"])[
                 "IoU"].mean()) / filtered.groupby(["Dataset"])["IoU"].mean()
@@ -544,7 +545,7 @@ def plot_ensemble_variance_relationship():
                 (df_constituents["Model"] == model) & (df_constituents["ID"].isin(constituents))]
             cstd = (filtered.groupby(["Dataset"]).std() / filtered.groupby(["Dataset"]).mean())["IoU"]
             improvements = df[
-                (df["Model"] == model) & (df["Experiment"] == f"{experiment}.pkl") & (df["ID"] == id)]
+                (df["Model"] == model) & (df["Experiment"] == experiment) & (df["ID"] == id)]
 
             improvements = 100 * (improvements.groupby(["Dataset"])["IoU"].mean() - filtered.groupby(["Dataset"])[
                 "IoU"].mean()) / filtered.groupby(["Dataset"])["IoU"].mean()
@@ -560,6 +561,7 @@ def plot_ensemble_variance_relationship():
             # cstd = filtered
         # df.at[i, "cstd"] =
         # cstds.append(0)
+    print(var_dataset)
     fig, ax = plt.subplots(2, 2, figsize=(12, 6))
     for i, dataset_name in enumerate(np.unique(var_dataset["Dataset"])):
         dataset_filtered = var_dataset[var_dataset["Dataset"] == dataset_name]
@@ -806,8 +808,8 @@ if __name__ == '__main__':
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
     # plot_baseline_performance()
-    # plot_ensemble_variance_relationship()
+    plot_ensemble_variance_relationship("all")
     # plot_cons_vs_aug_ensembles()
     # compare_ensembles()
     # get_ensemble_p_vals()
-    test()
+    # test()
