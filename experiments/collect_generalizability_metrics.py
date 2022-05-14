@@ -32,10 +32,12 @@ class ModelEvaluator:
         self.dataset_names = ["Kvasir-Seg", "Etis-LaribDB", "CVC-ClinicDB", "EndoCV2020"]
         # self.models = [DeepLab, FPN, InductiveNet, TriUnet, Unet]
         # self.model_names = ["DeepLab", "FPN", "InductiveNet", "TriUnet", "Unet"]
-        self.models = [FPN]
-        self.model_names = ["FPN"]
+        # self.models = [FPN]
+        # self.model_names = ["FPN"]
         # self.models = [InductiveNet]
         # self.model_names = ["InductiveNet"]
+        self.models = [Unet]
+        self.model_names = ["Unet"]
 
     def parse_experiment_details(self, model_name, eval_method, loss_fn, aug, id, last_epoch=False):
         """
@@ -73,8 +75,8 @@ class ModelEvaluator:
         mnv = ModelOfNaturalVariation(1)
         for model_constructor, model_name in zip(self.models, self.model_names):
             for eval_method in [""]:
-                for loss_fn in ["j", "sil"]:
-                    for aug in ["0", "V", "G"]:
+                for loss_fn in ["j"]:
+                    for aug in ["G"]:
                         sis_matrix = np.zeros((len(self.dataloaders), len(id_range)))
                         mean_ious = np.zeros((len(self.dataloaders), len(id_range)))
                         for id in id_range:
@@ -252,7 +254,7 @@ class SingularEnsembleEvaluator:
 
     def get_table_data(self, model_count):
         mnv = ModelOfNaturalVariation(0)
-        for type in ["vanilla"]:
+        for type in ["augmentation"]:
             for model_name in self.model_names:
                 # if model_name != "TriUnet":
                 #     continue
@@ -298,18 +300,13 @@ class DiverseEnsembleEvaluator:
 
     def get_table_data(self):
         mnv = ModelOfNaturalVariation(0)
-        for type in ["vanilla"]:
+        for type in ["augmentation"]:
             mean_ious = np.zeros((len(self.dataloaders), self.samples))
             constituents = {}
             for i in range(1, self.samples + 1):
                 model = DiverseEnsemble(i, type)
                 constituents[i] = model.get_constituents()
                 for dl_idx, dataloader in enumerate(self.dataloaders):
-                    # seeding ensures SIS metrics are non-stochastic
-                    # np.random.seed(0)
-                    # torch.manual_seed(0)
-                    # random.seed(0)
-                    # todo: filter bad predictors
                     for x, y, _ in tqdm(dataloader):
                         img, mask = x.to("cuda"), y.to("cuda")
                         out = model.predict(img)
@@ -329,12 +326,12 @@ def write_to_latex_table(pkl_file):
 
 if __name__ == '__main__':
     np.set_printoptions(precision=3, suppress=True)
-    # evaluator = ModelEvaluator()
-    # evaluator.get_table_data(np.arange(0, 10), np.arange(1, 11), show_reconstruction=False,
-    #                          show_consistency_examples=False)
-    evaluator = DiverseEnsembleEvaluator(samples=10)
-    evaluator.get_table_data()
+    evaluator = ModelEvaluator()
+    evaluator.get_table_data(np.arange(0, 10), np.arange(1, 11), show_reconstruction=False,
+                             show_consistency_examples=False)
+    # evaluator = DiverseEnsembleEvaluator(samples=10)
+    # evaluator.get_table_data()
     # evaluator = SingularEnsembleEvaluator()
     # evaluator.get_table_data(5)
-
+    #
     # get_metrics_for_experiment("Augmented", "consistency_1")
