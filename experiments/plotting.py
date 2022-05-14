@@ -53,10 +53,6 @@ def ood_v_epoch(log_csv):
     plt.show()
 
 
-def modelwise_boxplot():
-    results = torch.load("experiments/Data/pickles/ious_CVC-ClinicDB_DeepLab__j_0")  # vanilla
-
-
 def get_boxplots_for_models():
     """
     box plot for comparing model performance. Considers d% reduced along datasets, split according to experiments
@@ -75,27 +71,26 @@ def get_boxplots_for_models():
                 data = pickle.load(file)
                 datasets, samples = data["ious"].shape
                 kvasir_ious = data["ious"][0]
-                print(kvasir_ious)
-                # print(kvasir_ious)
                 mean_iid_iou = np.median(kvasir_ious)
                 print(mean_iid_iou)
                 if "maximum_consistency" in fname:
                     continue
                 for i in range(datasets):
-                    # if i==0:
-                    #     continue
+                    if i==0:
+                        continue
                     for j in range(samples):
                         if data["ious"][i, j] < 0.25 or data["ious"][0][j] < 0.75:
                             print(f"{fname} with id {j} has iou {data['ious'][i, j]} and {data['ious'][0][j]} ")
                             continue
-                        dataset.append([dataset_names[i], model, data["ious"][i, j]])
+                        # dataset.append([dataset_names[i], model, data["ious"][i, j]])
 
-                        # dataset.append(
-                        #     [dataset_names[i], model, 100 * (data["ious"][i, j] - mean_iid_iou) / mean_iid_iou])
+                        dataset.append(
+                            [dataset_names[i], model, 100 * (data["ious"][i, j] - mean_iid_iou) / mean_iid_iou])
 
     dataset = pd.DataFrame(data=dataset, columns=["Dataset", "Model", "\u0394%IoU"])
+    print(dataset)
+    plt.ylim(0,-100)
     sns.barplot(x="Dataset", y="\u0394%IoU", hue="Model", data=dataset)
-    plt.ylim((0, 1))
     plt.show()
 
 
@@ -345,7 +340,7 @@ def plot_inpainter_vs_conventional_performance():
 
     test = table.to_latex(float_format="%.3f")
     # improvements = improvements[improvements["Dataset"] == "CVC-ClinicDB"]
-    print(np.max(improvements[improvements["Expe riment"] == "Vanilla Augmentation"]))
+    print(np.max(improvements[improvements["Experiment"] == "Vanilla Augmentation"]))
     print(np.mean(improvements[improvements["Experiment"] == "Vanilla Augmentation"]))
 
     print(np.max(improvements[improvements["Experiment"] == "Inpainter Augmentation"]))
@@ -432,38 +427,90 @@ def plot_training_procedure_performance():
     return table
 
 
-def plot_baseline_performance():
+def compare_models(training_method):
     df = collate_base_results_into_df()
-    df = df[df["Experiment"] == "No Augmentation"]
-    p_value_matrix = np.zeros((len(np.unique(df["Model"])), len(np.unique(df["Model"]))))
-    models = np.unique(df["Model"])
-    print()
-    np.set_printoptions(precision=5, suppress=True)
-    fig, ax = plt.subplots(2, 2, sharey=True, sharex=True, figsize=(8, 8))
-    for didx, dataset in enumerate(np.unique(df["Dataset"])):
-        for i, model in enumerate(models):
-            for j, compare_model in enumerate(models):
-                p_value_matrix[i, j] = round(ttest_ind(df[(df["Model"] == model) & (df["Dataset"] == dataset)]["IoU"],
-                                                       df[(df["Model"] == compare_model) & (df["Dataset"] == dataset)][
-                                                           "IoU"],
-                                                       equal_var=False)[1], 5)
+    df = df[df["Experiment"] ==training_method]
+    # p_value_matrix = np.zeros((len(np.unique(df["Model"])), len(np.unique(df["Model"]))))
+    # models = np.unique(df["Model"])
+    # print()
+    # np.set_printoptions(precision=5, suppress=True)
+    # fig, ax = plt.subplots(2, 2, sharey=True, sharex=True, figsize=(8, 8))
+    # for didx, dataset in enumerate(np.unique(df["Dataset"])):
+    #     for i, model in enumerate(models):
+    #         for j, compare_model in enumerate(models):
+    #             p_value_matrix[i, j] = round(ttest_ind(df[(df["Model"] == model) & (df["Dataset"] == dataset)]["IoU"],
+    #                                                    df[(df["Model"] == compare_model) & (df["Dataset"] == dataset)][
+    #                                                        "IoU"],
+    #                                                    equal_var=False)[1], 5)
+    #
+    #     sns.heatmap(p_value_matrix, ax=ax.flatten()[didx], annot=True, xticklabels=models, yticklabels=models,
+    #                 cbar=False)
+    #     ax.flatten()[didx].set_title(dataset)
+    # plt.tight_layout()
+    # plt.savefig("model_pvals.eps")
+    # plt.show()
+    #
+    # df_van = df.groupby(["Dataset", "Model"])["IoU"].mean()
+    # df_van = df_van.reset_index()
+    # order = df_van.groupby(["Dataset"])["IoU"].mean().sort_values().index
+    #
+    # plt.hist(df[df["Dataset"] == "Kvasir-SEG"]["IoU"])
+    # plt.show()
+    # sns.barplot(data=df, x="Dataset", y="IoU", hue="Model", order=order)
+    # plt.show()
 
-        sns.heatmap(p_value_matrix, ax=ax.flatten()[didx], annot=True, xticklabels=models, yticklabels=models,
-                    cbar=False)
-        ax.flatten()[didx].set_title(dataset)
+    #generalizability_gap
+    grouped = df.groupby(["Dataset", "Model", "ID"])["IoU"].mean().reset_index()
+    ood = grouped[grouped["Dataset"]!="Kvasir-SEG"].copy()
+    print(ood.columns)
+    iid = grouped[grouped["Dataset"] == "Kvasir-SEG"].copy()
+    for i, row in ood.iterrows():
+        id = ood.at[i, "ID"]
+        dataset = ood.at[i, "Dataset"]
+        model = ood.at[i, "Model"]
+        iou = row["IoU"]
+        iid_iou = float(iid[(iid["ID"]==id)&(iid["Model"]==model)]["IoU"])
+        print(iou)
+        print(iid_iou)
+        ood.at[i, "gap"] = 100*(iou-iid_iou)/iid_iou
+    sns.barplot(data=ood, x="Dataset", hue="Model", y="gap")
+    plt.ylim(-100, 0)
+    plt.ylabel("% Change in IoU wrt IID")
+    plt.savefig("delta_iou_baseline.eps")
+
+    plt.show()
+
+    cstds = df.groupby(["Dataset", "Model"])["IoU"].std()/df.groupby(["Dataset", "Model"])["IoU"].mean()
+    cstds = cstds.reset_index()
+    sns.barplot(data=cstds, x="Dataset", y="IoU", hue="Model")
+    both = pd.merge(ood, cstds, on=["Model", "Dataset"])
+    plt.savefig("cstd_baseline.eps")
+
+    plt.show()
+    fig, ax = plt.subplots(3,1, figsize=(6,6))
+    for didx, dataset in enumerate(np.unique(both["Dataset"])):
+        test = pearsonr(both[both["Dataset"]==dataset]["IoU_y"], both[both["Dataset"]==dataset]["gap"])
+        ax.flatten()[didx].set_title(f"{dataset} : Rp={round(test[0],5)}, p={round(test[1],5)}")
+        if didx==2:
+            scatter = sns.scatterplot(ax=ax.flatten()[didx], data=both[both["Dataset"]==dataset], x="IoU_y", y="gap", hue="Model")
+            scatter.legend(loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=3)
+        else:
+            sns.scatterplot(ax=ax.flatten()[didx], data=both[both["Dataset"]==dataset], x="IoU_y", y="gap", hue="Model", legend=False)
+    # plt.tight_layout()
+
+    for axis in ax:
+        axis.set_ylabel("")
+        axis.set_xlabel("")
+        axis.set_yticklabels([])
+        axis.set_xticklabels([])
+        # axis.set_ylim(axis.get_ylim()[::-1])
+
+    ax.flatten()[2].set_xlabel("C.Std mIoU")
+    ax.flatten()[1].set_ylabel("% Change in mIoU wrt IID")
     plt.tight_layout()
-    plt.savefig("model_pvals.eps")
-    plt.show()
+    plt.savefig("underspecification_baseline.eps")
+    plt.show(ypad=4)
 
-    df_van = df.groupby(["Dataset", "Model"])["IoU"].mean()
-    df_van = df_van.reset_index()
-    order = df_van.groupby(["Dataset"])["IoU"].mean().sort_values().index
-
-    # t tests here
-    plt.hist(df[df["Dataset"] == "Kvasir-SEG"]["IoU"])
-    plt.show()
-    sns.barplot(data=df, x="Dataset", y="IoU", hue="Model", order=order)
-    plt.show()
 
 
 def plot_consistencies():
@@ -837,8 +884,6 @@ def test():
 
 if __name__ == '__main__':
     # plot_consistencies()
-    # def test(a):
-    #     return np.mean()
     # get_boxplots_for_models()
     # # collate_results_into_df()
     # get_variances_for_models()
@@ -849,9 +894,12 @@ if __name__ == '__main__':
     # plot_inpainter_vs_conventional_performance()
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
-    # plot_baseline_performance()
+    compare_models("No Augmentation")
+    compare_models("Vanilla Augmentation")
+    compare_models("Consistency Training")
+
     # plot_ensemble_variance_relationship("all")
     # plot_cons_vs_aug_ensembles()
-    compare_ensembles()
+    # compare_ensembles()
     # get_ensemble_p_vals()
     # test()
