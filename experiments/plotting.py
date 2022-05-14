@@ -183,7 +183,7 @@ def collate_ensemble_results_into_df(type="consistency"):
                 model = "DD-DeepLabV3+"
             for i in range(datasets):
                 for j in range(samples):
-                    if data["ious"][0, j] < 0.75: #if bugged out; rare
+                    if data["ious"][0, j] < 0.75:  # if bugged out; rare
                         continue
                     try:
                         dataset.append(
@@ -400,16 +400,25 @@ def plot_training_procedure_performance():
                 hue_order=["No Augmentation", "Vanilla Augmentation", "Consistency Training"])
     plt.savefig("consistency_training_cstd.eps")
     plt.show()
+    augmentation_performance = filt[filt["Experiment"] == "Vanilla Augmentation"].groupby(["Dataset"])["IoU"].mean()
+
+    test = improvement_pct = 100 * (filt.groupby(["Dataset", "Experiment", "ID"])[
+                                        "IoU"].mean() - augmentation_performance) / augmentation_performance
+    print(test.groupby(["Experiment"]).mean())
+    input()
     improvement_pct = 100 * (filt.groupby(["Dataset", "Experiment", "ID"])[
                                  "IoU"].mean() - no_augmentation_performance) / no_augmentation_performance
+
     improvement_pct = improvement_pct.reset_index()
     print(improvement_pct[improvement_pct["Experiment"] == "No Augmentation"])
     improvement_pct = improvement_pct[improvement_pct["Experiment"] != "No Augmentation"]
 
     # print(np.max(improvement_pct[improvement_pct["Experiment"] == "Consistency Training"]))
-    # print(np.mean(improvement_pct[improvement_pct["Experiment"] == "Consistency Training"]))
-    print(np.max(improvement_pct[improvement_pct["Experiment"] == "Vanilla Augmentation"]))
+    print("Consistency")
+    print(np.mean(improvement_pct[improvement_pct["Experiment"] == "Consistency Training"]))
+    print("Augmentation")
     print(np.mean(improvement_pct[improvement_pct["Experiment"] == "Vanilla Augmentation"]))
+
     improvement_pct.rename(columns={"IoU": "% Change in mean IoU with respect to No Augmentation"}, inplace=True)
     sns.boxplot(data=improvement_pct, x="Dataset", y="% Change in mean IoU with respect to No Augmentation",
                 hue="Experiment")
@@ -504,9 +513,9 @@ def plot_ensemble_variance_relationship(training_method):
     df["constituents"] = df["constituents"].apply(
         lambda x: [int(i.split("_")[-1]) for i in x] if type(x) == type([]) else int(x))
     if training_method != "all":
-        if training_method=="vanilla": training_method="No Augmentation"
-        if training_method=="augmentation": training_method="Vanilla Augmentation"
-        if training_method=="consistency": training_method="Consistency Training"
+        if training_method == "vanilla": training_method = "No Augmentation"
+        if training_method == "augmentation": training_method = "Vanilla Augmentation"
+        if training_method == "consistency": training_method = "Consistency Training"
         df_constituents = df_constituents[df_constituents["Experiment"] == training_method]
 
     colors = ["tab:blue", "tab:orange", "tab:green", "tab:red"]
@@ -532,16 +541,17 @@ def plot_ensemble_variance_relationship(training_method):
             cstd.rename(columns={"IoU": "C.StD"}, inplace=True)
             improvements.rename(columns={"IoU": "% Increase in Generalizability wrt Constituents Mean"}, inplace=True)
             merged = pd.merge(improvements, cstd)
-            merged["Model"] = [model] * 4 #dataset length
+            merged["Model"] = [model] * 4  # dataset length
             merged["ID"] = [id] * 4
-            merged["Experiment"]=[experiment]*4
+            merged["Experiment"] = [experiment] * 4
 
             var_dataset = var_dataset.append(merged)
         else:
 
             constituents = df.at[i, "constituents"]
             filtered = df_constituents[
-                (df_constituents["Model"] == model) & (df_constituents["ID"].isin(constituents)) & (df_constituents["Experiment"]==experiment)]
+                (df_constituents["Model"] == model) & (df_constituents["ID"].isin(constituents)) & (
+                        df_constituents["Experiment"] == experiment)]
             cstd = (filtered.groupby(["Dataset"]).std() / filtered.groupby(["Dataset"]).mean())["IoU"]
             improvements = df[
                 (df["Model"] == model) & (df["Experiment"] == experiment) & (df["ID"] == id)]
@@ -555,48 +565,52 @@ def plot_ensemble_variance_relationship(training_method):
             merged = pd.merge(improvements, cstd)
             merged["Model"] = [model] * 4
             merged["ID"] = [id] * 4
-            merged["Experiment"]=[experiment]*4
+            merged["Experiment"] = [experiment] * 4
             var_dataset = var_dataset.append(merged)
             # improvements = filtered.groupby
             # cstd = filtered
         # df.at[i, "cstd"] =
         # cstds.append(0)
-    print(len(np.unique(var_dataset[var_dataset["Experiment"]=="Vanilla Augmentation"]["% Increase in Generalizability wrt Constituents Mean"])))
-    print(len(np.unique(var_dataset[var_dataset["Experiment"]=="No Augmentation"]["% Increase in Generalizability wrt Constituents Mean"])))
+    print(len(np.unique(var_dataset[var_dataset["Experiment"] == "Vanilla Augmentation"][
+                            "% Increase in Generalizability wrt Constituents Mean"])))
+    print(len(np.unique(var_dataset[var_dataset["Experiment"] == "No Augmentation"][
+                            "% Increase in Generalizability wrt Constituents Mean"])))
     print(var_dataset.columns)
-    datasets=np.unique(var_dataset["Dataset"])
+    datasets = np.unique(var_dataset["Dataset"])
     training_methods = ["No Augmentation", "Vanilla Augmentation", "Consistency Training"]
     fig, ax = plt.subplots(len(datasets), len(training_methods), figsize=(11, 12))
     var_dataset = var_dataset.replace("diverse", "MultiModel")
 
     for i, dataset_name in enumerate(datasets):
         for j, training_method in enumerate(training_methods):
-            dataset_filtered = var_dataset[(var_dataset["Dataset"] == dataset_name)&(var_dataset["Experiment"] == training_method)]
+            dataset_filtered = var_dataset[
+                (var_dataset["Dataset"] == dataset_name) & (var_dataset["Experiment"] == training_method)]
             # sns.regplot(ax=ax.flatten()[i], data=dataset_filtered, x="C.StD",
             #             y="% Increase in Generalizability wrt Constituents Mean",
             #             ci=99,
             #             color=colormap[dataset_name], label=dataset_name)
             # correlation = pearsonr(dataset_filtered["C.StD"],
             #                        dataset_filtered["% Increase in Generalizability wrt Constituents Mean"])
-            if j==0: #seaborn does not like global legends
+            if j == 0:  # seaborn does not like global legends
                 scatter = sns.scatterplot(ax=ax[i, j], data=dataset_filtered, x="C.StD",
-                            y="% Increase in Generalizability wrt Constituents Mean",
-                            ci=99, legend=False, color=colormap[dataset_name], label=dataset_name)
-                ax[i,j].set_title(training_method)
+                                          y="% Increase in Generalizability wrt Constituents Mean",
+                                          ci=99, legend=False, color=colormap[dataset_name], label=dataset_name)
+                ax[i, j].set_title(training_method)
 
             else:
                 scatter = sns.scatterplot(ax=ax[i, j], data=dataset_filtered, x="C.StD",
                                           y="% Increase in Generalizability wrt Constituents Mean",
                                           ci=99, legend=False, color=colormap[dataset_name])
-            correlation = spearmanr(dataset_filtered["C.StD"], dataset_filtered["% Increase in Generalizability wrt Constituents Mean"])
-            ax[i,j].set_title(f"Rs={correlation[0]:.3f}, p={correlation[1]:.6f}")
+            correlation = spearmanr(dataset_filtered["C.StD"],
+                                    dataset_filtered["% Increase in Generalizability wrt Constituents Mean"])
+            ax[i, j].set_title(f"Rs={correlation[0]:.3f}, p={correlation[1]:.6f}")
     for a in ax.flatten():
         a.set(xlabel=None)
         a.set(ylabel=None)
     for axis, col in zip(ax[0], training_methods):
         axis.annotate(col, xy=(0.5, 1.5), xytext=(0, 5),
-                    xycoords='axes fraction', textcoords='offset points',
-                    size='xx-large', ha='center', va='baseline')
+                      xycoords='axes fraction', textcoords='offset points',
+                      size='xx-large', ha='center', va='baseline')
     fig.add_subplot(111, frameon=False)
     # fig.legend(loc='lower center', bbox_to_anchor=(0.5, 0.5), ncol=2, labels=np.unique(var_dataset["Dataset"]))
     fig.legend(loc='lower center', bbox_to_anchor=(0.5, 0), ncol=4)
@@ -613,8 +627,9 @@ def plot_ensemble_variance_relationship(training_method):
     #     "% Increase in Generalizability wrt Constituents Mean"].mean().sort_values().index
     var_dataset = var_dataset.replace("diverse", "MultiModel")
 
-    fig, ax = plt.subplots(figsize=(12,6))
-    sns.boxplot(data=var_dataset, ax=ax, x="Dataset", y="% Increase in Generalizability wrt Constituents Mean", hue="Model",
+    fig, ax = plt.subplots(figsize=(12, 6))
+    sns.boxplot(data=var_dataset, ax=ax, x="Dataset", y="% Increase in Generalizability wrt Constituents Mean",
+                hue="Model",
                 order=["Kvasir-SEG", "CVC-ClinicDB", "EndoCV2020", "Etis-LaribDB"])
 
     plt.axhline(0, linestyle="--")
@@ -781,7 +796,9 @@ def compare_ensembles():
     box.set(xlabel="Training Method")
     box.axhline(0, linestyle="--")
     plt.savefig("ensemble_improvements.eps")
+    print("..,.")
     print(overall_improvements.groupby(["Experiment"])["IoU"].mean())
+    print(overall_improvements.groupby(["Experiment"])["IoU"].max())
     plt.show()
 
     grouped = singular[singular["Experiment"] != "Inpainter Augmentation"].groupby(["Model", "Dataset", "Experiment"])[
@@ -807,9 +824,9 @@ def test():
     singular_cstds = singular_grouped.std() / singular_grouped.mean()
     merged = pd.merge(ensemble_improvements, singular_cstds, how='inner', on=["Experiment", "Dataset", "Model"])
     # merged = merged.groupby(["Experiment", "Model"]).mean()
-    fig=sns.scatterplot(data=merged, x="IoU_y", y="IoU_x", hue="Experiment")
+    fig = sns.scatterplot(data=merged, x="IoU_y", y="IoU_x", hue="Experiment")
     test = spearmanr(merged["IoU_y"], merged["IoU_x"])
-    plt.title(f"R_s = {round(test[0],5)}, p={round(test[1],5)}")
+    plt.title(f"R_s = {round(test[0], 5)}, p={round(test[1], 5)}")
     fig.set_ylabel("Change in IoU (%)")
     fig.set_xlabel("IoU C.StD.")
     # print(spearmanr(merged["IoU_y"], merged["IoU_x"]))
@@ -835,6 +852,6 @@ if __name__ == '__main__':
     # plot_baseline_performance()
     # plot_ensemble_variance_relationship("all")
     # plot_cons_vs_aug_ensembles()
-    # compare_ensembles()
-    get_ensemble_p_vals()
+    compare_ensembles()
+    # get_ensemble_p_vals()
     # test()
