@@ -668,7 +668,7 @@ def get_ensemble_p_vals():
     # model-averaged
     print("When averaged across models:")
     print("No augmentation")
-    experiments_long=["No Augmentation", "Conventional Augmentation", "Consistency Training"]
+    experiments_long=   ["No Augmentation", "Conventional Augmentation", "Consistency Training"]
     for dix, dataset in enumerate(np.unique(singular["Dataset"])):
         single = singular[singular["Experiment"] == "No Augmentation"]
         ensemble = collate_ensemble_results_into_df(type="vanilla")
