@@ -200,20 +200,25 @@ class KvasirSyntheticDataset(Dataset):
             self.split_fnames = self.fnames_test
         else:
             raise ValueError("Choices are train/val/test")
+        print("loading mnv")
+        self.mnv = ModelOfNaturalVariation(0, use_inpainter=True).to("cuda")
+        print("mnv loaded")
 
     def __len__(self):
         return len(self.split_fnames)
+        # return 10  # debug
 
     def __getitem__(self, index):
-        image = self.common_transforms(
-            open(join(join(self.path, "images/"), self.split_fnames[index])).convert("RGB"))
-        image = image
-        mask = generate_a_mask(imsize=512).T
-        mask = torch.tensor(mask > 0.5).float()
-        part = mask * image
-        masked_image = image - part
+        print(f"getting {index}")
+        image = np.array(open(join(self.path, "images/", self.split_fnames[index])).convert("RGB"))
+        mask = np.zeros_like(image)
+        image = self.common_transforms(PIL.Image.fromarray(image))
+        mask = self.common_transforms(PIL.Image.fromarray(mask))
+        image, mask = self.mnv(image.unsqueeze(0), mask.unsqueeze(0))
+        image = image.squeeze()
+        mask = mask.squeeze(0)
 
-        return image, mask, masked_image, part, self.split_fnames[index]
+        return image, mask, self.split_fnames[index]
 
 
 def test_KvasirSegmentationDataset():

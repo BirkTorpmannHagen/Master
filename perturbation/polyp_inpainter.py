@@ -28,7 +28,8 @@ class Inpainter:
 
     def add_polyp(self, img, old_mask):
         new_polyp_mask = np.expand_dims(self.perturbator(rad=0.25), -1)
-        total_mask = np.clip(new_polyp_mask[0] + old_mask, 0, 1)
+
+        total_mask = np.clip(new_polyp_mask + old_mask, 0, 1)
         masked = img * (1 - new_polyp_mask)
         with torch.no_grad():
             polyp = self.model(torch.Tensor(masked).permute(-1, 0, 1).unsqueeze(0)).squeeze(0).permute(1, 2, 0).numpy()

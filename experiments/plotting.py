@@ -76,7 +76,7 @@ def get_boxplots_for_models():
                 if "maximum_consistency" in fname:
                     continue
                 for i in range(datasets):
-                    if i==0:
+                    if i == 0:
                         continue
                     for j in range(samples):
                         if data["ious"][i, j] < 0.25 or data["ious"][0][j] < 0.75:
@@ -89,7 +89,7 @@ def get_boxplots_for_models():
 
     dataset = pd.DataFrame(data=dataset, columns=["Dataset", "Model", "\u0394%IoU"])
     print(dataset)
-    plt.ylim(0,-100)
+    plt.ylim(0, -100)
     sns.barplot(x="Dataset", y="\u0394%IoU", hue="Model", data=dataset)
     plt.show()
 
@@ -429,7 +429,7 @@ def plot_training_procedure_performance():
 
 def compare_models(training_method):
     df = collate_base_results_into_df()
-    df = df[df["Experiment"] ==training_method]
+    df = df[df["Experiment"] == training_method]
     # p_value_matrix = np.zeros((len(np.unique(df["Model"])), len(np.unique(df["Model"]))))
     # models = np.unique(df["Model"])
     # print()
@@ -459,9 +459,9 @@ def compare_models(training_method):
     # sns.barplot(data=df, x="Dataset", y="IoU", hue="Model", order=order)
     # plt.show()
 
-    #generalizability_gap
+    # generalizability_gap
     grouped = df.groupby(["Dataset", "Model", "ID"])["IoU"].mean().reset_index()
-    ood = grouped[grouped["Dataset"]!="Kvasir-SEG"].copy()
+    ood = grouped[grouped["Dataset"] != "Kvasir-SEG"].copy()
     print(ood.columns)
     iid = grouped[grouped["Dataset"] == "Kvasir-SEG"].copy()
     for i, row in ood.iterrows():
@@ -469,10 +469,10 @@ def compare_models(training_method):
         dataset = ood.at[i, "Dataset"]
         model = ood.at[i, "Model"]
         iou = row["IoU"]
-        iid_iou = float(iid[(iid["ID"]==id)&(iid["Model"]==model)]["IoU"])
+        iid_iou = float(iid[(iid["ID"] == id) & (iid["Model"] == model)]["IoU"])
         print(iou)
         print(iid_iou)
-        ood.at[i, "gap"] = 100*(iou-iid_iou)/iid_iou
+        ood.at[i, "gap"] = 100 * (iou - iid_iou) / iid_iou
     sns.barplot(data=ood, x="Dataset", hue="Model", y="gap")
     plt.ylim(-100, 0)
     plt.ylabel("% Change in IoU wrt IID")
@@ -480,22 +480,24 @@ def compare_models(training_method):
 
     plt.show()
 
-    cstds = df.groupby(["Dataset", "Model"])["IoU"].std()/df.groupby(["Dataset", "Model"])["IoU"].mean()
+    cstds = df.groupby(["Dataset", "Model"])["IoU"].std() / df.groupby(["Dataset", "Model"])["IoU"].mean()
     cstds = cstds.reset_index()
     sns.barplot(data=cstds, x="Dataset", y="IoU", hue="Model")
     both = pd.merge(ood, cstds, on=["Model", "Dataset"])
     plt.savefig("cstd_baseline.eps")
 
     plt.show()
-    fig, ax = plt.subplots(3,1, figsize=(6,6))
+    fig, ax = plt.subplots(3, 1, figsize=(6, 6))
     for didx, dataset in enumerate(np.unique(both["Dataset"])):
-        test = pearsonr(both[both["Dataset"]==dataset]["IoU_y"], both[both["Dataset"]==dataset]["gap"])
-        ax.flatten()[didx].set_title(f"{dataset} : Rp={round(test[0],5)}, p={round(test[1],5)}")
-        if didx==2:
-            scatter = sns.scatterplot(ax=ax.flatten()[didx], data=both[both["Dataset"]==dataset], x="IoU_y", y="gap", hue="Model")
+        test = pearsonr(both[both["Dataset"] == dataset]["IoU_y"], both[both["Dataset"] == dataset]["gap"])
+        ax.flatten()[didx].set_title(f"{dataset} : Rp={round(test[0], 5)}, p={round(test[1], 5)}")
+        if didx == 2:
+            scatter = sns.scatterplot(ax=ax.flatten()[didx], data=both[both["Dataset"] == dataset], x="IoU_y", y="gap",
+                                      hue="Model")
             scatter.legend(loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=3)
         else:
-            sns.scatterplot(ax=ax.flatten()[didx], data=both[both["Dataset"]==dataset], x="IoU_y", y="gap", hue="Model", legend=False)
+            sns.scatterplot(ax=ax.flatten()[didx], data=both[both["Dataset"] == dataset], x="IoU_y", y="gap",
+                            hue="Model", legend=False)
     # plt.tight_layout()
 
     for axis in ax:
@@ -510,7 +512,6 @@ def compare_models(training_method):
     plt.tight_layout()
     plt.savefig("underspecification_baseline.eps")
     plt.show(ypad=4)
-
 
 
 def plot_consistencies():
@@ -730,7 +731,7 @@ def get_ensemble_p_vals():
     # model-averaged
     print("When averaged across models:")
     print("No augmentation")
-    experiments_long=   ["No Augmentation", "Conventional Augmentation", "Consistency Training"]
+    experiments_long = ["No Augmentation", "Conventional Augmentation", "Consistency Training"]
     for dix, dataset in enumerate(np.unique(singular["Dataset"])):
         single = singular[singular["Experiment"] == "No Augmentation"]
         ensemble = collate_ensemble_results_into_df(type="vanilla")
@@ -883,20 +884,13 @@ def test():
 
 
 if __name__ == '__main__':
-    # plot_consistencies()
-    # get_boxplots_for_models()
-    # # collate_results_into_df()
-    # get_variances_for_models()
-    # plot_ensemble_performance()
-    # collate_base_results_into_df()
-    # plot_parameters_sizes()
-    # # training_plot("logs/vanilla/DeepLab/vanilla_1.csv")
+    training_plot("logs/consistency/DeepLab/consistency_1.csv")
     # plot_inpainter_vs_conventional_performance()
     # plot_training_procedure_performance()
     # plot_ensemble_performance()
-    compare_models("No Augmentation")
-    compare_models("Vanilla Augmentation")
-    compare_models("Consistency Training")
+    # compare_models("No Augmentation")
+    # compare_models("Vanilla Augmentation")
+    # compare_models("Consistency Training")
 
     # plot_ensemble_variance_relationship("all")
     # plot_cons_vs_aug_ensembles()

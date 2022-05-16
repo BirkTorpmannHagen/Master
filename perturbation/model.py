@@ -109,7 +109,7 @@ class ModelOfNaturalVariation(nn.Module):
         for batch_idx in range(image.shape[0]):  # random transforms to every image in the batch
             aug_img = image[batch_idx].squeeze().cpu().numpy().T
             aug_mask = mask[batch_idx].squeeze().cpu().numpy().T
-            if self.use_inpainter and np.random.rand(1) < 0.5:
+            if self.use_inpainter and np.random.rand(1) < 1:
                 aug_img, aug_mask = self.inpainter.add_polyp(aug_img, aug_mask)
 
             pixelwise = self.pixelwise_augments(image=aug_img)["image"]
