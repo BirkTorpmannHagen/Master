@@ -16,6 +16,7 @@ class Inpainter:
         self.config = None
         self.model = SegGenerator()
         self.model.load_state_dict(torch.load(path_to_state_dict))
+        self.model.to("cuda")
         self.model.eval()
         self.perturbator = RandomDraw()
 
@@ -26,14 +27,16 @@ class Inpainter:
         merged = (1 - mask) * img + (polyp * mask)
         return merged, polyp
 
-    def add_polyp(self, img, old_mask):
+    def add_polyp(self, img, old_mask_a):
         new_polyp_mask = np.expand_dims(self.perturbator(rad=0.25), -1)
-
+        old_mask = np.expand_dims(old_mask_a, -1)
         total_mask = np.clip(new_polyp_mask + old_mask, 0, 1)
         masked = img * (1 - new_polyp_mask)
         with torch.no_grad():
-            polyp = self.model(torch.Tensor(masked).permute(-1, 0, 1).unsqueeze(0)).squeeze(0).permute(1, 2, 0).numpy()
-        inpainted = (1 - new_polyp_mask) * img + (polyp * new_polyp_mask)
+            polyp = self.model(torch.Tensor(masked).to("cuda").T.unsqueeze(0))
+
+        cpu_polyp = polyp.cpu().squeeze(0).T.numpy()
+        inpainted = masked + (cpu_polyp * new_polyp_mask)
         return inpainted.astype(np.float32), total_mask.astype(np.float32)
 
     def get_test(self, split="test"):

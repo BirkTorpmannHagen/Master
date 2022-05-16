@@ -104,6 +104,7 @@ class ModelOfNaturalVariation(nn.Module):
 
     def forward(self, image, mask):
         # assert len(image.shape) == 4, "Image must be in BxCxHxW format"
+
         augmented_imgs = torch.zeros_like(image)
         augmented_masks = torch.zeros_like(mask)
         for batch_idx in range(image.shape[0]):  # random transforms to every image in the batch
@@ -111,7 +112,6 @@ class ModelOfNaturalVariation(nn.Module):
             aug_mask = mask[batch_idx].squeeze().cpu().numpy().T
             if self.use_inpainter and np.random.rand(1) < 1:
                 aug_img, aug_mask = self.inpainter.add_polyp(aug_img, aug_mask)
-
             pixelwise = self.pixelwise_augments(image=aug_img)["image"]
             geoms = self.geometric_augments(image=pixelwise, mask=aug_mask)
             augmented_imgs[batch_idx] = torch.Tensor(geoms["image"].T)
